@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShowOne — Comment ça marche ?</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --purple:#5B4FE8; --purple-dark:#3D32C4; --purple-deep:#1a1535; --purple-mid:#2d2560; --red:#E8394F; --cream:#f5f3ff; --muted:#a09dc0; --border:rgba(91,79,232,0.13); }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--purple-deep); overflow-x:hidden; }
+
+  /* NAV */
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:16px 48px; background:rgba(26,21,53,0.92); backdrop-filter:blur(16px); border-bottom:1px solid rgba(255,255,255,0.06); }
+  .nav-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:22px; color:#fff; text-decoration:none; }
+  .nav-logo span { color:var(--red); }
+  .nav-right { display:flex; gap:12px; }
+  .btn-nav { padding:8px 18px; border-radius:999px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; text-decoration:none; }
+  .btn-outline { border:1px solid rgba(255,255,255,0.25); color:#fff; background:transparent; }
+  .btn-outline:hover { background:rgba(255,255,255,0.08); }
+  .btn-fill { border:none; background:var(--red); color:#fff; }
+  .btn-fill:hover { background:#c0283c; transform:translateY(-1px); }
+
+  /* HERO */
+  .hero { background:linear-gradient(135deg, var(--purple-deep) 0%, var(--purple-mid) 60%, #3a1a2e 100%); padding:140px 64px 100px; text-align:center; position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 60% at 50% 100%, rgba(232,57,79,0.12) 0%, transparent 70%); pointer-events:none; }
+  .hero-tag { display:inline-flex; align-items:center; gap:7px; padding:5px 16px; border-radius:999px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); color:rgba(255,255,255,0.7); font-size:12px; font-weight:600; letter-spacing:.5px; text-transform:uppercase; margin-bottom:24px; }
+  .hero h1 { font-family:'Syne',sans-serif; font-size:clamp(36px,5vw,58px); font-weight:800; color:#fff; letter-spacing:-1.5px; line-height:1.08; margin-bottom:18px; }
+  .hero h1 em { color:var(--red); font-style:normal; }
+  .hero p { font-size:17px; color:rgba(255,255,255,0.55); max-width:540px; margin:0 auto 40px; line-height:1.65; }
+  .hero-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .btn-hero-main { padding:14px 32px; border-radius:12px; border:none; background:var(--red); color:#fff; font-size:15px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; text-decoration:none; }
+  .btn-hero-main:hover { background:#c0283c; transform:translateY(-2px); }
+  .btn-hero-sec { padding:14px 32px; border-radius:12px; border:1.5px solid rgba(255,255,255,0.2); background:transparent; color:#fff; font-size:15px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; text-decoration:none; }
+  .btn-hero-sec:hover { background:rgba(255,255,255,0.08); }
+
+  /* TOGGLE TALENT / RECRUTEUR */
+  .toggle-section { padding:60px 64px 0; max-width:900px; margin:0 auto; }
+  .toggle-wrap { display:flex; background:#fff; border:1.5px solid var(--border); border-radius:14px; padding:5px; margin-bottom:0; }
+  .toggle-btn { flex:1; padding:12px; border-radius:10px; border:none; background:transparent; font-size:15px; font-weight:700; color:var(--muted); cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .3s; }
+  .toggle-btn.active { background:var(--purple); color:#fff; }
+
+  /* ÉTAPES */
+  .steps-section { padding:48px 64px 80px; max-width:900px; margin:0 auto; }
+  .steps-panel { display:none; animation:fadeUp .4s ease; }
+  .steps-panel.active { display:block; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  .steps-list { display:flex; flex-direction:column; gap:0; position:relative; }
+  .steps-list::before { content:''; position:absolute; left:28px; top:60px; bottom:60px; width:2px; background:var(--border); }
+  .step-item { display:grid; grid-template-columns:60px 1fr; gap:24px; align-items:start; padding:32px 0; border-bottom:1px solid var(--border); }
+  .step-item:last-child { border-bottom:none; }
+  .step-num-wrap { display:flex; flex-direction:column; align-items:center; gap:0; z-index:1; }
+  .step-num { width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-size:20px; font-weight:800; flex-shrink:0; border:3px solid; }
+  .step-num.purple { background:rgba(91,79,232,0.1); border-color:var(--purple); color:var(--purple); }
+  .step-num.red { background:rgba(232,57,79,0.1); border-color:var(--red); color:var(--red); }
+  .step-num.green { background:rgba(16,185,129,0.1); border-color:#10b981; color:#10b981; }
+  .step-num.amber { background:rgba(245,158,11,0.1); border-color:#f59e0b; color:#f59e0b; }
+  .step-content { padding-top:8px; }
+  .step-tag { display:inline-block; padding:3px 10px; border-radius:999px; font-size:10px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; margin-bottom:8px; }
+  .tag-purple { background:rgba(91,79,232,0.1); color:var(--purple); }
+  .tag-red { background:rgba(232,57,79,0.1); color:var(--red); }
+  .tag-green { background:rgba(16,185,129,0.1); color:#10b981; }
+  .tag-amber { background:rgba(245,158,11,0.1); color:#f59e0b; }
+  .step-title { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; margin-bottom:10px; letter-spacing:-.3px; }
+  .step-desc { font-size:15px; color:#3d3760; line-height:1.7; margin-bottom:16px; }
+  .step-details { display:flex; flex-direction:column; gap:7px; }
+  .step-detail { display:flex; gap:9px; align-items:flex-start; font-size:13px; color:var(--muted); }
+  .step-detail::before { content:'✓'; color:var(--purple); font-weight:700; flex-shrink:0; margin-top:1px; }
+  .step-img { border-radius:14px; overflow:hidden; margin-top:16px; }
+  .step-img img { width:100%; display:block; height:180px; object-fit:cover; }
+
+  /* FAQ */
+  .faq-section { background:var(--purple-deep); padding:80px 64px; }
+  .faq-inner { max-width:780px; margin:0 auto; }
+  .faq-header { text-align:center; margin-bottom:48px; }
+  .faq-header h2 { font-family:'Syne',sans-serif; font-size:34px; font-weight:800; color:#fff; letter-spacing:-.5px; margin-bottom:10px; }
+  .faq-header p { color:rgba(255,255,255,0.45); font-size:15px; }
+  .faq-list { display:flex; flex-direction:column; gap:10px; }
+  .faq-item { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:12px; overflow:hidden; cursor:pointer; transition:all .2s; }
+  .faq-item:hover { border-color:rgba(255,255,255,0.15); }
+  .faq-item.open { border-color:rgba(91,79,232,0.4); }
+  .faq-q { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; }
+  .faq-q span { font-size:14px; font-weight:600; color:#fff; }
+  .faq-arrow { font-size:12px; color:rgba(255,255,255,0.4); transition:transform .3s; }
+  .faq-item.open .faq-arrow { transform:rotate(180deg); }
+  .faq-a { display:none; padding:0 20px 16px; font-size:13px; color:rgba(255,255,255,0.55); line-height:1.7; }
+  .faq-item.open .faq-a { display:block; }
+
+  /* CTA FINAL */
+  .cta-section { padding:80px 64px; text-align:center; }
+  .cta-section h2 { font-family:'Syne',sans-serif; font-size:38px; font-weight:800; letter-spacing:-.5px; margin-bottom:12px; }
+  .cta-section h2 em { color:var(--red); font-style:normal; }
+  .cta-section p { font-size:16px; color:var(--muted); margin-bottom:36px; }
+  .cta-cards { display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:700px; margin:0 auto; }
+  .cta-card { border-radius:16px; padding:28px; text-align:left; text-decoration:none; transition:all .3s; }
+  .cta-card:hover { transform:translateY(-3px); }
+  .cta-card-talent { background:var(--purple); }
+  .cta-card-recruiter { background:var(--purple-deep); border:1.5px solid rgba(255,255,255,0.1); }
+  .cta-card-ico { font-size:28px; margin-bottom:12px; }
+  .cta-card h3 { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; color:#fff; margin-bottom:6px; }
+  .cta-card p { font-size:13px; color:rgba(255,255,255,0.6); margin-bottom:16px; line-height:1.5; }
+  .cta-card-btn { display:inline-block; padding:10px 20px; border-radius:9px; border:1.5px solid rgba(255,255,255,0.3); color:#fff; font-size:13px; font-weight:700; transition:all .2s; }
+  .cta-card:hover .cta-card-btn { background:rgba(255,255,255,0.15); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="showone.html" class="nav-logo">Show<span>One</span></a>
+  <div class="nav-right">
+    <a href="connexion.html" class="btn-nav btn-outline">Connexion</a>
+    <a href="inscription-talent.html" class="btn-nav btn-fill">Rejoindre</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">✨ Simple, rapide, efficace</div>
+  <h1>Comment fonctionne<br><em>ShowOne</em> ?</h1>
+  <p>En quelques étapes simples, créez votre profil, déposez vos vidéos et commencez à être contacté par des recruteurs professionnels.</p>
+  <div class="hero-btns">
+    <a href="inscription-talent.html" class="btn-hero-main">🌟 Je suis un talent</a>
+    <a href="inscription-recruteur.html" class="btn-hero-sec">🔍 Je suis recruteur</a>
+  </div>
+</div>
+
+<!-- TOGGLE -->
+<div class="toggle-section">
+  <div class="toggle-wrap">
+    <button class="toggle-btn active" onclick="showPanel('talent', this)">🌟 Je suis un talent</button>
+    <button class="toggle-btn" onclick="showPanel('recruteur', this)">🔍 Je suis recruteur</button>
+  </div>
+</div>
+
+<!-- ÉTAPES -->
+<div class="steps-section">
+
+  <!-- TALENT -->
+  <div class="steps-panel active" id="panel-talent">
+    <div class="steps-list">
+
+      <div class="step-item">
+        <div class="step-num-wrap">
+          <div class="step-num purple">1</div>
+        </div>
+        <div class="step-content">
+          <span class="step-tag tag-purple">Étape 1</span>
+          <div class="step-title">Créez votre profil gratuit</div>
+          <p class="step-desc">Inscrivez-vous en 3 minutes. Renseignez vos informations, choisissez votre catégorie de talent et ajoutez vos réseaux sociaux.</p>
+          <div class="step-details">
+            <div class="step-detail">Nom, prénom, ville, date de naissance</div>
+            <div class="step-detail">Catégorie : Chant, Danse, Sport, Mannequin, Radio/TV…</div>
+            <div class="step-detail">Vos comptes TikTok, Instagram, Facebook</div>
+            <div class="step-detail">Une photo de profil et une courte description</div>
+          </div>
+          <div class="step-img">
+            <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&h=200&fit=crop&crop=top" alt="Inscription">
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num-wrap">
+          <div class="step-num red">2</div>
+        </div>
+        <div class="step-content">
+          <span class="step-tag tag-red">Étape 2</span>
+          <div class="step-title">Déposez votre vidéo</div>
+          <p class="step-desc">Uploadez votre vidéo de présentation directement sur votre profil. C'est votre vitrine — montrez ce que vous savez faire !</p>
+          <div class="step-details">
+            <div class="step-detail">Plan Gratuit : 1 vidéo d'1 minute</div>
+            <div class="step-detail">Plan Boost (1€) : 2 vidéos de 2 min 30</div>
+            <div class="step-detail">Plan Pro (4,99€/mois) : 5 vidéos/jour de 2 min 30</div>
+            <div class="step-detail">Formats acceptés : MP4, MOV</div>
+          </div>
+          <div class="step-img">
+            <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&h=200&fit=crop&crop=center" alt="Vidéo">
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num-wrap">
+          <div class="step-num green">3</div>
+        </div>
+        <div class="step-content">
+          <span class="step-tag tag-green">Étape 3</span>
+          <div class="step-title">Soyez découvert par des recruteurs</div>
+          <p class="step-desc">Votre profil est visible par des centaines de recruteurs professionnels. Ils peuvent vous contacter directement via la messagerie ShowOne.</p>
+          <div class="step-details">
+            <div class="step-detail">Profil visible immédiatement après inscription</div>
+            <div class="step-detail">Recruteurs vérifiés uniquement (SIRET obligatoire)</div>
+            <div class="step-detail">Notifications à chaque message reçu</div>
+            <div class="step-detail">Vous restez libre d'accepter ou refuser les contacts</div>
+          </div>
+          <div class="step-img">
+            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=200&fit=crop&crop=center" alt="Recrutement">
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num-wrap">
+          <div class="step-num amber">4</div>
+        </div>
+        <div class="step-content">
+          <span class="step-tag tag-amber">Bonus</span>
+          <div class="step-title">Partagez votre profil sur vos réseaux</div>
+          <p class="step-desc">Après votre inscription, ShowOne génère un lien unique pour votre profil. Partagez-le sur TikTok, Instagram et Facebook pour multiplier votre visibilité !</p>
+          <div class="step-details">
+            <div class="step-detail">Lien de profil personnalisé : showone.fr/talent/votre-nom</div>
+            <div class="step-detail">Mettez-le dans la bio de vos réseaux sociaux</div>
+            <div class="step-detail">Plus de visibilité = plus de chances d'être contacté</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RECRUTEUR -->
+  <div class="steps-panel" id="panel-recruteur">
+    <div class="steps-list">
+
+      <div class="step-item">
+        <div class="step-num-wrap"><div class="step-num purple">1</div></div>
+        <div class="step-content">
+          <span class="step-tag tag-purple">Étape 1</span>
+          <div class="step-title">Créez votre compte recruteur</div>
+          <p class="step-desc">Inscrivez-vous en tant que recruteur professionnel. Votre numéro SIRET est vérifié pour garantir la légitimité de votre société.</p>
+          <div class="step-details">
+            <div class="step-detail">Informations personnelles et professionnelles</div>
+            <div class="step-detail">Numéro SIRET de votre société (obligatoire)</div>
+            <div class="step-detail">Type de recruteur : agence, label, TV, sport…</div>
+            <div class="step-detail">Catégories de talents recherchés</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num-wrap"><div class="step-num red">2</div></div>
+        <div class="step-content">
+          <span class="step-tag tag-red">Étape 2</span>
+          <div class="step-title">Abonnez-vous au plan Recruteur</div>
+          <p class="step-desc">Pour 49,99€/mois, accédez à l'intégralité des profils et vidéos de la plateforme, sans aucune limite.</p>
+          <div class="step-details">
+            <div class="step-detail">Accès illimité à tous les talents</div>
+            <div class="step-detail">Messagerie directe sans restriction</div>
+            <div class="step-detail">Lecture de toutes les vidéos</div>
+            <div class="step-detail">Sans engagement, résiliable à tout moment</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num-wrap"><div class="step-num green">3</div></div>
+        <div class="step-content">
+          <span class="step-tag tag-green">Étape 3</span>
+          <div class="step-title">Recherchez et contactez les talents</div>
+          <p class="step-desc">Utilisez les filtres avancés pour trouver le profil idéal et envoyez un message directement depuis la plateforme.</p>
+          <div class="step-details">
+            <div class="step-detail">Filtres par catégorie, ville, âge, plan</div>
+            <div class="step-detail">Ajoutez des talents en favoris</div>
+            <div class="step-detail">Messagerie intégrée sécurisée</div>
+            <div class="step-detail">Notifications de réponse en temps réel</div>
+          </div>
+          <div class="step-img">
+            <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=200&fit=crop&crop=center" alt="Recherche">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FAQ -->
+<div class="faq-section">
+  <div class="faq-inner">
+    <div class="faq-header">
+      <h2>Questions fréquentes</h2>
+      <p>Tout ce que vous devez savoir sur ShowOne.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q"><span>Est-ce vraiment gratuit pour les talents ?</span><span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Oui ! L'inscription est totalement gratuite. Avec le plan gratuit, vous pouvez uploader 1 vidéo d'1 minute et être contacté par des recruteurs. Les plans Boost (1€ unique) et Pro (4,99€/mois) offrent plus de vidéos et de visibilité.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q"><span>Les recruteurs sont-ils vérifiés ?</span><span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Oui, tous les recruteurs doivent fournir un numéro SIRET valide lors de leur inscription. ShowOne vérifie la légitimité de chaque compte recruteur avant activation. En cas de comportement inapproprié, le compte est immédiatement suspendu.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q"><span>Puis-je changer d'abonnement à tout moment ?</span><span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Oui. Les abonnements mensuels (Pro talent et Recruteur) peuvent être résiliés à tout moment depuis votre espace personnel. La résiliation prend effet à la fin de la période en cours. Le plan Boost est un paiement unique non remboursable.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q"><span>Quels formats de vidéos sont acceptés ?</span><span class="faq-arrow">▼</span></div>
+        <div class="faq-a">ShowOne accepte les formats MP4 et MOV. La durée maximale est de 1 minute pour le plan Gratuit, et 2 minutes 30 pour les plans Boost et Pro. La qualité recommandée est au moins 720p.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q"><span>Mes données personnelles sont-elles protégées ?</span><span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Absolument. ShowOne est conforme au RGPD. Vos données ne sont jamais vendues à des tiers. Seul votre profil public (nom de scène, catégorie, ville, vidéos) est visible par les recruteurs. Vos coordonnées restent confidentielles.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q"><span>Comment fonctionne la messagerie ?</span><span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Les recruteurs abonnés peuvent envoyer un message à n'importe quel talent. Vous recevez une notification par e-mail et dans votre espace ShowOne. Vous êtes libre de répondre ou non. ShowOne ne partage jamais votre numéro de téléphone ou e-mail sans votre accord.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA FINAL -->
+<div class="cta-section">
+  <h2>Prêt à entrer en <em>scène</em> ?</h2>
+  <p>Rejoignez plus de 12 000 talents et 830 recruteurs déjà sur ShowOne.</p>
+  <div class="cta-cards">
+    <a href="inscription-talent.html" class="cta-card cta-card-talent">
+      <div class="cta-card-ico">🌟</div>
+      <h3>Je suis un talent</h3>
+      <p>Créez votre profil gratuit et commencez à être découvert dès aujourd'hui.</p>
+      <div class="cta-card-btn">S'inscrire gratuitement →</div>
+    </a>
+    <a href="inscription-recruteur.html" class="cta-card cta-card-recruiter">
+      <div class="cta-card-ico">🔍</div>
+      <h3>Je suis recruteur</h3>
+      <p>Accédez à tous les talents de la plateforme pour 49,99€/mois.</p>
+      <div class="cta-card-btn">Créer un compte recruteur →</div>
+    </a>
+  </div>
+</div>
+
+<script>
+  function showPanel(id, btn) {
+    document.querySelectorAll('.steps-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+  function toggleFaq(el) {
+    const isOpen = el.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(f => f.classList.remove('open'));
+    if (!isOpen) el.classList.add('open');
+  }
+</script>
+</body>
+</html>

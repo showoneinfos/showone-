@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShowOne — Inscription Mineur</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple:#5B4FE8; --purple-dark:#3D32C4; --purple-deep:#1a1535;
+    --red:#E8394F; --red-dark:#c0283c;
+    --cream:#f5f3ff; --muted:#a09dc0; --border:rgba(91,79,232,0.18);
+    --amber:#f59e0b; --green:#10b981;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--purple-deep); min-height:100vh; display:flex; }
+
+  /* GAUCHE */
+  .side-visual { width:40%; min-height:100vh; position:sticky; top:0; height:100vh; overflow:hidden; flex-shrink:0; }
+  .side-visual img { width:100%; height:100%; object-fit:cover; }
+  .side-overlay { position:absolute; inset:0; background:linear-gradient(160deg,rgba(26,21,53,0.88) 0%,rgba(245,158,11,0.25) 60%,rgba(232,57,79,0.2) 100%); }
+  .side-content { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:space-between; padding:40px; }
+  .logo { font-family:'Syne',sans-serif; font-weight:800; font-size:24px; color:#fff; text-decoration:none; }
+  .logo span { color:var(--red); }
+  .side-tag { display:inline-block; padding:4px 12px; border-radius:999px; background:rgba(245,158,11,0.2); border:1px solid rgba(245,158,11,0.4); color:#fcd34d; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:14px; }
+  .side-middle h2 { font-family:'Syne',sans-serif; font-size:32px; font-weight:800; color:#fff; line-height:1.1; letter-spacing:-.5px; margin-bottom:14px; }
+  .side-middle h2 em { color:#fcd34d; font-style:normal; }
+  .side-middle p { color:rgba(255,255,255,0.55); font-size:14px; line-height:1.65; max-width:280px; }
+  .side-perks { display:flex; flex-direction:column; gap:10px; }
+  .side-perk { display:flex; gap:10px; align-items:center; }
+  .side-perk-ico { width:32px; height:32px; border-radius:8px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+  .side-perk-txt { font-size:13px; color:rgba(255,255,255,0.65); line-height:1.4; }
+  .side-perk-txt strong { color:#fff; }
+
+  /* DROITE */
+  .side-form { flex:1; overflow-y:auto; padding:48px 52px; display:flex; flex-direction:column; }
+
+  /* ALERTE LÉGALE */
+  .legal-alert { display:flex; gap:12px; align-items:flex-start; background:rgba(245,158,11,0.08); border:1.5px solid rgba(245,158,11,0.25); border-radius:12px; padding:16px 18px; margin-bottom:32px; }
+  .legal-alert-ico { font-size:22px; flex-shrink:0; }
+  .legal-alert h3 { font-size:14px; font-weight:700; color:#92650a; margin-bottom:4px; }
+  .legal-alert p { font-size:12px; color:#92650a; line-height:1.6; }
+
+  /* STEPS */
+  .steps { display:flex; align-items:center; margin-bottom:40px; }
+  .stp { display:flex; align-items:center; gap:8px; }
+  .stp-num { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; border:2px solid var(--border); color:var(--muted); transition:all .3s; flex-shrink:0; }
+  .stp.active .stp-num { background:var(--purple); border-color:var(--purple); color:#fff; }
+  .stp.done .stp-num { background:var(--green); border-color:var(--green); color:#fff; }
+  .stp-lbl { font-size:11px; font-weight:600; color:var(--muted); white-space:nowrap; transition:color .3s; }
+  .stp.active .stp-lbl { color:var(--purple-deep); }
+  .stp.done .stp-lbl { color:var(--green); }
+  .stp-line { flex:1; height:1.5px; background:var(--border); margin:0 8px; transition:background .3s; }
+  .stp-line.done { background:var(--green); }
+
+  /* PANELS */
+  .panel { display:none; animation:fadeSlide .35s ease; }
+  .panel.active { display:block; }
+  @keyframes fadeSlide { from{opacity:0;transform:translateX(14px)} to{opacity:1;transform:translateX(0)} }
+
+  .fhead { margin-bottom:28px; }
+  .fhead h1 { font-family:'Syne',sans-serif; font-size:24px; font-weight:800; letter-spacing:-.5px; margin-bottom:6px; }
+  .fhead p { font-size:14px; color:var(--muted); line-height:1.5; }
+
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .fg { margin-bottom:14px; }
+  .flabel { display:block; font-size:12px; font-weight:700; letter-spacing:.2px; margin-bottom:6px; color:var(--purple-deep); }
+  .flabel-opt { font-weight:400; color:var(--muted); font-size:11px; margin-left:4px; }
+  .finput, .fselect, .ftextarea {
+    width:100%; padding:11px 15px; border:1.5px solid var(--border); border-radius:10px;
+    background:#fff; font-size:14px; color:var(--purple-deep);
+    font-family:'DM Sans',sans-serif; outline:none; transition:border-color .2s, box-shadow .2s;
+  }
+  .finput:focus,.fselect:focus,.ftextarea:focus { border-color:var(--purple); box-shadow:0 0 0 3px rgba(91,79,232,.09); }
+  .finput::placeholder,.ftextarea::placeholder { color:var(--muted); }
+  .fselect { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a09dc0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 13px center; padding-right:38px; cursor:pointer; appearance:none; }
+
+  /* UPLOAD */
+  .upload { border:2px dashed var(--border); border-radius:12px; padding:20px; text-align:center; cursor:pointer; transition:all .2s; background:#fff; margin-bottom:14px; }
+  .upload:hover { border-color:var(--purple); background:rgba(91,79,232,.02); }
+  .upload input { display:none; }
+  .upload-ico { font-size:26px; margin-bottom:6px; }
+  .upload-title { font-size:13px; font-weight:600; margin-bottom:2px; }
+  .upload-sub { font-size:11px; color:var(--muted); }
+
+  /* PARENT SECTION */
+  .parent-section { background:rgba(91,79,232,0.04); border:1.5px solid rgba(91,79,232,0.12); border-radius:12px; padding:20px; margin-bottom:14px; }
+  .parent-section-title { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+
+  /* CHECKBOX */
+  .chk { display:flex; gap:9px; align-items:flex-start; margin-bottom:12px; }
+  .chk input { width:17px; height:17px; margin-top:2px; accent-color:var(--purple); flex-shrink:0; cursor:pointer; }
+  .chk label { font-size:12px; color:var(--muted); line-height:1.5; }
+  .chk label a { color:var(--purple); text-decoration:none; font-weight:600; }
+  .chk label strong { color:var(--purple-deep); }
+
+  /* INFO NOTE */
+  .info-note { display:flex; gap:10px; align-items:flex-start; background:rgba(91,79,232,.06); border:1px solid rgba(91,79,232,.15); border-radius:9px; padding:12px 14px; margin-bottom:14px; }
+  .info-note-ico { font-size:16px; flex-shrink:0; margin-top:1px; }
+  .info-note p { font-size:12px; color:var(--purple-deep); line-height:1.5; }
+
+  /* ACTIONS */
+  .actions { display:flex; gap:10px; margin-top:10px; }
+  .btn-back { padding:12px 22px; border-radius:9px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .btn-back:hover { border-color:var(--purple); color:var(--purple); }
+  .btn-next { flex:1; padding:13px; border-radius:9px; border:none; background:var(--purple); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .btn-next:hover { background:var(--purple-dark); transform:translateY(-1px); }
+  .btn-submit { flex:1; padding:13px; border-radius:9px; border:none; background:var(--red); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .btn-submit:hover { background:var(--red-dark); transform:translateY(-1px); }
+
+  .login-link { text-align:center; margin-top:18px; font-size:13px; color:var(--muted); }
+  .login-link a { color:var(--purple); font-weight:600; text-decoration:none; }
+
+  /* SUCCÈS — EN ATTENTE */
+  .success { display:none; text-align:center; padding:32px 0; animation:fadeSlide .5s ease; }
+  .success.active { display:block; }
+  .success-ico { width:80px; height:80px; border-radius:50%; background:rgba(245,158,11,.1); border:2px solid var(--amber); display:flex; align-items:center; justify-content:center; font-size:34px; margin:0 auto 20px; animation:pulseAmber 2s ease-in-out infinite; }
+  @keyframes pulseAmber { 0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0.2)} 50%{box-shadow:0 0 0 16px rgba(245,158,11,0)} }
+  .success h2 { font-family:'Syne',sans-serif; font-size:24px; font-weight:800; margin-bottom:10px; }
+  .success-steps { display:flex; flex-direction:column; gap:10px; margin:24px 0; text-align:left; }
+  .success-step { display:flex; gap:12px; align-items:center; padding:14px 16px; background:#fff; border:1.5px solid var(--border); border-radius:11px; }
+  .success-step-num { width:28px; height:28px; border-radius:50%; background:var(--purple); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
+  .success-step-txt { font-size:13px; color:var(--purple-deep); line-height:1.4; }
+  .success-step-txt strong { font-weight:700; }
+  .success-pending { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:999px; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); color:#92650a; font-size:12px; font-weight:700; margin-bottom:20px; }
+</style>
+</head>
+<body>
+
+<!-- GAUCHE -->
+<div class="side-visual">
+  <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&h=1200&fit=crop&crop=center" alt="Jeune talent">
+  <div class="side-overlay"></div>
+  <div class="side-content">
+    <a href="showone.html" class="logo">Show<span>One</span></a>
+    <div class="side-middle">
+      <div class="side-tag">⚖️ Inscription Mineur</div>
+      <h2>Ton talent<br>mérite d'être <em>vu</em>.</h2>
+      <p>ShowOne protège les jeunes talents avec un processus d'inscription sécurisé et encadré par la loi française.</p>
+    </div>
+    <div class="side-perks">
+      <div class="side-perk">
+        <div class="side-perk-ico">🔒</div>
+        <div class="side-perk-txt"><strong>Profil protégé</strong> — Seuls les recruteurs vérifiés peuvent te contacter</div>
+      </div>
+      <div class="side-perk">
+        <div class="side-perk-ico">👨‍👩‍👧</div>
+        <div class="side-perk-txt"><strong>Accord parental</strong> — Tes parents valident ton inscription</div>
+      </div>
+      <div class="side-perk">
+        <div class="side-perk-ico">✅</div>
+        <div class="side-perk-txt"><strong>Validation ShowOne</strong> — Chaque dossier est vérifié manuellement</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORMULAIRE -->
+<div class="side-form">
+
+  <!-- ALERTE LÉGALE -->
+  <div class="legal-alert">
+    <div class="legal-alert-ico">⚖️</div>
+    <div>
+      <h3>Inscription encadrée par la loi française</h3>
+      <p>Conformément à la loi du 12 mars 2012 relative à l'exploitation des enfants dans le domaine du mannequinat et du cinéma, l'inscription d'un mineur nécessite l'autorisation des deux parents ou représentants légaux et une validation manuelle par ShowOne.</p>
+    </div>
+  </div>
+
+  <!-- STEPS -->
+  <div class="steps" id="stepsBar">
+    <div class="stp active" id="s1"><div class="stp-num">1</div><div class="stp-lbl">Le mineur</div></div>
+    <div class="stp-line" id="l1"></div>
+    <div class="stp" id="s2"><div class="stp-num">2</div><div class="stp-lbl">Parent 1</div></div>
+    <div class="stp-line" id="l2"></div>
+    <div class="stp" id="s3"><div class="stp-num">3</div><div class="stp-lbl">Parent 2</div></div>
+    <div class="stp-line" id="l3"></div>
+    <div class="stp" id="s4"><div class="stp-num">4</div><div class="stp-lbl">Documents</div></div>
+    <div class="stp-line" id="l4"></div>
+    <div class="stp" id="s5"><div class="stp-num">5</div><div class="stp-lbl">Profil talent</div></div>
+  </div>
+
+  <!-- ÉTAPE 1 — Infos mineur -->
+  <div class="panel active" id="p1">
+    <div class="fhead">
+      <h1>Informations du mineur</h1>
+      <p>Ces informations concernent le jeune talent qui souhaite s'inscrire.</p>
+    </div>
+    <div class="row2">
+      <div class="fg"><label class="flabel">Prénom *</label><input class="finput" type="text" placeholder="Lucas"></div>
+      <div class="fg"><label class="flabel">Nom *</label><input class="finput" type="text" placeholder="Martin"></div>
+    </div>
+    <div class="row2">
+      <div class="fg"><label class="flabel">Date de naissance *</label><input class="finput" type="date" id="birthDate" onchange="checkAge()"></div>
+      <div class="fg"><label class="flabel">Âge actuel</label><input class="finput" type="text" id="ageDisplay" placeholder="Calculé automatiquement" readonly style="background:#f5f3ff;color:var(--purple);font-weight:700;"></div>
+    </div>
+    <div id="ageWarning" style="display:none;" class="legal-alert" style="margin-bottom:14px;">
+      <div class="legal-alert-ico">⚠️</div>
+      <div><h3 id="ageWarningText"></h3></div>
+    </div>
+    <div class="row2">
+      <div class="fg"><label class="flabel">Ville *</label><input class="finput" type="text" placeholder="Paris"></div>
+      <div class="fg"><label class="flabel">Code postal *</label><input class="finput" type="text" placeholder="75001"></div>
+    </div>
+    <div class="fg"><label class="flabel">Adresse e-mail (du mineur ou parent) *</label><input class="finput" type="email" placeholder="contact@famille.com"></div>
+    <div class="fg"><label class="flabel">Mot de passe *</label><input class="finput" type="password" placeholder="Minimum 8 caractères"></div>
+    <div class="actions">
+      <button class="btn-next" onclick="go(2)">Continuer →</button>
+    </div>
+    <div class="login-link">Déjà un compte ? <a href="connexion.html">Se connecter</a> · <a href="inscription-talent.html">Je suis majeur →</a></div>
+  </div>
+
+  <!-- ÉTAPE 2 — Parent / Tuteur 1 -->
+  <div class="panel" id="p2">
+    <div class="fhead">
+      <h1>Autorisation — Parent / Tuteur 1</h1>
+      <p>Le premier représentant légal doit renseigner ses informations et donner son accord.</p>
+    </div>
+    <div class="parent-section">
+      <div class="parent-section-title">👤 Identité du représentant légal 1</div>
+      <div class="row2">
+        <div class="fg"><label class="flabel">Prénom *</label><input class="finput" type="text" placeholder="Marie"></div>
+        <div class="fg"><label class="flabel">Nom *</label><input class="finput" type="text" placeholder="Martin"></div>
+      </div>
+      <div class="fg"><label class="flabel">Lien avec le mineur *</label>
+        <select class="fselect">
+          <option>Mère</option>
+          <option>Père</option>
+          <option>Tuteur légal</option>
+          <option>Autre représentant légal</option>
+        </select>
+      </div>
+      <div class="fg"><label class="flabel">Adresse e-mail *</label><input class="finput" type="email" placeholder="marie.martin@email.com"></div>
+      <div class="fg"><label class="flabel">Numéro de téléphone *</label><input class="finput" type="tel" placeholder="+33 6 12 34 56 78"></div>
+    </div>
+    <div class="info-note">
+      <div class="info-note-ico">📧</div>
+      <p>Un e-mail de confirmation sera envoyé à cette adresse. Le parent devra cliquer sur le lien pour valider son autorisation.</p>
+    </div>
+    <div class="chk">
+      <input type="checkbox" id="auth1">
+      <label for="auth1">Je soussigné(e), <strong>représentant(e) légal(e)</strong> du mineur, autorise ShowOne à publier le profil et les vidéos de mon enfant sur la plateforme, dans le cadre défini par les <a href="legal.html">CGU</a> et conformément à la réglementation en vigueur.</label>
+    </div>
+    <div class="chk">
+      <input type="checkbox" id="auth1b">
+      <label for="auth1b">Je confirme avoir lu et accepté la <a href="legal.html">Politique de confidentialité</a> concernant les données de mon enfant mineur.</label>
+    </div>
+    <div class="actions">
+      <button class="btn-back" onclick="go(1)">← Retour</button>
+      <button class="btn-next" onclick="go(3)">Continuer →</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 3 — Parent / Tuteur 2 -->
+  <div class="panel" id="p3">
+    <div class="fhead">
+      <h1>Autorisation — Parent / Tuteur 2</h1>
+      <p>Si un second représentant légal existe, son autorisation est également requise.</p>
+    </div>
+
+    <div class="info-note">
+      <div class="info-note-ico">⚖️</div>
+      <p>En France, l'autorisation des <strong>deux parents</strong> est obligatoire pour l'inscription d'un mineur sur une plateforme de talents professionnelle. Si un seul parent a l'autorité parentale, cochez la case ci-dessous.</p>
+    </div>
+
+    <div class="chk" style="margin-bottom:20px;">
+      <input type="checkbox" id="singleParent" onchange="toggleSingleParent()">
+      <label for="singleParent"><strong>Un seul parent / tuteur légal</strong> détient l'autorité parentale (divorce, décès, tutelle…). Je fournirai le justificatif correspondant à l'étape suivante.</label>
+    </div>
+
+    <div id="parent2Section">
+      <div class="parent-section">
+        <div class="parent-section-title">👤 Identité du représentant légal 2</div>
+        <div class="row2">
+          <div class="fg"><label class="flabel">Prénom *</label><input class="finput" type="text" placeholder="Jean"></div>
+          <div class="fg"><label class="flabel">Nom *</label><input class="finput" type="text" placeholder="Martin"></div>
+        </div>
+        <div class="fg"><label class="flabel">Lien avec le mineur *</label>
+          <select class="fselect">
+            <option>Père</option>
+            <option>Mère</option>
+            <option>Tuteur légal</option>
+            <option>Autre représentant légal</option>
+          </select>
+        </div>
+        <div class="fg"><label class="flabel">Adresse e-mail *</label><input class="finput" type="email" placeholder="jean.martin@email.com"></div>
+        <div class="fg"><label class="flabel">Numéro de téléphone *</label><input class="finput" type="tel" placeholder="+33 6 98 76 54 32"></div>
+      </div>
+      <div class="chk">
+        <input type="checkbox" id="auth2">
+        <label for="auth2">Je soussigné(e), <strong>représentant(e) légal(e)</strong> du mineur, autorise ShowOne à publier le profil et les vidéos de mon enfant sur la plateforme, conformément aux <a href="legal.html">CGU</a>.</label>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-back" onclick="go(2)">← Retour</button>
+      <button class="btn-next" onclick="go(4)">Continuer →</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 4 — Documents -->
+  <div class="panel" id="p4">
+    <div class="fhead">
+      <h1>Documents obligatoires</h1>
+      <p>Ces documents sont nécessaires pour valider l'inscription conformément à la loi.</p>
+    </div>
+
+    <div class="fg">
+      <label class="flabel">Pièce d'identité du mineur *</label>
+      <div class="upload" onclick="this.querySelector('input').click()" id="docMineur">
+        <div class="upload-ico">🪪</div>
+        <div class="upload-title">Carte d'identité ou passeport du mineur</div>
+        <div class="upload-sub">JPG, PNG, PDF — max 5 Mo</div>
+        <input type="file" accept="image/*,.pdf" onchange="previewDoc(this,'docMineur','ID mineur')">
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="flabel">Pièce d'identité du Parent / Tuteur 1 *</label>
+      <div class="upload" onclick="this.querySelector('input').click()" id="docParent1">
+        <div class="upload-ico">🪪</div>
+        <div class="upload-title">Carte d'identité ou passeport du parent 1</div>
+        <div class="upload-sub">JPG, PNG, PDF — max 5 Mo</div>
+        <input type="file" accept="image/*,.pdf" onchange="previewDoc(this,'docParent1','ID parent 1')">
+      </div>
+    </div>
+
+    <div class="fg" id="docParent2Wrap">
+      <label class="flabel">Pièce d'identité du Parent / Tuteur 2 *</label>
+      <div class="upload" onclick="this.querySelector('input').click()" id="docParent2">
+        <div class="upload-ico">🪪</div>
+        <div class="upload-title">Carte d'identité ou passeport du parent 2</div>
+        <div class="upload-sub">JPG, PNG, PDF — max 5 Mo</div>
+        <input type="file" accept="image/*,.pdf" onchange="previewDoc(this,'docParent2','ID parent 2')">
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="flabel">Livret de famille ou acte de naissance *</label>
+      <div class="upload" onclick="this.querySelector('input').click()" id="docNaissance">
+        <div class="upload-ico">📄</div>
+        <div class="upload-title">Livret de famille ou acte de naissance</div>
+        <div class="upload-sub">JPG, PNG, PDF — max 5 Mo</div>
+        <input type="file" accept="image/*,.pdf" onchange="previewDoc(this,'docNaissance','Livret famille')">
+      </div>
+    </div>
+
+    <div class="fg" id="docTutelleWrap" style="display:none;">
+      <label class="flabel">Justificatif d'autorité parentale unique <span class="flabel-opt">(si un seul parent)</span></label>
+      <div class="upload" onclick="this.querySelector('input').click()" id="docTutelle">
+        <div class="upload-ico">⚖️</div>
+        <div class="upload-title">Jugement de divorce, acte de décès, ou ordonnance de tutelle</div>
+        <div class="upload-sub">JPG, PNG, PDF — max 5 Mo</div>
+        <input type="file" accept="image/*,.pdf" onchange="previewDoc(this,'docTutelle','Justificatif tutelle')">
+      </div>
+    </div>
+
+    <div class="info-note">
+      <div class="info-note-ico">🔒</div>
+      <p>Tous vos documents sont chiffrés et stockés de manière sécurisée. Ils sont utilisés uniquement pour la vérification de votre dossier et supprimés après validation conformément au RGPD.</p>
+    </div>
+
+    <div class="actions">
+      <button class="btn-back" onclick="go(3)">← Retour</button>
+      <button class="btn-next" onclick="go(5)">Continuer →</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 5 — Profil talent -->
+  <div class="panel" id="p5">
+    <div class="fhead">
+      <h1>Profil du jeune talent</h1>
+      <p>Ce que verront les recruteurs sur la page publique.</p>
+    </div>
+
+    <div class="fg">
+      <label class="flabel">Nom de scène *</label>
+      <input class="finput" type="text" placeholder="Ex : Lucas M. ou juste Lucas">
+    </div>
+
+    <div class="fg">
+      <label class="flabel">Catégorie principale *</label>
+      <select class="fselect" id="catSelect" onchange="updateSousCat()" style="margin-bottom:10px;">
+        <option value="">-- Choisissez une catégorie --</option>
+        <option value="acting">🎬 Acting / Cinéma & Télévision</option>
+        <option value="musique">🎤 Musique / Chant</option>
+        <option value="danse">💃 Danse</option>
+        <option value="sport">⚽ Sport</option>
+        <option value="createurs">📱 Créateurs de contenu / Influence</option>
+        <option value="mode">👗 Mode / Mannequinat</option>
+        <option value="art">🎨 Art & Création</option>
+        <option value="talents">✨ Performances & Talents uniques</option>
+        <option value="animaux">🐾 Animaux</option>
+        <option value="pro">🎙️ Compétences professionnelles</option>
+      </select>
+      <select class="fselect" id="sousCatSelect" style="display:none;">
+        <option value="">-- Choisissez une sous-catégorie --</option>
+      </select>
+    </div>
+
+    <div class="fg">
+      <label class="flabel">Photo de profil *</label>
+      <div class="upload" onclick="this.querySelector('input').click()" id="photoZone">
+        <div class="upload-ico">📷</div>
+        <div class="upload-title">Photo du jeune talent</div>
+        <div class="upload-sub">JPG, PNG — max 5 Mo — Photo récente et appropriée</div>
+        <input type="file" accept="image/*" onchange="previewPhoto(this)">
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="flabel">Présentation <span class="flabel-opt">(rédigée par le parent)</span></label>
+      <textarea class="ftextarea" placeholder="Ex : Lucas, 14 ans, pratique la danse depuis 6 ans. Passionné par le hip-hop et la danse contemporaine, il recherche des opportunités dans le spectacle vivant…"></textarea>
+    </div>
+
+    <div class="chk">
+      <input type="checkbox" id="cgum" checked>
+      <label for="cgum">Les représentants légaux acceptent les <a href="legal.html">CGU</a> et la <a href="legal.html">Politique de confidentialité</a> au nom du mineur.</label>
+    </div>
+    <div class="chk">
+      <input type="checkbox" id="confirmAge">
+      <label for="confirmAge">Je certifie que toutes les informations fournies sont exactes et que <strong>les deux représentants légaux</strong> ont donné leur accord pour cette inscription.</label>
+    </div>
+
+    <div class="actions">
+      <button class="btn-back" onclick="go(4)">← Retour</button>
+      <button class="btn-submit" onclick="showSuccess()">Soumettre le dossier →</button>
+    </div>
+  </div>
+
+  <!-- SUCCÈS — EN ATTENTE DE VALIDATION -->
+  <div class="success" id="success">
+    <div class="success-ico">⏳</div>
+    <h2>Dossier soumis !</h2>
+    <div class="success-pending">⏳ En attente de validation — 3 à 5 jours ouvrés</div>
+    <p style="font-size:14px;color:var(--muted);line-height:1.6;max-width:400px;margin:0 auto 24px;">Votre dossier a bien été reçu par ShowOne. Notre équipe va vérifier tous les documents et les autorisations parentales avant d'activer le compte.</p>
+
+    <div class="success-steps">
+      <div class="success-step">
+        <div class="success-step-num">1</div>
+        <div class="success-step-txt"><strong>E-mail de confirmation</strong> envoyé aux deux parents pour validation en ligne</div>
+      </div>
+      <div class="success-step">
+        <div class="success-step-num">2</div>
+        <div class="success-step-txt"><strong>Vérification des documents</strong> par l'équipe ShowOne (3 à 5 jours ouvrés)</div>
+      </div>
+      <div class="success-step">
+        <div class="success-step-num">3</div>
+        <div class="success-step-txt"><strong>Activation du compte</strong> et notification par e-mail dès validation</div>
+      </div>
+    </div>
+
+    <p style="font-size:12px;color:var(--muted);margin-top:8px;">Des questions ? Contactez-nous à <strong>mineurs@showone.fr</strong></p>
+  </div>
+
+</div>
+
+<script>
+  let cur = 1;
+  let singleParentMode = false;
+
+  function go(n) {
+    document.getElementById('p'+cur).classList.remove('active');
+    const el = document.getElementById('s'+cur);
+    el.classList.remove('active'); el.classList.add('done');
+    if (cur < 5) document.getElementById('l'+cur).classList.add('done');
+    cur = n;
+    if (cur <= 5) {
+      document.getElementById('p'+cur).classList.add('active');
+      const nel = document.getElementById('s'+cur);
+      nel.classList.remove('done'); nel.classList.add('active');
+    }
+    document.querySelector('.side-form').scrollTo(0,0);
+  }
+
+  function showSuccess() {
+    document.getElementById('p5').classList.remove('active');
+    document.getElementById('s5').classList.remove('active');
+    document.getElementById('s5').classList.add('done');
+    document.getElementById('l4').classList.add('done');
+    document.getElementById('stepsBar').style.display = 'none';
+    document.getElementById('success').classList.add('active');
+  }
+
+  function checkAge() {
+    const birth = new Date(document.getElementById('birthDate').value);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    const display = document.getElementById('ageDisplay');
+    const warning = document.getElementById('ageWarning');
+    const warnText = document.getElementById('ageWarningText');
+    if (isNaN(age) || age < 0) return;
+    display.value = age + ' ans';
+    if (age >= 18) {
+      warning.style.display = 'flex';
+      warnText.textContent = '⚠️ Vous êtes majeur(e). Veuillez utiliser la page d\'inscription standard.';
+      warning.style.background = 'rgba(232,57,79,0.08)';
+      warning.style.borderColor = 'rgba(232,57,79,0.25)';
+    } else if (age < 6) {
+      warning.style.display = 'flex';
+      warnText.textContent = '⚠️ L\'âge minimum requis est de 6 ans.';
+      warning.style.background = 'rgba(232,57,79,0.08)';
+      warning.style.borderColor = 'rgba(232,57,79,0.25)';
+    } else {
+      warning.style.display = 'none';
+    }
+  }
+
+  function toggleSingleParent() {
+    singleParentMode = document.getElementById('singleParent').checked;
+    document.getElementById('parent2Section').style.opacity = singleParentMode ? '0.3' : '1';
+    document.getElementById('parent2Section').style.pointerEvents = singleParentMode ? 'none' : 'auto';
+    document.getElementById('docParent2Wrap').style.display = singleParentMode ? 'none' : 'block';
+    document.getElementById('docTutelleWrap').style.display = singleParentMode ? 'block' : 'none';
+  }
+
+  function previewDoc(input, zoneId, label) {
+    const zone = document.getElementById(zoneId);
+    if (input.files[0]) {
+      zone.querySelector('.upload-title').textContent = label + ' — ' + input.files[0].name;
+      zone.querySelector('.upload-sub').textContent = '✓ Document ajouté';
+      zone.querySelector('.upload-ico').textContent = '✅';
+      zone.style.borderColor = 'var(--green)';
+      zone.style.borderStyle = 'solid';
+    }
+  }
+
+  function previewPhoto(input) {
+    const zone = document.getElementById('photoZone');
+    if (input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        zone.innerHTML = `<img src="${e.target.result}" style="width:70px;height:70px;border-radius:50%;object-fit:cover;margin-bottom:8px;border:3px solid var(--purple);"><div class="upload-title">Photo sélectionnée ✓</div><input type="file" accept="image/*" onchange="previewPhoto(this)" style="display:none">`;
+        zone.style.borderColor = 'var(--purple)'; zone.style.borderStyle = 'solid';
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  const sousCats = {
+    acting:['Acteur cinéma','Acteur série TV','Acteur publicité','Figuration','Voix off / doublage','Improvisation','Acteur théâtre'],
+    musique:['Chanteur solo','Groupe / Band','Rap / Hip-hop','Pop','Rock','DJ','Compositeur / Beatmaker','Musicien'],
+    danse:['Danse urbaine (hip-hop)','Danse contemporaine','Danse classique','Danse latino','Chorégraphe'],
+    sport:['Football','Basketball','Tennis','Sports de combat','Fitness / Coaching','Freestyle','Sports extrêmes'],
+    createurs:['YouTuber','TikToker','Streamer','Créateur lifestyle','Créateur humour','Gaming'],
+    mode:['Mannequin photo — Curvy femme','Mannequin photo — Curvy homme','Mannequin photo — Enfant','Mannequin défilé','Modèle fitness','Modèle pub'],
+    art:['Dessin / Illustration','Peinture','Sculpture','Photographie','Vidéaste / Monteur'],
+    talents:['Magicien','Humoriste / Stand-up','Imitateur','Acrobate','Cascadeur'],
+    animaux:['Chat','Chien','Dresseur','Autre'],
+    pro:['Présentateur / Animateur','Conférencier','Coach','Formateur']
+  };
+
+  function updateSousCat() {
+    const cat = document.getElementById('catSelect').value;
+    const sel = document.getElementById('sousCatSelect');
+    sel.innerHTML = '<option value="">-- Sous-catégorie --</option>';
+    if (cat && sousCats[cat]) {
+      sousCats[cat].forEach(s => { const o = document.createElement('option'); o.value=s; o.textContent=s; sel.appendChild(o); });
+      sel.style.display = 'block';
+    } else { sel.style.display = 'none'; }
+  }
+</script>
+</body>
+</html>
