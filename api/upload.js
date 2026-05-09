@@ -17,56 +17,60 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
+  const credentials = Buffer.from(MUX_ID + ':' + MUX_SECRET).toString('base64');
+  const authHeader = 'Basic ' + credentials;
+
+  // Obtenir URL d'upload
   if (req.method === 'GET' && req.query.action === 'upload-url') {
     try {
-      const credentials = Buffer.from(MUX_ID + ':' + MUX_SECRET).toString('base64');
-
       const muxRes = await fetch('https://api.mux.com/video/v1/uploads', {
         method: 'POST',
-        headers: {
-          'Authorization': 'Basic ' + credentials,
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Authorization': authHeader, 'Content-Type': 'application/json' },
         body: JSON.stringify({
           cors_origin: '*',
-          new_asset_settings: {
-            playback_policy: ['public'],
-            max_resolution_tier: '1080p'
-          },
+          new_asset_settings: { playback_policy: ['public'], max_resolution_tier: '1080p' },
           timeout: 3600
         })
       });
 
       const muxData = await muxRes.json();
-
-      if (!muxRes.ok) {
-        console.error('Mux error:', JSON.stringify(muxData));
-        return res.status(500).json({ error: 'Erreur Mux', details: muxData });
-      }
+      if (!muxRes.ok) return res.status(500).json({ error: 'Erreur Mux', details: muxData });
 
       return res.status(200).json({
         upload_url: muxData.data.url,
-        upload_id: muxData.data.id,
-        asset_id: muxData.data.asset_id
+        upload_id: muxData.data.id
       });
 
     } catch (err) {
-      console.error('Server error:', err);
       return res.status(500).json({ error: err.message });
     }
   }
 
-  if (req.method === 'GET' && req.query.action === 'asset-status') {
+  // Vérifier statut upload et récupérer playback_id
+  if (req.method === 'GET' && req.query.action === 'get-playback') {
     try {
       const { upload_id } = req.query;
-      const credentials = Buffer.from(MUX_ID + ':' + MUX_SECRET).toString('base64');
 
-      const muxRes = await fetch('https://api.mux.com/video/v1/uploads/' + upload_id, {
-        headers: { 'Authorization': 'Basic ' + credentials }
+      // Récupérer l'upload pour avoir l'asset_id
+      const uploadRes = await fetch('https://api.mux.com/video/v1/uploads/' + upload_id, {
+        headers: { 'Authorization': authHeader }
       });
+      const uploadData = await uploadRes.json();
+      const asset_id = uploadData.data?.asset_id;
 
-      const muxData = await muxRes.json();
-      return res.status(200).json(muxData.data);
+      if (!asset_id) {
+        return res.status(200).json({ status: 'waiting', playback_id: null });
+      }
+
+      // Récupérer l'asset pour avoir la playback_id
+      const assetRes = await fetch('https://api.mux.com/video/v1/assets/' + asset_id, {
+        headers: { 'Authorization': authHeader }
+      });
+      const assetData = await assetRes.json();
+      const playback_id = assetData.data?.playback_ids?.[0]?.id;
+      const status = assetData.data?.status;
+
+      return res.status(200).json({ status, playback_id, asset_id });
 
     } catch (err) {
       return res.status(500).json({ error: err.message });
