@@ -5,8 +5,10 @@ export const config = {
   },
 };
 
+const MUX_ID = process.env.MUX_ID || 'd7942670-6123-4784-a3ce-8837f6022e2b';
+const MUX_SECRET = process.env.MUX_SECRET || 'bzycqzWKWB4qw+7KicW2miUUx48F+Xb3+DzUQjBBCMcwTzAzyertDFqBjcNCNAjvp7Jb3bYAyjT';
+
 export default async function handler(req, res) {
-  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -16,11 +18,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'GET' && req.query.action === 'upload-url') {
-    // Créer une URL d'upload direct Mux
     try {
-      const MUX_ID = process.env.MUX_ID;
-      const MUX_SECRET = process.env.MUX_SECRET;
-
       const credentials = Buffer.from(`${MUX_ID}:${MUX_SECRET}`).toString('base64');
 
       const muxRes = await fetch('https://api.mux.com/video/v1/uploads', {
@@ -59,11 +57,8 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'GET' && req.query.action === 'asset-status') {
-    // Vérifier le statut d'un asset Mux
     try {
       const { upload_id } = req.query;
-      const MUX_ID = process.env.MUX_ID;
-      const MUX_SECRET = process.env.MUX_SECRET;
       const credentials = Buffer.from(`${MUX_ID}:${MUX_SECRET}`).toString('base64');
 
       const muxRes = await fetch(`https://api.mux.com/video/v1/uploads/${upload_id}`, {
