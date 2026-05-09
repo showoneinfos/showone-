@@ -5,8 +5,8 @@ export const config = {
   },
 };
 
-const MUX_ID = process.env.MUX_ID || 'd7942670-6123-4784-a3ce-8837f6022e2b';
-const MUX_SECRET = process.env.MUX_SECRET || 'bzycqzWKWB4qw+7KicW2miUUx48F+Xb3+DzUQjBBCMcwTzAzyertDFqBjcNCNAjvp7Jb3bYAyjT';
+const MUX_ID = '004310b6-3d93-4799-9d08-f966924bc618';
+const MUX_SECRET = '+2mbKI+H8WlNRgXYtVKn06g4vAlXieQyAiXJ9+VupygFo3lwg0uavkUiCF6DWbssp1vItBEdjNJ';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,12 +19,12 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET' && req.query.action === 'upload-url') {
     try {
-      const credentials = Buffer.from(`${MUX_ID}:${MUX_SECRET}`).toString('base64');
+      const credentials = Buffer.from(MUX_ID + ':' + MUX_SECRET).toString('base64');
 
       const muxRes = await fetch('https://api.mux.com/video/v1/uploads', {
         method: 'POST',
         headers: {
-          'Authorization': `Basic ${credentials}`,
+          'Authorization': 'Basic ' + credentials,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
       const muxData = await muxRes.json();
 
       if (!muxRes.ok) {
-        console.error('Mux error:', muxData);
+        console.error('Mux error:', JSON.stringify(muxData));
         return res.status(500).json({ error: 'Erreur Mux', details: muxData });
       }
 
@@ -59,10 +59,10 @@ export default async function handler(req, res) {
   if (req.method === 'GET' && req.query.action === 'asset-status') {
     try {
       const { upload_id } = req.query;
-      const credentials = Buffer.from(`${MUX_ID}:${MUX_SECRET}`).toString('base64');
+      const credentials = Buffer.from(MUX_ID + ':' + MUX_SECRET).toString('base64');
 
-      const muxRes = await fetch(`https://api.mux.com/video/v1/uploads/${upload_id}`, {
-        headers: { 'Authorization': `Basic ${credentials}` }
+      const muxRes = await fetch('https://api.mux.com/video/v1/uploads/' + upload_id, {
+        headers: { 'Authorization': 'Basic ' + credentials }
       });
 
       const muxData = await muxRes.json();
