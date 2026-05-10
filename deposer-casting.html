@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShowOne — Déposer un casting</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --purple:#5B4FE8; --purple-dark:#3D32C4; --purple-deep:#1a1535; --purple-mid:#2d2560; --red:#E8394F; --cream:#f5f3ff; --muted:#a09dc0; --border:rgba(91,79,232,0.13); --white:#fff; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--purple-deep); min-height:100vh; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:16px 48px; background:rgba(26,21,53,0.92); backdrop-filter:blur(16px); border-bottom:1px solid rgba(255,255,255,0.06); }
+  .nav-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:22px; color:#fff; text-decoration:none; }
+  .nav-logo span { color:var(--red); }
+  .nav-back { color:rgba(255,255,255,0.6); font-size:13px; text-decoration:none; display:flex; align-items:center; gap:6px; }
+  .nav-back:hover { color:#fff; }
+
+  .page { max-width:720px; margin:0 auto; padding:100px 40px 80px; }
+
+  .page-header { margin-bottom:32px; }
+  .page-tag { display:inline-flex; align-items:center; gap:6px; padding:4px 12px; border-radius:999px; background:rgba(91,79,232,0.1); border:1px solid rgba(91,79,232,0.2); color:var(--purple); font-size:12px; font-weight:600; margin-bottom:12px; }
+  .page-title { font-family:'Syne',sans-serif; font-size:32px; font-weight:800; letter-spacing:-0.5px; margin-bottom:8px; }
+  .page-sub { color:var(--muted); font-size:15px; }
+
+  .form-card { background:var(--white); border:1.5px solid var(--border); border-radius:20px; padding:32px; margin-bottom:20px; }
+  .form-card-title { font-family:'Syne',sans-serif; font-size:16px; font-weight:800; margin-bottom:20px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+
+  .fg { margin-bottom:18px; }
+  .flabel { display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:var(--purple-deep); }
+  .flabel span { color:var(--muted); font-weight:400; }
+  .finput, .fselect, .ftextarea { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; font-family:'DM Sans',sans-serif; color:var(--purple-deep); background:var(--cream); transition:border-color .2s; outline:none; }
+  .finput:focus, .fselect:focus, .ftextarea:focus { border-color:var(--purple); background:#fff; }
+  .ftextarea { resize:vertical; min-height:120px; }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+  .cats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .cat-option { position:relative; }
+  .cat-option input { position:absolute; opacity:0; }
+  .cat-option label { display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px 8px; border:1.5px solid var(--border); border-radius:12px; cursor:pointer; transition:all .2s; background:var(--cream); text-align:center; }
+  .cat-option label:hover { border-color:var(--purple); background:#fff; }
+  .cat-option input:checked + label { border-color:var(--purple); background:rgba(91,79,232,0.06); }
+  .cat-ico { font-size:24px; }
+  .cat-txt { font-size:11px; font-weight:600; color:var(--purple-deep); }
+
+  .remun-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  .remun-option input { position:absolute; opacity:0; }
+  .remun-option { position:relative; }
+  .remun-option label { display:block; padding:10px 14px; border:1.5px solid var(--border); border-radius:10px; cursor:pointer; transition:all .2s; font-size:13px; font-weight:600; background:var(--cream); }
+  .remun-option label:hover { border-color:var(--purple); }
+  .remun-option input:checked + label { border-color:var(--purple); background:rgba(91,79,232,0.06); color:var(--purple); }
+
+  .btn-submit { width:100%; padding:15px; border-radius:12px; border:none; background:var(--purple); color:#fff; font-size:15px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; margin-top:8px; }
+  .btn-submit:hover { background:var(--purple-dark); transform:translateY(-1px); }
+  .btn-submit:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+
+  .success-box { display:none; background:rgba(16,185,129,0.08); border:1.5px solid rgba(16,185,129,0.25); border-radius:16px; padding:28px; text-align:center; margin-top:20px; }
+  .success-box.show { display:block; }
+  .success-ico { font-size:48px; margin-bottom:12px; }
+  .success-title { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; margin-bottom:8px; color:#065f46; }
+  .success-sub { color:#047857; font-size:14px; margin-bottom:20px; }
+  .btn-retour { padding:12px 24px; border-radius:10px; border:none; background:var(--purple); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; text-decoration:none; display:inline-block; }
+
+  @media (max-width: 768px) {
+    nav { padding:14px 20px; }
+    .page { padding:80px 16px 60px; }
+    .form-card { padding:20px; }
+    .row2 { grid-template-columns:1fr; gap:0; }
+    .cats-grid { grid-template-columns:repeat(2,1fr); }
+    .remun-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Show<span>One</span></a>
+  <a href="/dashboard-recruteur" class="nav-back">← Mon espace recruteur</a>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-tag">🎬 Nouveau casting</div>
+    <h1 class="page-title">Déposer un casting</h1>
+    <p class="page-sub">Décrivez votre besoin — les talents correspondants pourront postuler directement.</p>
+  </div>
+
+  <!-- INFOS CASTING -->
+  <div class="form-card">
+    <div class="form-card-title">📋 Informations du casting</div>
+
+    <div class="fg">
+      <label class="flabel">Titre du casting *</label>
+      <input id="titre" class="finput" type="text" placeholder="Ex : Casting mannequin pour défilé printemps 2025">
+    </div>
+
+    <div class="fg">
+      <label class="flabel">Description *</label>
+      <textarea id="description" class="ftextarea" placeholder="Décrivez votre casting : profil recherché, expérience souhaitée, déroulement des auditions…"></textarea>
+    </div>
+
+    <div class="row2">
+      <div class="fg">
+        <label class="flabel">Ville *</label>
+        <input id="ville" class="finput" type="text" placeholder="Paris, Lyon, Marseille…">
+      </div>
+      <div class="fg">
+        <label class="flabel">Date du casting <span>(optionnel)</span></label>
+        <input id="dateCasting" class="finput" type="date">
+      </div>
+    </div>
+  </div>
+
+  <!-- CATÉGORIE -->
+  <div class="form-card">
+    <div class="form-card-title">🎭 Catégorie recherchée</div>
+    <div class="cats-grid">
+      <div class="cat-option"><input type="radio" name="categorie" id="c1" value="Acting / Cinéma & TV"><label for="c1"><span class="cat-ico">🎬</span><span class="cat-txt">Acting / Cinéma</span></label></div>
+      <div class="cat-option"><input type="radio" name="categorie" id="c2" value="Musique / Chant"><label for="c2"><span class="cat-ico">🎤</span><span class="cat-txt">Musique / Chant</span></label></div>
+      <div class="cat-option"><input type="radio" name="categorie" id="c3" value="Danse"><label for="c3"><span class="cat-ico">💃</span><span class="cat-txt">Danse</span></label></div>
+      <div class="cat-option"><input type="radio" name="categorie" id="c4" value="Sport"><label for="c4"><span class="cat-ico">⚽</span><span class="cat-txt">Sport</span></label></div>
+      <div class="cat-option"><input type="radio" name="categorie" id="c5" value="Mode / Mannequinat"><label for="c5"><span class="cat-ico">👗</span><span class="cat-txt">Mode / Mannequinat</span></label></div>
+      <div class="cat-option"><input type="radio" name="categorie" id="c6" value="Créateurs de contenu"><label for="c6"><span class="cat-ico">📱</span><span class="cat-txt">Créateurs</span></label></div>
+      <div class="cat-option"><input type="radio" name="categorie" id="c7" value="Art & Création"><label for="c7"><span class="cat-ico">🎨</span><span class="cat-txt">Art & Création</span></label></div>
+      <div class="cat-option"><input type="radio" name="categorie" id="c8" value="Talents uniques"><label for="c8"><span class="cat-ico">✨</span><span class="cat-txt">Talents uniques</span></label></div>
+      <div class="cat-option"><input type="radio" name="categorie" id="c9" value="Autre"><label for="c9"><span class="cat-ico">🎭</span><span class="cat-txt">Autre</span></label></div>
+    </div>
+  </div>
+
+  <!-- RÉMUNÉRATION -->
+  <div class="form-card">
+    <div class="form-card-title">💰 Rémunération</div>
+    <div class="remun-grid">
+      <div class="remun-option"><input type="radio" name="remun" id="r1" value="Non rémunéré"><label for="r1">Non rémunéré</label></div>
+      <div class="remun-option"><input type="radio" name="remun" id="r2" value="Défraiement"><label for="r2">Défraiement</label></div>
+      <div class="remun-option"><input type="radio" name="remun" id="r3" value="Cachet"><label for="r3">Cachet</label></div>
+      <div class="remun-option"><input type="radio" name="remun" id="r4" value="Salaire"><label for="r4">Salaire</label></div>
+    </div>
+    <div class="fg" style="margin-top:14px;">
+      <label class="flabel">Précisez <span>(optionnel)</span></label>
+      <input id="remunDetail" class="finput" type="text" placeholder="Ex : 500€/jour, SMIC, à négocier…">
+    </div>
+  </div>
+
+  <button class="btn-submit" onclick="deposerCasting()">🎬 Publier le casting</button>
+
+  <!-- SUCCÈS -->
+  <div class="success-box" id="successBox">
+    <div class="success-ico">🎉</div>
+    <div class="success-title">Casting publié !</div>
+    <p class="success-sub">Votre casting est maintenant visible par tous les talents ShowOne.<br>Vous recevrez les candidatures dans votre espace recruteur.</p>
+    <a href="/dashboard-recruteur" class="btn-retour">← Retour à mon espace</a>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://emiuzigtlomlrsofxqyf.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_U8P52zBkzF6Nqno_mmbcVQ_bKQLNmTP';
+
+  async function deposerCasting() {
+    const token = window.localStorage.getItem('showone_token');
+    const userStr = window.localStorage.getItem('showone_user');
+    if (!token || !userStr) { window.location.href = '/connexion'; return; }
+
+    const titre = document.getElementById('titre').value.trim();
+    const description = document.getElementById('description').value.trim();
+    const ville = document.getElementById('ville').value.trim();
+    const dateCasting = document.getElementById('dateCasting').value;
+    const categorie = document.querySelector('input[name="categorie"]:checked')?.value || '';
+    const remun = document.querySelector('input[name="remun"]:checked')?.value || '';
+    const remunDetail = document.getElementById('remunDetail').value.trim();
+
+    if (!titre || !description || !ville || !categorie) {
+      alert('Veuillez remplir tous les champs obligatoires !');
+      return;
+    }
+
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = 'Publication en cours…';
+    btn.disabled = true;
+
+    try {
+      const userObj = JSON.parse(userStr);
+      const userEmail = userObj.email || userObj.user?.email;
+
+      // Récupérer l'ID utilisateur
+      const userRes = await fetch(`${SUPABASE_URL}/rest/v1/utilisateurs?email=eq.${encodeURIComponent(userEmail)}&select=id`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` }
+      });
+      const userData = await userRes.json();
+      const dbUserId = userData[0]?.id;
+
+      // Récupérer l'ID recruteur
+      const recruteurRes = await fetch(`${SUPABASE_URL}/rest/v1/profils_recruteurs?utilisateur_id=eq.${dbUserId}&select=id`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` }
+      });
+      const recruteurData = await recruteurRes.json();
+      const recruteurId = recruteurData[0]?.id;
+
+      if (!recruteurId) {
+        alert('Vous devez être inscrit comme recruteur pour déposer un casting !');
+        window.location.href = '/inscription-recruteur';
+        return;
+      }
+
+      // Créer le casting
+      await fetch(`${SUPABASE_URL}/rest/v1/castings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${token}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          recruteur_id: recruteurId,
+          titre,
+          description,
+          categorie,
+          ville,
+          date_casting: dateCasting || null,
+          remuneration: remun + (remunDetail ? ' — ' + remunDetail : ''),
+          statut: 'actif'
+        })
+      });
+
+      document.querySelector('.btn-submit').style.display = 'none';
+      document.getElementById('successBox').classList.add('show');
+
+    } catch(err) {
+      console.error(err);
+      alert('Erreur lors de la publication. Veuillez réessayer.');
+      btn.textContent = '🎬 Publier le casting';
+      btn.disabled = false;
+    }
+  }
+</script>
+</body>
+</html>
