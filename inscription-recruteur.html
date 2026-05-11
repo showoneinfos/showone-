@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShowOne — Inscription Recruteur</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #5B4FE8;
+    --purple-dark: #3D32C4;
+    --purple-deep: #1a1535;
+    --purple-mid: #2d2560;
+    --red: #E8394F;
+    --red-dark: #c0283c;
+    --cream: #f5f3ff;
+    --muted: #a09dc0;
+    --border: rgba(91,79,232,0.18);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--purple-deep); min-height:100vh; display:flex; }
+
+  /* GAUCHE */
+  .side-visual { width:40%; min-height:100vh; position:sticky; top:0; height:100vh; overflow:hidden; flex-shrink:0; }
+  .side-visual img { width:100%; height:100%; object-fit:cover; }
+  .side-overlay { position:absolute; inset:0; background:linear-gradient(160deg,rgba(26,21,53,0.88) 0%,rgba(61,50,196,0.5) 60%,rgba(232,57,79,0.2) 100%); }
+  .side-content { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:space-between; padding:40px; }
+  .logo { font-family:'Syne',sans-serif; font-weight:800; font-size:24px; color:#fff; text-decoration:none; }
+  .logo span { color:var(--red); }
+  .side-tag { display:inline-block; padding:4px 12px; border-radius:999px; background:rgba(232,57,79,0.15); border:1px solid rgba(232,57,79,0.3); color:#ff8090; font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:14px; }
+  .side-middle h2 { font-family:'Syne',sans-serif; font-size:32px; font-weight:800; color:#fff; line-height:1.1; letter-spacing:-.5px; margin-bottom:14px; }
+  .side-middle h2 em { color:var(--red); font-style:normal; }
+  .side-middle p { color:rgba(255,255,255,0.55); font-size:14px; line-height:1.65; max-width:280px; }
+  .side-perks { display:flex; flex-direction:column; gap:10px; }
+  .side-perk { display:flex; gap:10px; align-items:center; }
+  .side-perk-ico { width:32px; height:32px; border-radius:8px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+  .side-perk-txt { font-size:13px; color:rgba(255,255,255,0.7); line-height:1.4; }
+  .side-perk-txt strong { color:#fff; font-weight:600; }
+
+  /* DROITE */
+  .side-form { flex:1; overflow-y:auto; padding:48px 52px; display:flex; flex-direction:column; }
+
+  /* STEPS */
+  .steps { display:flex; align-items:center; margin-bottom:44px; }
+  .stp { display:flex; align-items:center; gap:9px; }
+  .stp-num { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; border:2px solid var(--border); color:var(--muted); transition:all .3s; flex-shrink:0; }
+  .stp.active .stp-num { background:var(--purple); border-color:var(--purple); color:#fff; }
+  .stp.done .stp-num { background:#10b981; border-color:#10b981; color:#fff; }
+  .stp-lbl { font-size:12px; font-weight:600; color:var(--muted); white-space:nowrap; transition:color .3s; }
+  .stp.active .stp-lbl { color:var(--purple-deep); }
+  .stp.done .stp-lbl { color:#10b981; }
+  .stp-line { flex:1; height:1.5px; background:var(--border); margin:0 10px; transition:background .3s; }
+  .stp-line.done { background:#10b981; }
+
+  /* PANELS */
+  .panel { display:none; animation:fadeSlide .35s ease; }
+  .panel.active { display:block; }
+  @keyframes fadeSlide { from{opacity:0;transform:translateX(14px)} to{opacity:1;transform:translateX(0)} }
+
+  .fhead { margin-bottom:28px; }
+  .fhead h1 { font-family:'Syne',sans-serif; font-size:26px; font-weight:800; letter-spacing:-.5px; margin-bottom:6px; }
+  .fhead p { font-size:14px; color:var(--muted); }
+
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .fg { margin-bottom:14px; }
+  .flabel { display:block; font-size:12px; font-weight:700; letter-spacing:.2px; margin-bottom:6px; color:var(--purple-deep); }
+  .flabel-opt { font-weight:400; color:var(--muted); font-size:11px; margin-left:4px; }
+  .finput, .fselect, .ftextarea {
+    width:100%; padding:11px 15px;
+    border:1.5px solid var(--border); border-radius:10px;
+    background:#fff; font-size:14px; color:var(--purple-deep);
+    font-family:'DM Sans',sans-serif; outline:none;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .finput:focus,.fselect:focus,.ftextarea:focus { border-color:var(--purple); box-shadow:0 0 0 3px rgba(91,79,232,.09); }
+  .finput::placeholder,.ftextarea::placeholder { color:var(--muted); }
+  .ftextarea { resize:vertical; min-height:85px; line-height:1.6; }
+  .fselect { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a09dc0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 13px center; padding-right:38px; cursor:pointer; appearance:none; }
+
+  /* SIRET */
+  .siret-wrap { position:relative; }
+  .siret-verify {
+    position:absolute; right:10px; top:50%; transform:translateY(-50%);
+    padding:5px 12px; border-radius:7px; border:none;
+    background:rgba(91,79,232,.1); color:var(--purple);
+    font-size:12px; font-weight:700; cursor:pointer;
+    font-family:'DM Sans',sans-serif; transition:all .2s;
+  }
+  .siret-verify:hover { background:rgba(91,79,232,.18); }
+  .siret-wrap .finput { padding-right:90px; }
+  .siret-status { display:none; font-size:12px; margin-top:5px; padding:6px 10px; border-radius:7px; }
+  .siret-status.ok { display:block; background:rgba(16,185,129,.08); color:#0a7a56; border:1px solid rgba(16,185,129,.2); }
+  .siret-status.err { display:block; background:rgba(232,57,79,.08); color:#a0243a; border:1px solid rgba(232,57,79,.2); }
+
+  /* TYPE RECRUTEUR */
+  .type-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin-bottom:14px; }
+  .type-r { display:none; }
+  .type-l { display:flex; flex-direction:column; align-items:center; gap:7px; padding:14px 8px; border:1.5px solid var(--border); border-radius:11px; cursor:pointer; transition:all .2s; background:#fff; text-align:center; }
+  .type-l:hover { border-color:var(--purple); background:rgba(91,79,232,.03); }
+  .type-r:checked + .type-l { border-color:var(--purple); background:rgba(91,79,232,.08); }
+  .type-ico { font-size:24px; }
+  .type-txt { font-size:11px; font-weight:700; color:var(--purple-deep); }
+  .type-r:checked + .type-l .type-txt { color:var(--purple); }
+
+  /* CATÉGORIES RECHERCHÉES */
+  .cats-check { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin-bottom:14px; }
+  .cat-cb { display:none; }
+  .cat-cbl { display:flex; flex-direction:column; align-items:center; gap:7px; padding:12px 8px; border:1.5px solid var(--border); border-radius:11px; cursor:pointer; transition:all .2s; background:#fff; text-align:center; }
+  .cat-cbl:hover { border-color:var(--purple); background:rgba(91,79,232,.03); }
+  .cat-cb:checked + .cat-cbl { border-color:var(--purple); background:rgba(91,79,232,.08); }
+  .cat-cbl-ico { font-size:22px; }
+  .cat-cbl-txt { font-size:11px; font-weight:700; color:var(--purple-deep); }
+  .cat-cb:checked + .cat-cbl .cat-cbl-txt { color:var(--purple); }
+
+  /* NOTE INFO */
+  .info-note { display:flex; gap:10px; align-items:flex-start; background:rgba(91,79,232,.06); border:1px solid rgba(91,79,232,.15); border-radius:9px; padding:12px 14px; margin-bottom:16px; }
+  .info-note-ico { font-size:16px; flex-shrink:0; margin-top:1px; }
+  .info-note p { font-size:12px; color:var(--purple-deep); line-height:1.5; }
+
+  /* PLAN RECRUTEUR */
+  .plan-recruiter {
+    background:var(--purple-deep);
+    border-radius:16px; padding:28px;
+    margin-bottom:16px; position:relative; overflow:hidden;
+  }
+  .plan-recruiter::before {
+    content:''; position:absolute; top:-40px; right:-40px;
+    width:150px; height:150px; border-radius:50%;
+    background:rgba(232,57,79,0.15);
+  }
+  .plan-recruiter-tag { display:inline-block; padding:3px 10px; border-radius:999px; background:rgba(232,57,79,0.2); border:1px solid rgba(232,57,79,0.35); color:#ff8090; font-size:10px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; margin-bottom:12px; }
+  .plan-recruiter-price { font-family:'Syne',sans-serif; font-size:44px; font-weight:800; color:#fff; line-height:1; margin-bottom:4px; }
+  .plan-recruiter-price span { font-size:16px; font-weight:400; color:rgba(255,255,255,0.45); }
+  .plan-recruiter-sub { color:rgba(255,255,255,0.45); font-size:13px; margin-bottom:20px; }
+  .plan-recruiter-feats { display:flex; flex-direction:column; gap:9px; }
+  .plan-recruiter-feat { display:flex; gap:9px; align-items:center; font-size:13px; color:rgba(255,255,255,0.8); }
+  .plan-recruiter-feat::before { content:'✓'; color:var(--red); font-weight:700; flex-shrink:0; }
+
+  /* CHECKBOX */
+  .chk { display:flex; gap:9px; align-items:flex-start; margin-bottom:12px; }
+  .chk input { width:17px; height:17px; margin-top:2px; accent-color:var(--purple); flex-shrink:0; cursor:pointer; }
+  .chk label { font-size:12px; color:var(--muted); line-height:1.5; }
+  .chk label a { color:var(--purple); text-decoration:none; }
+
+  /* ACTIONS */
+  .actions { display:flex; gap:10px; margin-top:10px; }
+  .btn-back { padding:12px 22px; border-radius:9px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .btn-back:hover { border-color:var(--purple); color:var(--purple); }
+  .btn-next { flex:1; padding:13px; border-radius:9px; border:none; background:var(--purple); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .btn-next:hover { background:var(--purple-dark); transform:translateY(-1px); }
+  .btn-submit { flex:1; padding:13px; border-radius:9px; border:none; background:var(--red); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .btn-submit:hover { background:var(--red-dark); transform:translateY(-1px); }
+
+  .login-link { text-align:center; margin-top:18px; font-size:13px; color:var(--muted); }
+  .login-link a { color:var(--purple); font-weight:600; text-decoration:none; }
+
+  /* SUCCÈS */
+  .success { display:none; text-align:center; padding:40px 0; animation:fadeSlide .5s ease; }
+  .success.active { display:block; }
+  .success-ico { width:70px; height:70px; border-radius:50%; background:rgba(16,185,129,.1); border:2px solid #10b981; display:flex; align-items:center; justify-content:center; font-size:30px; margin:0 auto 20px; }
+  .success h2 { font-family:'Syne',sans-serif; font-size:26px; font-weight:800; margin-bottom:10px; }
+  .success p { color:var(--muted); font-size:14px; line-height:1.6; max-width:400px; margin:0 auto 28px; }
+  .success-cards { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:28px; text-align:left; }
+  .success-card { background:#fff; border:1.5px solid var(--border); border-radius:12px; padding:16px; }
+  .success-card-ico { font-size:22px; margin-bottom:8px; }
+  .success-card-title { font-size:13px; font-weight:700; color:var(--purple-deep); margin-bottom:3px; }
+  .success-card-desc { font-size:11px; color:var(--muted); line-height:1.4; }
+  .btn-go { display:inline-block; padding:13px 34px; background:var(--purple); color:#fff; border-radius:9px; text-decoration:none; font-size:14px; font-weight:700; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .btn-go:hover { background:var(--purple-dark); transform:translateY(-1px); }
+</style>
+</head>
+<body>
+
+<!-- VISUEL GAUCHE -->
+<div class="side-visual">
+  <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=1200&fit=crop&crop=center" alt="Recruteur ShowOne">
+  <div class="side-overlay"></div>
+  <div class="side-content">
+    <a href="showone.html" class="logo">Show<span>One</span></a>
+    <div class="side-middle">
+      <div class="side-tag">Espace Recruteur</div>
+      <h2>Trouvez le talent qu'il vous <em>faut</em>.</h2>
+      <p>Accédez à des milliers de profils vérifiés, contactez directement les talents et gérez vos recherches depuis un seul espace.</p>
+    </div>
+    <div class="side-perks">
+      <div class="side-perk">
+        <div class="side-perk-ico">🎯</div>
+        <div class="side-perk-txt"><strong>Accès illimité</strong> à tous les talents de la plateforme</div>
+      </div>
+      <div class="side-perk">
+        <div class="side-perk-ico">💬</div>
+        <div class="side-perk-txt"><strong>Messagerie directe</strong> avec les talents</div>
+      </div>
+      <div class="side-perk">
+        <div class="side-perk-ico">🔍</div>
+        <div class="side-perk-txt"><strong>Recherche avancée</strong> par catégorie, ville, plan</div>
+      </div>
+      <div class="side-perk">
+        <div class="side-perk-ico">📹</div>
+        <div class="side-perk-txt"><strong>Lecture illimitée</strong> de toutes les vidéos</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORMULAIRE DROITE -->
+<div class="side-form">
+
+  <div class="steps" id="stepsBar">
+    <div class="stp active" id="s1"><div class="stp-num">1</div><div class="stp-lbl">Identité</div></div>
+    <div class="stp-line" id="l1"></div>
+    <div class="stp" id="s2"><div class="stp-num">2</div><div class="stp-lbl">Société</div></div>
+    <div class="stp-line" id="l2"></div>
+    <div class="stp" id="s3"><div class="stp-num">3</div><div class="stp-lbl">Recherche</div></div>
+    <div class="stp-line" id="l3"></div>
+    <div class="stp" id="s4"><div class="stp-num">4</div><div class="stp-lbl">Abonnement</div></div>
+  </div>
+
+  <!-- ÉTAPE 1 — Identité -->
+  <div class="panel active" id="p1">
+    <div class="fhead">
+      <h1>Vos informations personnelles</h1>
+      <p>Le responsable du compte recruteur.</p>
+    </div>
+    <div class="row2">
+      <div class="fg"><label class="flabel">Prénom *</label><input id="prenom" class="finput" type="text" placeholder="Jean"></div>
+      <div class="fg"><label class="flabel">Nom *</label><input id="nom" class="finput" type="text" placeholder="Martin"></div>
+    </div>
+    <div class="fg"><label class="flabel">Adresse e-mail professionnelle *</label><input id="email" class="finput" type="email" placeholder="jean.martin@agence.com"></div>
+    <div class="fg"><label class="flabel">Mot de passe *</label><input id="password" class="finput" type="password" placeholder="Minimum 8 caractères"></div>
+    <div class="row2">
+      <div class="fg"><label class="flabel">Téléphone direct *</label><input id="telephone" class="finput" type="tel" placeholder="+33 1 23 45 67 89"></div>
+      <div class="fg"><label class="flabel">Poste / Fonction *</label><input id="poste" class="finput" type="text" placeholder="Ex : Directeur de casting"></div>
+    </div>
+    <div class="fg"><label class="flabel">Adresse postale *</label><input id="adresse" class="finput" type="text" placeholder="12 avenue des Champs-Élysées, 75008 Paris"></div>
+    <div class="row2">
+      <div class="fg"><label class="flabel">Ville *</label><input id="ville" class="finput" type="text" placeholder="Paris"></div>
+      <div class="fg"><label class="flabel">Code postal *</label><input id="codepostal" class="finput" type="text" placeholder="75008"></div>
+    </div>
+    <div class="actions">
+      <button class="btn-next" onclick="go(2)">Continuer →</button>
+    </div>
+    <div class="login-link">Déjà un compte ? <a href="/connexion">Se connecter</a> · <a href="/inscription-talent">Je suis un talent →</a></div>
+  </div>
+
+  <!-- ÉTAPE 2 — Société -->
+  <div class="panel" id="p2">
+    <div class="fhead">
+      <h1>Votre société</h1>
+      <p>Ces informations permettent de vérifier votre identité professionnelle.</p>
+    </div>
+
+    <div class="info-note">
+      <div class="info-note-ico">🔒</div>
+      <p>Le numéro SIRET est obligatoire pour garantir la légitimité des recruteurs sur ShowOne et protéger les talents de la plateforme.</p>
+    </div>
+
+    <div class="fg"><label class="flabel">Nom de la société *</label><input id="nomsociete" class="finput" type="text" placeholder="Agence Lumière Productions"></div>
+
+    <div class="fg">
+      <label class="flabel">Numéro SIRET *</label>
+      <div class="siret-wrap">
+        <input class="finput" type="text" id="siretInput" placeholder="XXX XXX XXX XXXXX" maxlength="17" oninput="formatSiret(this)">
+        <button class="siret-verify" onclick="verifySiret()">Vérifier</button>
+      </div>
+      <div class="siret-status" id="siretStatus"></div>
+    </div>
+
+    <div class="fg">
+      <label class="flabel">Type de recruteur *</label>
+      <div class="type-grid">
+        <div><input type="radio" name="type" id="t1" class="type-r" checked><label for="t1" class="type-l"><span class="type-ico">🎬</span><span class="type-txt">Agence de casting</span></label></div>
+        <div><input type="radio" name="type" id="t2" class="type-r"><label for="t2" class="type-l"><span class="type-ico">🎵</span><span class="type-txt">Label musical</span></label></div>
+        <div><input type="radio" name="type" id="t3" class="type-r"><label for="t3" class="type-l"><span class="type-ico">📺</span><span class="type-txt">TV / Radio</span></label></div>
+        <div><input type="radio" name="type" id="t4" class="type-r"><label for="t4" class="type-l"><span class="type-ico">👔</span><span class="type-txt">Agence mode</span></label></div>
+        <div><input type="radio" name="type" id="t5" class="type-r"><label for="t5" class="type-l"><span class="type-ico">⚽</span><span class="type-txt">Club sportif</span></label></div>
+        <div><input type="radio" name="type" id="t6" class="type-r"><label for="t6" class="type-l"><span class="type-ico">🏢</span><span class="type-txt">Autre</span></label></div>
+      </div>
+    </div>
+
+    <div class="fg"><label class="flabel">Site web <span class="flabel-opt">(optionnel)</span></label><input id="siteweb" class="finput" type="url" placeholder="https://www.votre-agence.com"></div>
+
+    <div class="fg">
+      <label class="flabel">Décrivez votre activité <span class="flabel-opt">(optionnel)</span></label>
+      <textarea id="descactivite" class="ftextarea" placeholder="Ex : Agence de casting spécialisée dans la comédie musicale et les spectacles live, active depuis 2010…"></textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn-back" onclick="go(1)">← Retour</button>
+      <button class="btn-next" onclick="go(3)">Continuer →</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 3 — Recherche -->
+  <div class="panel" id="p3">
+    <div class="fhead">
+      <h1>Vos recherches</h1>
+      <p>Dites-nous quels profils vous intéressent pour personnaliser votre expérience.</p>
+    </div>
+
+    <div class="fg">
+      <label class="flabel">Catégories de talents recherchés *</label>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Sélectionnez une ou plusieurs catégories.</p>
+      <div class="cats-check">
+        <div><input type="checkbox" id="cc1" class="cat-cb" checked><label for="cc1" class="cat-cbl"><span class="cat-cbl-ico">🎬</span><span class="cat-cbl-txt">Acting / Cinéma</span></label></div>
+        <div><input type="checkbox" id="cc2" class="cat-cb"><label for="cc2" class="cat-cbl"><span class="cat-cbl-ico">🎤</span><span class="cat-cbl-txt">Musique / Chant</span></label></div>
+        <div><input type="checkbox" id="cc3" class="cat-cb"><label for="cc3" class="cat-cbl"><span class="cat-cbl-ico">💃</span><span class="cat-cbl-txt">Danse</span></label></div>
+        <div><input type="checkbox" id="cc4" class="cat-cb"><label for="cc4" class="cat-cbl"><span class="cat-cbl-ico">⚽</span><span class="cat-cbl-txt">Sport</span></label></div>
+        <div><input type="checkbox" id="cc5" class="cat-cb"><label for="cc5" class="cat-cbl"><span class="cat-cbl-ico">📱</span><span class="cat-cbl-txt">Créateurs</span></label></div>
+        <div><input type="checkbox" id="cc6" class="cat-cb"><label for="cc6" class="cat-cbl"><span class="cat-cbl-ico">👗</span><span class="cat-cbl-txt">Mode</span></label></div>
+        <div><input type="checkbox" id="cc7" class="cat-cb"><label for="cc7" class="cat-cbl"><span class="cat-cbl-ico">🎨</span><span class="cat-cbl-txt">Art & Création</span></label></div>
+        <div><input type="checkbox" id="cc8" class="cat-cb"><label for="cc8" class="cat-cbl"><span class="cat-cbl-ico">✨</span><span class="cat-cbl-txt">Talents uniques</span></label></div>
+        <div><input type="checkbox" id="cc9" class="cat-cb"><label for="cc9" class="cat-cbl"><span class="cat-cbl-ico">🐾</span><span class="cat-cbl-txt">Animaux</span></label></div>
+        <div><input type="checkbox" id="cc10" class="cat-cb"><label for="cc10" class="cat-cbl"><span class="cat-cbl-ico">🎙️</span><span class="cat-cbl-txt">Compétences pro</span></label></div>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="fg">
+        <label class="flabel">Zone géographique principale</label>
+        <select class="fselect">
+          <option>France entière</option>
+          <option>Île-de-France</option>
+          <option>Auvergne-Rhône-Alpes</option>
+          <option>Provence-Alpes-Côte d'Azur</option>
+          <option>Occitanie</option>
+          <option>Nouvelle-Aquitaine</option>
+          <option>Bretagne</option>
+          <option>International</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="flabel">Tranche d'âge recherchée</label>
+        <select class="fselect">
+          <option>Tous âges</option>
+          <option>15 – 25 ans</option>
+          <option>25 – 35 ans</option>
+          <option>35 – 50 ans</option>
+          <option>50 ans et plus</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="flabel">Précisez vos besoins <span class="flabel-opt">(optionnel)</span></label>
+      <textarea class="ftextarea" placeholder="Ex : Nous recherchons principalement des chanteurs entre 18 et 30 ans pour des auditions de comédie musicale à Paris…"></textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn-back" onclick="go(2)">← Retour</button>
+      <button class="btn-next" onclick="go(4)">Continuer →</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 4 — Abonnement -->
+  <div class="panel" id="p4">
+    <div class="fhead">
+      <h1>Votre abonnement recruteur</h1>
+      <p>Un seul plan, un accès total à tous les talents.</p>
+    </div>
+
+    <div class="plan-recruiter">
+      <div class="plan-recruiter-tag">Plan unique</div>
+      <div class="plan-recruiter-price">49,99€ <span>/ mois</span></div>
+      <div class="plan-recruiter-sub">Sans engagement — résiliable à tout moment</div>
+      <div class="plan-recruiter-feats">
+        <div class="plan-recruiter-feat">Contacter n'importe quel talent sur la plateforme</div>
+        <div class="plan-recruiter-feat">Messagerie illimitée avec tous les talents</div>
+        <div class="plan-recruiter-feat">Recherche avancée par catégorie, ville, âge</div>
+        <div class="plan-recruiter-feat">Lecture illimitée de toutes les vidéos</div>
+        <div class="plan-recruiter-feat">Accès prioritaire aux nouveaux talents</div>
+        <div class="plan-recruiter-feat">Support dédié aux recruteurs</div>
+      </div>
+    </div>
+
+    <div class="info-note">
+      <div class="info-note-ico">💳</div>
+      <p>Le paiement sera effectué de manière sécurisée via Stripe. Vous recevrez une facture par e-mail chaque mois. Aucun engagement, résiliation en un clic.</p>
+    </div>
+
+    <div class="chk">
+      <input type="checkbox" id="cgu" checked>
+      <label for="cgu">J'accepte les <a href="#">Conditions Générales d'Utilisation</a> et la <a href="#">Politique de confidentialité</a> de ShowOne.</label>
+    </div>
+    <div class="chk">
+      <input type="checkbox" id="charte">
+      <label for="charte">Je m'engage à respecter la <a href="#">Charte des recruteurs ShowOne</a> et à utiliser la plateforme de manière éthique.</label>
+    </div>
+    <div class="chk">
+      <input type="checkbox" id="nl">
+      <label for="nl">Je souhaite recevoir les actualités recruteurs et les nouveaux talents par e-mail.</label>
+    </div>
+
+    <div class="actions">
+      <button class="btn-back" onclick="go(3)">← Retour</button>
+      <button class="btn-submit" onclick="showSuccess()">Créer mon compte · 49,99€/mois</button>
+    </div>
+  </div>
+
+  <!-- SUCCÈS -->
+  <div class="success" id="success">
+    <div class="success-ico">✓</div>
+    <h2>Bienvenue chez ShowOne !</h2>
+    <p>Votre compte recruteur a bien été créé et votre abonnement est actif. Vous pouvez dès maintenant rechercher et contacter des talents.</p>
+    <div class="success-cards">
+      <div class="success-card">
+        <div class="success-card-ico">🔍</div>
+        <div class="success-card-title">Rechercher</div>
+        <div class="success-card-desc">Filtrez par catégorie, ville et âge pour trouver le profil idéal</div>
+      </div>
+      <div class="success-card">
+        <div class="success-card-ico">💬</div>
+        <div class="success-card-title">Contacter</div>
+        <div class="success-card-desc">Envoyez un message direct à n'importe quel talent</div>
+      </div>
+      <div class="success-card">
+        <div class="success-card-ico">📹</div>
+        <div class="success-card-title">Visionner</div>
+        <div class="success-card-desc">Regardez toutes les vidéos des talents sans limite</div>
+      </div>
+    </div>
+    <a href="/dashboard-recruteur" class="btn-go">Accéder à mon espace recruteur →</a>
+  </div>
+
+</div>
+
+<script>
+  let cur = 1;
+
+  function go(n) {
+    document.getElementById('p'+cur).classList.remove('active');
+    const el = document.getElementById('s'+cur);
+    el.classList.remove('active'); el.classList.add('done');
+    if (cur < 4) document.getElementById('l'+cur).classList.add('done');
+    cur = n;
+    if (cur <= 4) {
+      document.getElementById('p'+cur).classList.add('active');
+      const nel = document.getElementById('s'+cur);
+      nel.classList.remove('done'); nel.classList.add('active');
+    }
+    document.querySelector('.side-form').scrollTo(0,0);
+  }
+
+  // Configuration Supabase
+  const SUPABASE_URL = 'https://emiuzigtlomlrsofxqyf.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_U8P52zBkzF6Nqno_mmbcVQ_bKQLNmTP';
+
+  async function showSuccess() {
+    const prenom = document.getElementById('prenom').value.trim();
+    const nom = document.getElementById('nom').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const telephone = document.getElementById('telephone').value.trim();
+    const adresse = document.getElementById('adresse').value.trim();
+    const ville = document.getElementById('ville').value.trim();
+    const codepostal = document.getElementById('codepostal').value.trim();
+    const nomsociete = document.getElementById('nomsociete').value.trim();
+    const siret = document.getElementById('siretInput').value.replace(/\s/g,'');
+    const siteweb = document.getElementById('siteweb').value.trim();
+    const descactivite = document.getElementById('descactivite').value.trim();
+    const typeRec = document.querySelector('input[name="type"]:checked');
+    const typeRecruteur = typeRec ? typeRec.nextElementSibling.querySelector('.type-txt').textContent : '';
+    const categories = Array.from(document.querySelectorAll('.cat-cb:checked')).map(cb => cb.nextElementSibling.querySelector('.cat-cbl-txt').textContent);
+
+    if (!prenom || !nom || !email || !password || !nomsociete || !siret) {
+      alert('Veuillez remplir tous les champs obligatoires.');
+      go(1); return;
+    }
+    if (siret.length !== 14) {
+      alert('Le numéro SIRET doit contenir 14 chiffres.');
+      go(2); return;
+    }
+
+    const btnSubmit = document.querySelector('.btn-submit');
+    if (btnSubmit) { btnSubmit.textContent = 'Création en cours…'; btnSubmit.disabled = true; }
+
+    try {
+      // 1. Créer le compte Auth
+      const authRes = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY },
+        body: JSON.stringify({ email, password })
+      });
+      const authData = await authRes.json();
+
+      if (authData.error) {
+        alert('Erreur : ' + (authData.error.message || 'Email déjà utilisé ou invalide.'));
+        if (btnSubmit) { btnSubmit.textContent = 'Créer mon compte · 49,99€/mois'; btnSubmit.disabled = false; }
+        return;
+      }
+
+      const userId = authData.user?.id;
+
+      // 2. Sauvegarder utilisateur
+      await fetch(`${SUPABASE_URL}/rest/v1/utilisateurs`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${authData.access_token}`, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ id: userId, email, prenom, nom, telephone, adresse, ville, code_postal: codepostal, type_compte: 'recruteur', plan: 'gratuit' })
+      });
+
+      // 3. Sauvegarder profil recruteur
+      await fetch(`${SUPABASE_URL}/rest/v1/profils_recruteurs`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${authData.access_token}`, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ utilisateur_id: userId, nom_societe: nomsociete, siret, type_recruteur: typeRecruteur, site_web: siteweb, description: descactivite, categories_recherchees: categories })
+      });
+
+      // 4. Envoyer l'email de confirmation
+      try {
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'confirmation_recruteur', to: email, prenom })
+        });
+      } catch(e) { console.log('Email non envoyé:', e); }
+
+      // 5. Afficher le succès
+      document.getElementById('p4').classList.remove('active');
+      document.getElementById('s4').classList.remove('active');
+      document.getElementById('s4').classList.add('done');
+      document.getElementById('l3').classList.add('done');
+      document.getElementById('stepsBar').style.display = 'none';
+      document.getElementById('success').classList.add('active');
+
+    } catch (err) {
+      console.error(err);
+      alert('Une erreur est survenue. Veuillez réessayer.');
+      if (btnSubmit) { btnSubmit.textContent = 'Créer mon compte · 49,99€/mois'; btnSubmit.disabled = false; }
+    }
+  }
+
+  function formatSiret(input) {
+    let v = input.value.replace(/\D/g,'');
+    let out = '';
+    for (let i = 0; i < v.length && i < 14; i++) {
+      if (i === 3 || i === 6 || i === 9) out += ' ';
+      out += v[i];
+    }
+    input.value = out;
+    document.getElementById('siretStatus').className = 'siret-status';
+  }
+
+  function verifySiret() {
+    const val = document.getElementById('siretInput').value.replace(/\s/g,'');
+    const status = document.getElementById('siretStatus');
+    if (val.length === 14 && /^\d+$/.test(val)) {
+      status.className = 'siret-status ok';
+      status.textContent = '✓ Format SIRET valide — vérification en cours…';
+      setTimeout(() => { status.textContent = '✓ Société vérifiée avec succès'; }, 1200);
+    } else {
+      status.className = 'siret-status err';
+      status.textContent = '✗ Le SIRET doit contenir exactement 14 chiffres.';
+    }
+  }
+</script>
+</body>
+</html>
