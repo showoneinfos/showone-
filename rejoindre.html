@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rejoindre ShowOne — Talent ou Recruteur ?</title>
+<meta name="description" content="Rejoignez ShowOne en tant que talent ou recruteur. Créez votre profil gratuitement et faites-vous découvrir.">
+<link rel="canonical" href="https://www.showone.fr/rejoindre">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple:#5B4FE8; --purple-dark:#3D32C4; --purple-deep:#1a1535;
+    --red:#E8394F; --red-dark:#c0283c;
+    --cream:#f5f3ff; --muted:#a09dc0; --border:rgba(91,79,232,0.15);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--purple-deep); color:#fff; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; overflow:hidden; }
+
+  /* Fond animé */
+  body::before {
+    content:''; position:fixed; inset:0; z-index:0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(91,79,232,0.3) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(232,57,79,0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 60% 80%, rgba(91,79,232,0.15) 0%, transparent 50%);
+    animation: bgPulse 8s ease-in-out infinite alternate;
+  }
+  @keyframes bgPulse {
+    0% { opacity:.7; }
+    100% { opacity:1; }
+  }
+
+  .wrap { position:relative; z-index:1; width:100%; max-width:720px; text-align:center; }
+
+  /* Logo */
+  .logo { font-family:'Syne',sans-serif; font-weight:800; font-size:28px; color:#fff; text-decoration:none; display:inline-block; margin-bottom:48px; }
+  .logo span { color:var(--red); }
+
+  /* Titre */
+  h1 { font-family:'Syne',sans-serif; font-size:clamp(28px,5vw,48px); font-weight:800; line-height:1.05; letter-spacing:-1.5px; margin-bottom:14px; }
+  h1 em { color:var(--red); font-style:normal; }
+  .sub { font-size:16px; color:rgba(255,255,255,0.5); margin-bottom:56px; line-height:1.6; }
+
+  /* Cards */
+  .cards { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:36px; }
+
+  .card {
+    background:rgba(255,255,255,0.04);
+    border:1.5px solid rgba(255,255,255,0.08);
+    border-radius:20px; padding:36px 28px;
+    cursor:pointer; text-decoration:none; color:#fff;
+    transition:all .3s cubic-bezier(.34,1.56,.64,1);
+    display:flex; flex-direction:column; align-items:flex-start; gap:16px;
+    position:relative; overflow:hidden;
+  }
+  .card::before {
+    content:''; position:absolute; inset:0; opacity:0;
+    transition:opacity .3s;
+    border-radius:20px;
+  }
+  .card-talent::before { background:linear-gradient(135deg,rgba(91,79,232,0.2),rgba(91,79,232,0.05)); }
+  .card-recruteur::before { background:linear-gradient(135deg,rgba(232,57,79,0.2),rgba(232,57,79,0.05)); }
+  .card:hover { transform:translateY(-6px) scale(1.02); border-color:rgba(255,255,255,0.2); }
+  .card:hover::before { opacity:1; }
+  .card-talent:hover { border-color:var(--purple); box-shadow:0 20px 60px rgba(91,79,232,0.25); }
+  .card-recruteur:hover { border-color:var(--red); box-shadow:0 20px 60px rgba(232,57,79,0.25); }
+
+  .card-ico {
+    width:56px; height:56px; border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; flex-shrink:0;
+  }
+  .card-talent .card-ico { background:rgba(91,79,232,0.2); }
+  .card-recruteur .card-ico { background:rgba(232,57,79,0.2); }
+
+  .card-tag {
+    font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+    padding:4px 10px; border-radius:99px;
+  }
+  .card-talent .card-tag { background:rgba(91,79,232,0.25); color:#a89ff5; }
+  .card-recruteur .card-tag { background:rgba(232,57,79,0.2); color:#f5827a; }
+
+  .card h2 { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; margin-bottom:4px; }
+  .card p { font-size:13px; color:rgba(255,255,255,0.5); line-height:1.6; }
+
+  .card-features { list-style:none; margin-top:8px; display:flex; flex-direction:column; gap:7px; }
+  .card-features li { font-size:13px; color:rgba(255,255,255,0.6); display:flex; align-items:center; gap:8px; }
+  .card-features li::before { content:'✓'; font-size:11px; font-weight:700; flex-shrink:0; }
+  .card-talent .card-features li::before { color:#a89ff5; }
+  .card-recruteur .card-features li::before { color:#f5827a; }
+
+  .card-arrow {
+    position:absolute; bottom:24px; right:24px;
+    width:36px; height:36px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; transition:all .3s;
+    opacity:0; transform:translateX(-8px);
+  }
+  .card-talent .card-arrow { background:var(--purple); }
+  .card-recruteur .card-arrow { background:var(--red); }
+  .card:hover .card-arrow { opacity:1; transform:translateX(0); }
+
+  /* Connexion */
+  .login-link { font-size:14px; color:rgba(255,255,255,0.4); }
+  .login-link a { color:rgba(255,255,255,0.7); font-weight:600; text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color .2s; }
+  .login-link a:hover { color:#fff; }
+
+  /* Mineur */
+  .mineur-link { margin-top:12px; font-size:12px; color:rgba(255,255,255,0.3); }
+  .mineur-link a { color:rgba(255,255,255,0.45); text-decoration:none; }
+  .mineur-link a:hover { color:rgba(255,255,255,0.7); }
+
+  @media (max-width:600px) {
+    .cards { grid-template-columns:1fr; }
+    h1 { font-size:28px; }
+    .sub { font-size:14px; margin-bottom:36px; }
+    .card { padding:28px 22px; }
+    .logo { margin-bottom:32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a href="/" class="logo">Show<span>One</span></a>
+
+  <h1>Qui êtes-vous <em>?</em></h1>
+  <p class="sub">Choisissez votre profil pour créer votre compte ShowOne.</p>
+
+  <div class="cards">
+
+    <!-- TALENT -->
+    <a href="/inscription-talent" class="card card-talent">
+      <div style="display:flex;align-items:center;gap:12px;width:100%;">
+        <div class="card-ico">🌟</div>
+        <span class="card-tag">Gratuit</span>
+      </div>
+      <div>
+        <h2>Je suis un Talent</h2>
+        <p>Chanteur, danseur, acteur, mannequin, sportif, créateur…</p>
+      </div>
+      <ul class="card-features">
+        <li>Créez votre profil vidéo</li>
+        <li>Soyez découvert par des recruteurs</li>
+        <li>Postulez aux castings</li>
+        <li>Inscription 100% gratuite</li>
+      </ul>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- RECRUTEUR -->
+    <a href="/inscription-recruteur" class="card card-recruteur">
+      <div style="display:flex;align-items:center;gap:12px;width:100%;">
+        <div class="card-ico">🔍</div>
+        <span class="card-tag">Pro</span>
+      </div>
+      <div>
+        <h2>Je suis Recruteur</h2>
+        <p>Agence, directeur de casting, marque, producteur…</p>
+      </div>
+      <ul class="card-features">
+        <li>Accédez à des centaines de talents</li>
+        <li>Contactez directement les profils</li>
+        <li>Publiez vos offres de casting</li>
+        <li>Recherche avancée par catégorie</li>
+      </ul>
+      <div class="card-arrow">→</div>
+    </a>
+
+  </div>
+
+  <p class="login-link">Déjà un compte ? <a href="/connexion">Se connecter →</a></p>
+  <p class="mineur-link">Moins de 18 ans ? <a href="/inscription-mineur">Inscription mineur →</a></p>
+</div>
+
+<script>
+  // Si déjà connecté, rediriger vers le bon dashboard
+  (function() {
+    try {
+      const u = JSON.parse(localStorage.getItem('showone_user') || '{}');
+      if (u.type_compte === 'recruteur') window.location.href = '/dashboard-recruteur';
+      else if (u.type_compte === 'talent') window.location.href = '/dashboard-talent';
+    } catch(e) {}
+  })();
+</script>
+</body>
+</html>
