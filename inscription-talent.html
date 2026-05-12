@@ -475,6 +475,15 @@
 </div>
 
 <script>
+  // Vérifier si déjà connecté — rediriger vers le bon dashboard
+  (function() {
+    try {
+      const u = JSON.parse(localStorage.getItem('showone_user') || '{}');
+      if (u.type_compte === 'recruteur') { window.location.href = '/dashboard-recruteur'; }
+      else if (u.type_compte === 'talent') { window.location.href = '/dashboard-talent'; }
+    } catch(e) {}
+  })();
+
   let cur = 1;
 
   function go(n) {
@@ -547,7 +556,31 @@
                            errMsg.toLowerCase().includes('taken');
         
         if (emailExiste) {
-          errDiv.innerHTML = '⚠️ Cette adresse email est déjà utilisée.<br>Vous avez déjà un compte ShowOne — <a href="/connexion" style="color:var(--red);font-weight:700;text-decoration:underline;">connectez-vous ici →</a>';
+          // Vérifier si c'est un compte recruteur
+          try {
+            const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/utilisateurs?email=eq.${email}&select=type_compte&limit=1`, {
+              headers: { 'apikey': SUPABASE_KEY }
+            });
+            const checkData = await checkRes.json();
+            if (checkData && checkData.length > 0 && checkData[0].type_compte === 'recruteur') {
+              errDiv.innerHTML = '⚠️ Cette adresse email est associée à un compte <strong>recruteur</strong>.<br>Les comptes recruteurs ne peuvent pas s'inscrire comme talents. <a href="/connexion" style="color:var(--red);font-weight:700;text-decoration:underline;">Connectez-vous à votre espace recruteur →</a>';
+            } else {
+              // Vérifier si c'est un compte recruteur
+          try {
+            const chk = await fetch(`${SUPABASE_URL}/rest/v1/utilisateurs?email=eq.${document.getElementById('email').value.trim()}&select=type_compte&limit=1`, { headers: { 'apikey': SUPABASE_KEY } });
+            const chkData = await chk.json();
+            if (chkData?.[0]?.type_compte === 'recruteur') {
+              errDiv.innerHTML = '⚠️ Cette adresse est associée à un compte <strong>recruteur</strong>. Les recruteurs ne peuvent pas s'inscrire comme talents. <a href="/connexion" style="color:var(--red);font-weight:700;text-decoration:underline;">Accéder à votre espace recruteur →</a>';
+            } else {
+              errDiv.innerHTML = '⚠️ Cette adresse email est déjà utilisée. <a href="/connexion" style="color:var(--red);font-weight:700;text-decoration:underline;">Connectez-vous ici →</a>';
+            }
+          } catch(e) {
+            errDiv.innerHTML = '⚠️ Cette adresse email est déjà utilisée. <a href="/connexion" style="color:var(--red);font-weight:700;text-decoration:underline;">Connectez-vous ici →</a>';
+          }
+            }
+          } catch(e) {
+            errDiv.innerHTML = '⚠️ Cette adresse email est déjà utilisée. <a href="/connexion" style="color:var(--red);font-weight:700;text-decoration:underline;">Connectez-vous ici →</a>';
+          }
         } else {
           errDiv.innerHTML = '⚠️ ' + (errMsg || 'Une erreur est survenue. Vérifiez vos informations.');
         }

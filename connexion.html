@@ -240,6 +240,18 @@
         } catch(e) {}
       }
 
+      // Récupérer le vrai type_compte depuis Supabase (plus fiable que le toggle)
+      let vraiType = currentType;
+      try {
+        const typeRes = await fetch(`${SUPABASE_URL}/rest/v1/utilisateurs?id=eq.${userId}&select=type_compte&limit=1`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` }
+        });
+        const typeData = await typeRes.json();
+        if (typeData && typeData.length > 0 && typeData[0].type_compte) {
+          vraiType = typeData[0].type_compte;
+        }
+      } catch(e) { console.warn('Type compte non récupéré:', e); }
+
       // Stocker toutes les infos dans showone_user
       window.localStorage.setItem('showone_user', JSON.stringify({
         id: userId,
@@ -247,11 +259,11 @@
         prenom,
         nom,
         photo_url,
-        type_compte: currentType
+        type_compte: vraiType
       }));
 
-      // Rediriger selon le type
-      if (currentType === 'recruteur') {
+      // Rediriger selon le vrai type
+      if (vraiType === 'recruteur') {
         window.location.href = '/dashboard-recruteur';
       } else {
         window.location.href = '/dashboard-talent';

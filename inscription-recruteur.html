@@ -544,6 +544,17 @@
         body: JSON.stringify({ utilisateur_id: userId, nom_societe: nomsociete, siret, type_recruteur: typeRecruteur, site_web: siteweb, description: descactivite, categories_recherchees: categories })
       });
 
+      // 3b. Sauvegarder dans localStorage avec type_compte recruteur
+      localStorage.setItem('showone_token', authData.access_token);
+      localStorage.setItem('showone_user', JSON.stringify({
+        id: userId,
+        email,
+        prenom,
+        nom,
+        type_compte: 'recruteur',
+        photo_url: ''
+      }));
+
       // 4. Envoyer l'email de confirmation
       try {
         await fetch('/api/send-email', {
