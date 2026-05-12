@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShowOne — Toutes les catégories</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --purple:#5B4FE8; --purple-dark:#3D32C4; --purple-deep:#1a1535; --purple-mid:#2d2560; --red:#E8394F; --cream:#f5f3ff; --muted:#a09dc0; --border:rgba(91,79,232,0.13); --white:#fff; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--purple-deep); }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:16px 48px; background:rgba(26,21,53,0.92); backdrop-filter:blur(16px); border-bottom:1px solid rgba(255,255,255,0.06); }
+  .nav-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:22px; color:#fff; text-decoration:none; }
+  .nav-logo span { color:var(--red); }
+  .nav-right { display:flex; gap:12px; }
+  .btn-nav { padding:8px 18px; border-radius:999px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; text-decoration:none; display:inline-block; }
+  .btn-outline { border:1px solid rgba(255,255,255,0.25); color:#fff; background:transparent; }
+  .btn-outline:hover { background:rgba(255,255,255,0.08); }
+  .btn-fill { border:none; background:var(--red); color:#fff; }
+  .btn-fill:hover { background:#c0283c; transform:translateY(-1px); }
+
+  .hero { background:linear-gradient(135deg,var(--purple-deep) 0%,var(--purple-mid) 60%,#3a1a2e 100%); padding:120px 64px 80px; text-align:center; }
+  .hero-tag { display:inline-flex; align-items:center; gap:7px; padding:5px 16px; border-radius:999px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); color:rgba(255,255,255,0.7); font-size:12px; font-weight:600; letter-spacing:.5px; text-transform:uppercase; margin-bottom:20px; }
+  .hero h1 { font-family:'Syne',sans-serif; font-size:48px; font-weight:800; color:#fff; letter-spacing:-1.5px; margin-bottom:14px; }
+  .hero h1 em { color:var(--red); font-style:normal; }
+  .hero p { font-size:16px; color:rgba(255,255,255,0.5); max-width:500px; margin:0 auto; line-height:1.65; }
+
+  .content { max-width:1100px; margin:0 auto; padding:60px 40px 80px; }
+
+  .cats-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:24px; }
+
+  .cat-card { background:var(--white); border:1.5px solid var(--border); border-radius:18px; overflow:hidden; transition:all .3s; }
+  .cat-card:hover { box-shadow:0 20px 40px rgba(91,79,232,0.1); transform:translateY(-3px); }
+
+  .cat-header { padding:24px 26px 20px; display:flex; align-items:center; gap:16px; border-bottom:1px solid var(--border); }
+  .cat-ico { width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
+  .cat-title { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; margin-bottom:3px; }
+  .cat-count { font-size:12px; color:var(--muted); font-weight:500; }
+
+  .cat-body { padding:20px 26px; }
+  .sous-cats { display:flex; flex-wrap:wrap; gap:8px; }
+  .sous-cat { padding:6px 14px; border-radius:999px; background:var(--cream); border:1.5px solid var(--border); font-size:12px; font-weight:600; color:var(--purple-deep); cursor:pointer; transition:all .2s; text-decoration:none; display:inline-block; }
+  .sous-cat:hover { background:var(--purple); color:#fff; border-color:var(--purple); }
+
+  .cat-btn { display:block; margin:16px 26px 20px; padding:11px; border-radius:10px; border:none; background:var(--purple); color:#fff; font-size:13px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; text-align:center; text-decoration:none; }
+  .cat-btn:hover { background:var(--purple-dark); }
+
+  /* couleurs des icônes */
+  .ico-acting { background:rgba(232,57,79,0.1); }
+  .ico-musique { background:rgba(91,79,232,0.1); }
+  .ico-danse { background:rgba(245,158,11,0.1); }
+  .ico-sport { background:rgba(16,185,129,0.1); }
+  .ico-createurs { background:rgba(99,102,241,0.1); }
+  .ico-mode { background:rgba(236,72,153,0.1); }
+  .ico-art { background:rgba(20,184,166,0.1); }
+  .ico-talents { background:rgba(168,85,247,0.1); }
+  .ico-animaux { background:rgba(34,197,94,0.1); }
+  .ico-pro { background:rgba(59,130,246,0.1); }
+
+  .cta-section { background:var(--purple-deep); border-radius:20px; padding:48px; text-align:center; margin-top:48px; }
+  .cta-section h2 { font-family:'Syne',sans-serif; font-size:32px; font-weight:800; color:#fff; margin-bottom:10px; letter-spacing:-.5px; }
+  .cta-section h2 em { color:var(--red); font-style:normal; }
+  .cta-section p { color:rgba(255,255,255,0.45); font-size:15px; margin-bottom:28px; }
+  .cta-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .btn-cta-main { padding:13px 30px; border-radius:10px; border:none; background:var(--red); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; text-decoration:none; }
+  .btn-cta-main:hover { background:#c0283c; transform:translateY(-1px); }
+  .btn-cta-sec { padding:13px 30px; border-radius:10px; border:1.5px solid rgba(255,255,255,0.2); background:transparent; color:#fff; font-size:14px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; text-decoration:none; }
+  .btn-cta-sec:hover { background:rgba(255,255,255,0.08); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Show<span>One</span></a>
+  <div class="nav-right">
+    <a href="/connexion" class="btn-nav btn-outline">Connexion</a>
+    <a href="/inscription-talent" class="btn-nav btn-fill">Rejoindre</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">🌟 Tous les talents</div>
+  <h1>Explorez nos <em>catégories</em></h1>
+  <p>Des centaines de talents dans toutes les disciplines. Trouvez votre catégorie et montrez ce que vous savez faire !</p>
+</div>
+
+<div class="content">
+  <div class="cats-grid">
+
+    <!-- ACTING -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <div class="cat-ico ico-acting">🎬</div>
+        <div>
+          <div class="cat-title">Acting / Cinéma & TV</div>
+          <div class="cat-count">7 sous-catégories</div>
+        </div>
+      </div>
+      <div class="cat-body">
+        <div class="sous-cats">
+          <a href="/categorie-detail?cat=acting&sc=Acteur+cinéma" class="sous-cat">Acteur cinéma</a>
+          <a href="/categorie-detail?cat=acting&sc=Acteur+série+TV" class="sous-cat">Acteur série TV</a>
+          <a href="/categorie-detail?cat=acting&sc=Acteur+publicité" class="sous-cat">Acteur publicité</a>
+          <a href="/categorie-detail?cat=acting&sc=Figuration" class="sous-cat">Figuration</a>
+          <a href="/categorie-detail?cat=acting&sc=Voix+off+%2F+Doublage" class="sous-cat">Voix off / Doublage</a>
+          <a href="/categorie-detail?cat=acting&sc=Improvisation" class="sous-cat">Improvisation</a>
+          <a href="/categorie-detail?cat=acting&sc=Acteur+théâtre" class="sous-cat">Acteur théâtre</a>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- MUSIQUE -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <div class="cat-ico ico-musique">🎤</div>
+        <div>
+          <div class="cat-title">Musique / Chant</div>
+          <div class="cat-count">8 sous-catégories</div>
+        </div>
+      </div>
+      <div class="cat-body">
+        <div class="sous-cats">
+          <a href="/categorie-detail?cat=musique&sc=Chanteur+solo" class="sous-cat">Chanteur solo</a>
+          <a href="/categorie-detail?cat=musique&sc=Groupe+%2F+Band" class="sous-cat">Groupe / Band</a>
+          <a href="/categorie-detail?cat=musique&sc=Rap+%2F+Hip-hop" class="sous-cat">Rap / Hip-hop</a>
+          <a href="/categorie-detail?cat=musique&sc=Pop" class="sous-cat">Pop</a>
+          <a href="/categorie-detail?cat=musique&sc=Rock" class="sous-cat">Rock</a>
+          <a href="/categorie-detail?cat=musique&sc=DJ" class="sous-cat">DJ</a>
+          <a href="/categorie-detail?cat=musique&sc=Compositeur+%2F+Beatmaker" class="sous-cat">Compositeur / Beatmaker</a>
+          <a href="/categorie-detail?cat=musique&sc=Musicien" class="sous-cat">Musicien</a>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- DANSE -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <div class="cat-ico ico-danse">💃</div>
+        <div>
+          <div class="cat-title">Danse</div>
+          <div class="cat-count">5 sous-catégories</div>
+        </div>
+      </div>
+      <div class="cat-body">
+        <div class="sous-cats">
+          <a href="/categorie-detail?cat=danse&sc=Danse+urbaine+(hip-hop)" class="sous-cat">Danse urbaine (hip-hop)</a>
+          <a href="/categorie-detail?cat=danse&sc=Danse+contemporaine" class="sous-cat">Danse contemporaine</a>
+          <a href="/categorie-detail?cat=danse&sc=Danse+classique" class="sous-cat">Danse classique</a>
+          <a href="/categorie-detail?cat=danse&sc=Danse+latino" class="sous-cat">Danse latino</a>
+          <a href="/categorie-detail?cat=danse&sc=Chorégraphe" class="sous-cat">Chorégraphe</a>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- SPORT -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <div class="cat-ico ico-sport">⚽</div>
+        <div>
+          <div class="cat-title">Sport</div>
+          <div class="cat-count">7 sous-catégories</div>
+        </div>
+      </div>
+      <div class="cat-body">
+        <div class="sous-cats">
+          <a href="/categorie-detail?cat=sport&sc=Football" class="sous-cat">Football</a>
+          <a href="/categorie-detail?cat=sport&sc=Basketball" class="sous-cat">Basketball</a>
+          <a href="/categorie-detail?cat=sport&sc=Tennis" class="sous-cat">Tennis</a>
+          <a href="/categorie-detail?cat=sport&sc=Sports+de+combat" class="sous-cat">Sports de combat</a>
+          <a href="/categorie-detail?cat=sport&sc=Fitness+%2F+Coaching" class="sous-cat">Fitness / Coaching</a>
+          <a href="/categorie-detail?cat=sport&sc=Freestyle" class="sous-cat">Freestyle</a>
+          <a href="/categorie-detail?cat=sport&sc=Sports+extrêmes" class="sous-cat">Sports extrêmes</a>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- CRÉATEURS -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <div class="cat-ico ico-createurs">📱</div>
+        <div>
+          <div class="cat-title">Créateurs de contenu</div>
+          <div class="cat-count">6 sous-catégories</div>
+        </div>
+      </div>
+      <div class="cat-body">
+        <div class="sous-cats">
+          <a href="/categorie-detail?cat=createurs&sc=YouTuber" class="sous-cat">YouTuber</a>
+          <a href="/categorie-detail?cat=createurs&sc=TikToker" class="sous-cat">TikToker</a>
+          <a href="/categorie-detail?cat=createurs&sc=Streamer" class="sous-cat">Streamer</a>
+          <a href="/categorie-detail?cat=createurs&sc=Créateur+lifestyle" class="sous-cat">Créateur lifestyle</a>
+          <a href="/categorie-detail?cat=createurs&sc=Créateur+humour" class="sous-cat">Créateur humour</a>
+          <a href="/categorie-detail?cat=createurs&sc=Gaming" class="sous-cat">Gaming</a>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- MODE -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <div class="cat-ico ico-mode">👗</div>
+        <div>
+          <div class="cat-title">Mode / Mannequinat</div>
+          <div class="cat-count">6 sous-catégories</div>
+        </div>
+      </div>
+      <div class="cat-body">
+        <div class="sous-cats">
+          <a href="/categorie-detail?cat=mode&sc=Mannequin+photo+%E2%80%94+Curvy+femme" class="sous-cat">Mannequin photo — Curvy femme</a>
+          <a href="/categorie-detail?cat=mode&sc=Mannequin+photo+%E2%80%94+Curvy+homme" class="sous-cat">Mannequin photo — Curvy homme</a>
+          <a href="/categorie-detail?cat=mode&sc=Mannequin+photo+%E2%80%94+Enfant" class="sous-cat">Mannequin photo — Enfant</a>
+          <a href="/categorie-detail?cat=mode&sc=Mannequin+défilé" class="sous-cat">Mannequin défilé</a>
+          <a href="/categorie-detail?cat=mode&sc=Modèle+fitness" class="sous-cat">Modèle fitness</a>
+          <a href="/categorie-detail?cat=mode&sc=Modèle+pub" class="sous-cat">Modèle pub</a>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- ART -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <div class="cat-ico ico-art">🎨</div>
+        <div>
+          <div class="cat-title">Art & Création</div>
+          <div class="cat-count">5 sous-catégories</div>
+        </div>
+      </div>
+      <div class="cat-body">
+        <div class="sous-cats">
+          <a href="/categorie-detail?cat=art&sc=Dessin+%2F+Illustration" class="sous-cat">Dessin / Illustration</a>
+          <a href="/categorie-detail?cat=art&sc=Peinture" class="sous-cat">Peinture</a>
+          <a href="/categorie-detail?cat=art&sc=Sculpture" class="sous-cat">Sculpture</a>
+          <a href="/categorie-detail?cat=art&sc=Photographie" class="sous-cat">Photographie</a>
+          <a href="/categorie-detail?cat=art&sc=Vidéaste+%2F+Monteur" class="sous-cat">Vidéaste / Monteur</a>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- TALENTS UNIQUES -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <div class="cat-ico ico-talents">✨</div>
+        <div>
+          <div class="cat-title">Performances & Talents uniques</div>
+          <div class="cat-count">5 sous-catégories</div>
+        </div>
+      </div>
+      <div class="cat-body">
+        <div class="sous-cats">
+          <a href="/categorie-detail?cat=talents&sc=Magicien" class="sous-cat">Magicien</a>
+          <a href="/categorie-detail?cat=talents&sc=Humoriste+%2F+Stand-up" class="sous-cat">Humoriste / Stand-up</a>
+          <a href="/categorie-detail?cat=talents&sc=Imitateur" class="sous-cat">Imitateur</a>
+          <a href="/categorie-detail?cat=talents&sc=Acrobate" class="sous-cat">Acrobate</a>
+          <a href="/categorie-detail?cat=talents&sc=Cascadeur" class="sous-cat">Cascadeur</a>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- ANIMAUX -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <div class="cat-ico ico-animaux">🐾</div>
+        <div>
+          <div class="cat-title">Animaux</div>
+          <div class="cat-count">4 sous-catégories</div>
+        </div>
+      </div>
+      <div class="cat-body">
+        <div class="sous-cats">
+          <a href="/categorie-detail?cat=animaux&sc=Chat" class="sous-cat">Chat</a>
+          <a href="/categorie-detail?cat=animaux&sc=Chien" class="sous-cat">Chien</a>
+          <a href="/inscription-talent" class="sous-cat">Dresseur</a>
+          <a href="/inscription-talent" class="sous-cat">Autre animal</a>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- PRO -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <div class="cat-ico ico-pro">🎙️</div>
+        <div>
+          <div class="cat-title">Compétences professionnelles</div>
+          <div class="cat-count">4 sous-catégories</div>
+        </div>
+      </div>
+      <div class="cat-body">
+        <div class="sous-cats">
+          <a href="/inscription-talent" class="sous-cat">Présentateur / Animateur</a>
+          <a href="/inscription-talent" class="sous-cat">Conférencier</a>
+          <a href="/inscription-talent" class="sous-cat">Coach</a>
+          <a href="/inscription-talent" class="sous-cat">Formateur</a>
+        </div>
+      </div>
+      
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h2>Prêt à entrer en <em>scène</em> ?</h2>
+    <p>Rejoignez plus de 12 000 talents déjà inscrits sur ShowOne.</p>
+    <div class="cta-btns">
+      <a href="/inscription-talent" class="btn-cta-main">🌟 S'inscrire gratuitement</a>
+      <a href="/inscription-recruteur" class="btn-cta-sec">🔍 Espace recruteur</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://emiuzigtlomlrsofxqyf.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_U8P52zBkzF6Nqno_mmbcVQ_bKQLNmTP';
+
+  const CATS_MAP = {
+    'acting': 'Acting', 'musique': 'Musique', 'danse': 'Danse',
+    'sport': 'Sport', 'créateurs': 'Créateurs', 'mode': 'Mode',
+    'art': 'Art', 'talents': 'Talents', 'animaux': 'Animaux', 'pro': 'Pro'
+  };
+  const ICO_IDS = ['acting','musique','danse','sport','createurs','mode','art','talents','animaux','pro'];
+
+  async function chargerCompteurs() {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/profils_talents?select=categorie`, {
+        headers: { 'apikey': SUPABASE_KEY }
+      });
+      const data = await res.json();
+      if (!Array.isArray(data)) return;
+
+      // Compter par catégorie
+      const counts = {};
+      data.forEach(p => {
+        const c = (p.categorie || '').toLowerCase().trim();
+        counts[c] = (counts[c] || 0) + 1;
+      });
+
+      // Mettre à jour chaque carte
+      ICO_IDS.forEach(id => {
+        const ico = document.querySelector(`.ico-${id}`);
+        if (!ico) return;
+        const card = ico.closest('.cat-card');
+        if (!card) return;
+
+        // Compteur réel
+        const nomCat = CATS_MAP[id] || id;
+        const nb = counts[nomCat.toLowerCase()] || 0;
+        const countEl = card.querySelector('.cat-count');
+        if (countEl) {
+          countEl.textContent = nb > 0
+            ? nb + ' talent' + (nb > 1 ? 's' : '') + ' disponible' + (nb > 1 ? 's' : '')
+            : 'Soyez le premier !';
+        }
+
+        // Boutons
+        const div = document.createElement('div');
+        div.style.cssText = 'display:flex;gap:10px;margin:0 26px 20px;';
+        div.innerHTML = `
+          <a href="/inscription-talent" style="flex:1;display:block;padding:11px;border-radius:10px;background:var(--purple);color:#fff;font-size:13px;font-weight:700;text-align:center;text-decoration:none;">S'inscrire →</a>
+          <a href="/dashboard-recruteur" style="padding:11px 14px;border-radius:10px;border:1.5px solid var(--border);background:#fff;color:var(--purple);font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;">🔍 Voir</a>
+        `;
+        card.appendChild(div);
+      });
+
+    } catch(e) { console.error(e); }
+  }
+
+  chargerCompteurs();
+</script>
+
+</body>
+</html>
