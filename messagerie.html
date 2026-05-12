@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShowOne — Messagerie</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple:#5B4FE8; --purple-dark:#3D32C4; --purple-deep:#1a1535;
+    --purple-mid:#2d2560; --red:#E8394F; --red-dark:#c0283c;
+    --cream:#f5f3ff; --muted:#a09dc0; --border:rgba(91,79,232,0.13);
+    --white:#fff; --green:#10b981; --sidebar-w:240px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--purple-deep); display:flex; min-height:100vh; }
+
+  /* SIDEBAR */
+  .sidebar { width:var(--sidebar-w); min-height:100vh; background:var(--purple-deep); display:flex; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:50; }
+  .sidebar-logo { padding:28px 24px 20px; border-bottom:1px solid rgba(255,255,255,0.06); }
+  .sidebar-logo a { font-family:'Syne',sans-serif; font-weight:800; font-size:22px; color:#fff; text-decoration:none; }
+  .sidebar-logo a span { color:var(--red); }
+  .sidebar-logo p { font-size:11px; color:rgba(255,255,255,0.35); margin-top:2px; }
+  .sidebar-avatar { padding:16px 24px; display:flex; align-items:center; gap:12px; border-bottom:1px solid rgba(255,255,255,0.06); }
+  .avatar-circle { width:40px; height:40px; border-radius:50%; background:var(--purple); display:flex; align-items:center; justify-content:center; color:#fff; font-size:16px; font-weight:700; flex-shrink:0; }
+  .avatar-name { font-size:13px; font-weight:600; color:#fff; }
+  .avatar-role { font-size:11px; color:rgba(255,255,255,0.4); }
+  .sidebar-nav { padding:16px 12px; flex:1; }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:9px; cursor:pointer; color:rgba(255,255,255,0.55); font-size:13px; font-weight:500; text-decoration:none; transition:all .2s; margin-bottom:2px; }
+  .nav-item:hover { background:rgba(255,255,255,0.07); color:#fff; }
+  .nav-item.active { background:rgba(91,79,232,0.35); color:#fff; }
+  .sidebar-bottom { padding:16px 12px; border-top:1px solid rgba(255,255,255,0.06); }
+  .nav-item-danger { color:rgba(232,57,79,0.7); }
+  .nav-item-danger:hover { background:rgba(232,57,79,0.1); color:var(--red); }
+
+  /* MAIN */
+  .main { margin-left:var(--sidebar-w); flex:1; display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+
+  /* TOPBAR */
+  .topbar { padding:20px 28px; border-bottom:1px solid var(--border); background:var(--white); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+  .topbar h1 { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; }
+  .topbar p { font-size:13px; color:var(--muted); margin-top:2px; }
+  .btn-new-msg { display:flex; align-items:center; gap:6px; padding:9px 16px; border-radius:9px; border:none; background:var(--purple); color:#fff; font-size:13px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .btn-new-msg:hover { background:var(--purple-dark); }
+
+  /* LAYOUT MESSAGERIE */
+  .msg-layout { display:flex; flex:1; overflow:hidden; }
+
+  /* LISTE DES CONVERSATIONS */
+  .conv-list { width:320px; border-right:1px solid var(--border); background:var(--white); display:flex; flex-direction:column; flex-shrink:0; }
+  .conv-search { padding:14px 16px; border-bottom:1px solid var(--border); }
+  .conv-search input { width:100%; padding:9px 14px; border:1.5px solid var(--border); border-radius:9px; background:var(--cream); font-size:13px; font-family:'DM Sans',sans-serif; outline:none; color:var(--purple-deep); }
+  .conv-search input:focus { border-color:var(--purple); }
+  .conv-items { flex:1; overflow-y:auto; }
+  .conv-item { display:flex; gap:12px; align-items:flex-start; padding:14px 16px; cursor:pointer; border-bottom:1px solid var(--border); transition:all .2s; }
+  .conv-item:hover { background:var(--cream); }
+  .conv-item.active { background:rgba(91,79,232,0.06); border-left:3px solid var(--purple); }
+  .conv-item.unread .conv-name { font-weight:700; }
+  .conv-item.unread .conv-preview { color:var(--purple-deep); font-weight:500; }
+  .conv-avatar { width:44px; height:44px; border-radius:50%; background:var(--purple); display:flex; align-items:center; justify-content:center; color:#fff; font-size:16px; font-weight:700; flex-shrink:0; overflow:hidden; }
+  .conv-avatar img { width:100%; height:100%; object-fit:cover; }
+  .conv-info { flex:1; min-width:0; }
+  .conv-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:3px; }
+  .conv-name { font-size:14px; font-weight:600; color:var(--purple-deep); }
+  .conv-time { font-size:11px; color:var(--muted); flex-shrink:0; }
+  .conv-preview { font-size:12px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .conv-unread-dot { width:8px; height:8px; border-radius:50%; background:var(--purple); flex-shrink:0; margin-top:6px; }
+  .conv-empty { padding:40px 20px; text-align:center; color:var(--muted); font-size:13px; }
+
+  /* ZONE DE CONVERSATION */
+  .conv-view { flex:1; display:flex; flex-direction:column; background:var(--cream); }
+  .conv-header { padding:16px 24px; background:var(--white); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:14px; flex-shrink:0; }
+  .conv-header-avatar { width:44px; height:44px; border-radius:50%; background:var(--purple); display:flex; align-items:center; justify-content:center; color:#fff; font-size:16px; font-weight:700; overflow:hidden; flex-shrink:0; }
+  .conv-header-avatar img { width:100%; height:100%; object-fit:cover; }
+  .conv-header-info h3 { font-family:'Syne',sans-serif; font-size:16px; font-weight:700; }
+  .conv-header-info p { font-size:12px; color:var(--muted); }
+
+  /* MESSAGES */
+  .messages-area { flex:1; overflow-y:auto; padding:20px 24px; display:flex; flex-direction:column; gap:16px; }
+  .msg-bubble-wrap { display:flex; gap:10px; align-items:flex-end; }
+  .msg-bubble-wrap.sent { flex-direction:row-reverse; }
+  .msg-bubble-avatar { width:32px; height:32px; border-radius:50%; background:var(--purple); display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:700; flex-shrink:0; overflow:hidden; }
+  .msg-bubble-avatar img { width:100%; height:100%; object-fit:cover; }
+  .msg-bubble { max-width:65%; padding:12px 16px; border-radius:16px; font-size:14px; line-height:1.55; }
+  .msg-bubble.received { background:var(--white); border:1.5px solid var(--border); border-bottom-left-radius:4px; color:var(--purple-deep); }
+  .msg-bubble.sent { background:var(--purple); color:#fff; border-bottom-right-radius:4px; }
+  .msg-bubble-objet { font-size:11px; font-weight:700; opacity:.7; margin-bottom:4px; }
+  .msg-bubble-time { font-size:10px; opacity:.6; margin-top:6px; text-align:right; }
+  .msg-date-sep { text-align:center; font-size:11px; color:var(--muted); font-weight:600; padding:4px 0; }
+
+  /* ZONE RÉPONSE */
+  .reply-area { padding:16px 24px; background:var(--white); border-top:1px solid var(--border); flex-shrink:0; }
+  .reply-input-wrap { display:flex; gap:10px; align-items:flex-end; }
+  .reply-textarea { flex:1; padding:12px 16px; border:1.5px solid var(--border); border-radius:12px; background:var(--cream); font-size:14px; font-family:'DM Sans',sans-serif; outline:none; resize:none; min-height:44px; max-height:120px; line-height:1.5; color:var(--purple-deep); transition:border-color .2s; }
+  .reply-textarea:focus { border-color:var(--purple); background:#fff; }
+  .reply-textarea::placeholder { color:var(--muted); }
+  .btn-reply { width:44px; height:44px; border-radius:12px; border:none; background:var(--purple); color:#fff; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .2s; }
+  .btn-reply:hover { background:var(--purple-dark); transform:scale(1.05); }
+  .btn-reply:disabled { background:var(--border); cursor:not-allowed; transform:none; }
+
+  /* ÉTAT VIDE */
+  .conv-placeholder { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--muted); gap:12px; }
+  .conv-placeholder-ico { font-size:48px; opacity:.4; }
+  .conv-placeholder p { font-size:14px; }
+
+  /* MODAL NOUVEAU MESSAGE */
+  .modal-overlay { position:fixed; inset:0; background:rgba(26,21,53,0.6); backdrop-filter:blur(4px); z-index:300; display:none; align-items:center; justify-content:center; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:#fff; border-radius:18px; padding:28px; width:100%; max-width:500px; margin:20px; }
+  .modal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+  .modal-head h2 { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; }
+  .modal-close { width:32px; height:32px; border-radius:8px; border:1.5px solid var(--border); background:transparent; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
+  .modal-fg { margin-bottom:14px; }
+  .modal-label { display:block; font-size:12px; font-weight:700; margin-bottom:6px; }
+  .modal-input, .modal-select { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px; background:#fff; font-size:14px; color:var(--purple-deep); font-family:'DM Sans',sans-serif; outline:none; }
+  .modal-input:focus, .modal-select:focus { border-color:var(--purple); }
+  .modal-textarea { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px; background:#fff; font-size:14px; color:var(--purple-deep); font-family:'DM Sans',sans-serif; outline:none; resize:vertical; min-height:100px; line-height:1.6; }
+  .modal-textarea:focus { border-color:var(--purple); }
+  .btn-send { width:100%; padding:13px; border-radius:10px; border:none; background:var(--purple); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; margin-top:6px; transition:all .2s; }
+  .btn-send:hover { background:var(--purple-dark); }
+
+  @media (max-width: 768px) {
+    .sidebar { display:none; }
+    .main { margin-left:0; }
+    .conv-list { width:100%; display:none; }
+    .conv-list.show { display:flex; }
+    .conv-view { display:none; }
+    .conv-view.show { display:flex; }
+    .msg-layout { position:relative; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <a href="/">Show<span>One</span></a>
+    <p id="sidebarRole">Espace Talent</p>
+  </div>
+  <div class="sidebar-avatar">
+    <div class="avatar-circle" id="sideAvatar">?</div>
+    <div>
+      <div class="avatar-name" id="sideNom">Chargement…</div>
+      <div class="avatar-role" id="sideRole">—</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav" id="sideNav"></nav>
+  <div class="sidebar-bottom">
+    <a href="#" onclick="seDeconnecter()" class="nav-item nav-item-danger">🚪 Se déconnecter</a>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <h1>💬 Messagerie</h1>
+      <p id="topbarSub">Vos conversations</p>
+    </div>
+    <button class="btn-new-msg" id="btnNewMsg" style="display:none" onclick="ouvrirNouveauMessage()">✉️ Nouveau message</button>
+  </div>
+
+  <div class="msg-layout">
+    <!-- LISTE CONVERSATIONS -->
+    <div class="conv-list" id="convList">
+      <div class="conv-search">
+        <input type="text" placeholder="🔍 Rechercher une conversation…" oninput="filtrerConversations(this.value)">
+      </div>
+      <div class="conv-items" id="convItems">
+        <div class="conv-empty">Chargement…</div>
+      </div>
+    </div>
+
+    <!-- VUE CONVERSATION -->
+    <div class="conv-view" id="convView">
+      <div class="conv-placeholder" id="convPlaceholder">
+        <div class="conv-placeholder-ico">💬</div>
+        <p>Sélectionnez une conversation</p>
+      </div>
+
+      <div id="convActive" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+        <div class="conv-header">
+          <div class="conv-header-avatar" id="convHeaderAvatar">?</div>
+          <div class="conv-header-info">
+            <h3 id="convHeaderNom">—</h3>
+            <p id="convHeaderSub">—</p>
+          </div>
+        </div>
+        <div class="messages-area" id="messagesArea"></div>
+        <div class="reply-area">
+          <div class="reply-input-wrap">
+            <textarea class="reply-textarea" id="replyText" placeholder="Écrire une réponse…" rows="1" onkeydown="handleReplyKey(event)" oninput="autoResize(this)"></textarea>
+            <button class="btn-reply" onclick="envoyerReponse()" id="btnReply">➤</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NOUVEAU MESSAGE (recruteur seulement) -->
+<div class="modal-overlay" id="modalNouveauMsg">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Nouveau message</h2>
+      <button class="modal-close" onclick="fermerNouveauMessage()">✕</button>
+    </div>
+    <div class="modal-fg">
+      <label class="modal-label">Destinataire (talent)</label>
+      <select class="modal-select" id="selectTalent">
+        <option value="">Choisir un talent…</option>
+      </select>
+    </div>
+    <div class="modal-fg">
+      <label class="modal-label">Objet</label>
+      <input class="modal-input" type="text" id="newMsgObjet" placeholder="Ex : Proposition de casting">
+    </div>
+    <div class="modal-fg">
+      <label class="modal-label">Message</label>
+      <textarea class="modal-textarea" id="newMsgContenu" placeholder="Bonjour, nous avons découvert votre profil ShowOne…"></textarea>
+    </div>
+    <button class="btn-send" onclick="envoyerNouveauMessage()">Envoyer ✓</button>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://emiuzigtlomlrsofxqyf.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_U8P52zBkzF6Nqno_mmbcVQ_bKQLNmTP';
+
+let currentRole = null; // 'talent' ou 'recruteur'
+let currentProfilId = null;
+let currentToken = null;
+let conversations = [];
+let activeConvKey = null; // "recruteurId_talentId"
+let allMessages = [];
+
+async function init() {
+  const token = localStorage.getItem('showone_token');
+  const userStr = localStorage.getItem('showone_user');
+  if (!token || !userStr) { window.location.href = '/connexion'; return; }
+
+  let user;
+  try { user = JSON.parse(userStr); } catch(e) { window.location.href = '/connexion'; return; }
+
+  currentToken = token;
+  currentRole = user.type_compte || 'talent';
+
+  // Afficher le nom
+  const nom = (user.prenom || '') + ' ' + (user.nom || '');
+  document.getElementById('sideNom').textContent = nom.trim() || user.email;
+  document.getElementById('sideRole').textContent = currentRole === 'recruteur' ? 'Recruteur' : 'Talent';
+  document.getElementById('sidebarRole').textContent = currentRole === 'recruteur' ? 'Espace Recruteur' : 'Espace Talent';
+
+  // Avatar
+  const initiales = ((user.prenom?.[0] || '') + (user.nom?.[0] || '')).toUpperCase() || '?';
+  if (user.photo_url) {
+    document.getElementById('sideAvatar').innerHTML = `<img src="${user.photo_url}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">`;
+  } else {
+    document.getElementById('sideAvatar').textContent = initiales;
+  }
+
+  // Nav selon le rôle
+  const nav = document.getElementById('sideNav');
+  if (currentRole === 'recruteur') {
+    nav.innerHTML = `
+      <a href="/dashboard-recruteur" class="nav-item">🏠 Tableau de bord</a>
+      <a href="/messagerie" class="nav-item active">💬 Messagerie</a>
+      <a href="/categories" class="nav-item">🔍 Chercher des talents</a>`;
+    document.getElementById('btnNewMsg').style.display = 'flex';
+  } else {
+    nav.innerHTML = `
+      <a href="/dashboard-talent" class="nav-item">🏠 Tableau de bord</a>
+      <a href="/messagerie" class="nav-item active">💬 Messagerie</a>
+      <a href="/categories" class="nav-item">🎬 Explorer</a>`;
+  }
+
+  // Récupérer le profilId
+  const userId = user.id;
+  if (currentRole === 'recruteur') {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/profils_recruteurs?utilisateur_id=eq.${userId}&select=id`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` }
+    });
+    const rd = await r.json();
+    currentProfilId = rd[0]?.id;
+  } else {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/profils_talents?utilisateur_id=eq.${userId}&select=id`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` }
+    });
+    const rd = await r.json();
+    currentProfilId = rd[0]?.id;
+  }
+
+  await chargerConversations();
+
+  // Ouvrir une conversation depuis l'URL si talent_id présent
+  const params = new URLSearchParams(window.location.search);
+  const talentIdUrl = params.get('talent_id');
+  if (talentIdUrl && currentRole === 'recruteur') {
+    ouvrirNouveauMessage(talentIdUrl);
+  }
+}
+
+async function enrichirMsgs(msgs) {
+  if (!Array.isArray(msgs) || msgs.length === 0) return msgs;
+  
+  try {
+    // Récupérer les IDs uniques des recruteurs et talents
+    const recruteurIds = [...new Set(msgs.map(m => m.recruteur_id).filter(Boolean))];
+    const talentIds = [...new Set(msgs.map(m => m.talent_id).filter(Boolean))];
+    
+    const [recruteurs, talents] = await Promise.all([
+      recruteurIds.length ? fetch(`${SUPABASE_URL}/rest/v1/profils_recruteurs?id=in.(${recruteurIds.join(',')})&select=id,nom_entreprise,photo_url,utilisateur_id`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${currentToken}` }
+      }).then(r => r.json()) : Promise.resolve([]),
+      talentIds.length ? fetch(`${SUPABASE_URL}/rest/v1/profils_talents?id=in.(${talentIds.join(',')})&select=id,nom_scene,photo_url,utilisateur_id`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${currentToken}` }
+      }).then(r => r.json()) : Promise.resolve([])
+    ]);
+
+    // Récupérer les noms des utilisateurs
+    const utilisateurIds = [
+      ...new Set([
+        ...(Array.isArray(recruteurs) ? recruteurs.map(r => r.utilisateur_id) : []),
+        ...(Array.isArray(talents) ? talents.map(t => t.utilisateur_id) : [])
+      ].filter(Boolean))
+    ];
+    
+    let users = [];
+    if (utilisateurIds.length) {
+      const uRes = await fetch(`${SUPABASE_URL}/rest/v1/utilisateurs?id=in.(${utilisateurIds.join(',')})&select=id,prenom,nom`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${currentToken}` }
+      });
+      users = await uRes.json();
+    }
+
+    const userMap = {};
+    if (Array.isArray(users)) users.forEach(u => userMap[u.id] = u);
+    const recruteurMap = {};
+    if (Array.isArray(recruteurs)) recruteurs.forEach(r => {
+      r.utilisateurs = userMap[r.utilisateur_id] || null;
+      recruteurMap[r.id] = r;
+    });
+    const talentMap = {};
+    if (Array.isArray(talents)) talents.forEach(t => {
+      t.utilisateurs = userMap[t.utilisateur_id] || null;
+      talentMap[t.id] = t;
+    });
+
+    return msgs.map(m => ({
+      ...m,
+      profils_recruteurs: recruteurMap[m.recruteur_id] || null,
+      profils_talents: talentMap[m.talent_id] || null
+    }));
+  } catch(e) {
+    console.error('enrichirMsgs:', e);
+    return msgs;
+  }
+}
+
+async function chargerConversations() {
+  const list = document.getElementById('convItems');
+  list.innerHTML = '<div class="conv-empty">Chargement…</div>';
+
+  try {
+    let msgs;
+    if (currentRole === 'talent') {
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/messages?talent_id=eq.${currentProfilId}&select=id,recruteur_id,talent_id,objet,contenu,lu,created_at&order=created_at.desc`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${currentToken}` }
+      });
+      const rawMsgs = await r.json();
+      msgs = await enrichirMsgs(rawMsgs);
+    } else {
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/messages?recruteur_id=eq.${currentProfilId}&select=id,recruteur_id,talent_id,objet,contenu,lu,created_at&order=created_at.desc`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${currentToken}` }
+      });
+      const rawMsgs = await r.json();
+      msgs = await enrichirMsgs(rawMsgs);
+    }
+
+    if (!Array.isArray(msgs) || msgs.length === 0) {
+      list.innerHTML = '<div class="conv-empty">Aucune conversation pour l\'instant.</div>';
+      return;
+    }
+
+    allMessages = msgs;
+
+    // Grouper par conversation (recruteur_id + talent_id)
+    const convMap = {};
+    msgs.forEach(m => {
+      const key = m.recruteur_id + '_' + m.talent_id;
+      if (!convMap[key]) convMap[key] = { key, messages: [], lastMsg: m, unread: 0 };
+      convMap[key].messages.push(m);
+      if (!m.lu && (currentRole === 'talent')) convMap[key].unread++;
+    });
+
+    conversations = Object.values(convMap).sort((a, b) => new Date(b.lastMsg.created_at) - new Date(a.lastMsg.created_at));
+    afficherListeConversations(conversations);
+
+  } catch(e) {
+    console.error(e);
+    list.innerHTML = '<div class="conv-empty">Erreur de chargement.</div>';
+  }
+}
+
+function afficherListeConversations(convs) {
+  const list = document.getElementById('convItems');
+  if (!convs.length) { list.innerHTML = '<div class="conv-empty">Aucune conversation.</div>'; return; }
+
+  list.innerHTML = convs.map(conv => {
+    const m = conv.lastMsg;
+    const autre = currentRole === 'talent' ? m.profils_recruteurs : m.profils_talents;
+    const nom = currentRole === 'talent'
+      ? (autre?.nom_entreprise || ((autre?.utilisateurs?.prenom || '') + ' ' + (autre?.utilisateurs?.nom || '')).trim() || 'Recruteur')
+      : (autre?.nom_scene || ((autre?.utilisateurs?.prenom || '') + ' ' + (autre?.utilisateurs?.nom || '')).trim() || 'Talent');
+    const photo = autre?.photo_url;
+    const initiale = nom[0]?.toUpperCase() || '?';
+    const date = new Date(m.created_at);
+    const maintenant = new Date();
+    const diffH = Math.round((maintenant - date) / 36e5);
+    const temps = diffH < 1 ? 'À l\'instant' : diffH < 24 ? `${diffH}h` : diffH < 48 ? 'Hier' : date.toLocaleDateString('fr-FR', {day:'numeric',month:'short'});
+    const unread = conv.unread > 0;
+
+    return `
+      <div class="conv-item ${activeConvKey === conv.key ? 'active' : ''} ${unread ? 'unread' : ''}" onclick="ouvrirConversation('${conv.key}')">
+        <div class="conv-avatar">${photo ? `<img src="${photo}">` : initiale}</div>
+        <div class="conv-info">
+          <div class="conv-top">
+            <div class="conv-name">${nom}</div>
+            <div class="conv-time">${temps}</div>
+          </div>
+          <div class="conv-preview">${m.objet ? m.objet + ' — ' : ''}${m.contenu}</div>
+        </div>
+        ${unread ? '<div class="conv-unread-dot"></div>' : ''}
+      </div>`;
+  }).join('');
+}
+
+async function ouvrirConversation(key) {
+  activeConvKey = key;
+  const conv = conversations.find(c => c.key === key);
+  if (!conv) return;
+
+  // Mettre à jour l'UI liste
+  document.querySelectorAll('.conv-item').forEach(el => el.classList.remove('active'));
+  const items = document.querySelectorAll('.conv-item');
+  const idx = conversations.indexOf(conv);
+  if (items[idx]) items[idx].classList.add('active');
+
+  // Infos de l'interlocuteur
+  const m = conv.lastMsg;
+  const autre = currentRole === 'talent' ? m.profils_recruteurs : m.profils_talents;
+  const nom = currentRole === 'talent'
+    ? (autre?.nom_entreprise || ((autre?.utilisateurs?.prenom || '') + ' ' + (autre?.utilisateurs?.nom || '')).trim() || 'Recruteur')
+    : (autre?.nom_scene || ((autre?.utilisateurs?.prenom || '') + ' ' + (autre?.utilisateurs?.nom || '')).trim() || 'Talent');
+  const photo = autre?.photo_url;
+  const initiale = nom[0]?.toUpperCase() || '?';
+  const sub = currentRole === 'talent' ? 'Recruteur' : 'Talent ShowOne';
+
+  document.getElementById('convHeaderNom').textContent = nom;
+  document.getElementById('convHeaderSub').textContent = sub;
+  const ha = document.getElementById('convHeaderAvatar');
+  ha.innerHTML = photo ? `<img src="${photo}" style="width:44px;height:44px;object-fit:cover;">` : initiale;
+
+  // Afficher les messages du thread
+  const [recruteurId, talentId] = key.split('_');
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/messages?recruteur_id=eq.${recruteurId}&talent_id=eq.${talentId}&order=created_at.asc&select=*`, {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${currentToken}` }
+  });
+  const threadMsgs = await r.json();
+
+  // Marquer comme lus
+  if (currentRole === 'talent') {
+    const nonLusIds = threadMsgs.filter(msg => !msg.lu).map(msg => msg.id);
+    if (nonLusIds.length > 0) {
+      await fetch(`${SUPABASE_URL}/rest/v1/messages?recruteur_id=eq.${recruteurId}&talent_id=eq.${talentId}&lu=eq.false`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${currentToken}`, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ lu: true })
+      });
+    }
+  }
+
+  afficherMessages(threadMsgs);
+
+  // Stocker les IDs pour la réponse
+  document.getElementById('replyText').dataset.recruteurId = recruteurId;
+  document.getElementById('replyText').dataset.talentId = talentId;
+  document.getElementById('replyText').dataset.objet = m.objet || '';
+
+  // Afficher la vue
+  document.getElementById('convPlaceholder').style.display = 'none';
+  const ca = document.getElementById('convActive');
+  ca.style.display = 'flex';
+}
+
+function afficherMessages(msgs) {
+  const area = document.getElementById('messagesArea');
+  area.innerHTML = '';
+
+  let lastDate = null;
+  msgs.forEach(msg => {
+    const date = new Date(msg.created_at);
+    const dateStr = date.toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'});
+    if (dateStr !== lastDate) {
+      const sep = document.createElement('div');
+      sep.className = 'msg-date-sep';
+      sep.textContent = dateStr;
+      area.appendChild(sep);
+      lastDate = dateStr;
+    }
+
+    // Détecter si c'est un message envoyé par moi
+    const isSent = currentRole === 'recruteur'
+      ? msg.recruteur_id === currentProfilId
+      : msg.talent_id === currentProfilId && !msg.profils_recruteurs; // approximation
+
+    // En réalité on distingue par un champ "expediteur" qu'on peut déduire :
+    // Si le talent répond, on stocke avec un objet "RE:" ou un champ sender
+    // Pour l'instant on utilise: si objet commence par "RE:" → envoyé par talent
+    const sentByTalent = (msg.objet || '').startsWith('RE:');
+    const isMySent = currentRole === 'talent' ? sentByTalent : !sentByTalent;
+
+    const wrap = document.createElement('div');
+    wrap.className = `msg-bubble-wrap ${isMySent ? 'sent' : ''}`;
+
+    const timeStr = date.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+
+    wrap.innerHTML = `
+      <div class="msg-bubble-avatar">?</div>
+      <div class="msg-bubble ${isMySent ? 'sent' : 'received'}">
+        ${msg.objet && !msg.objet.startsWith('RE:') ? `<div class="msg-bubble-objet">📌 ${msg.objet}</div>` : ''}
+        ${msg.contenu}
+        <div class="msg-bubble-time">${timeStr}</div>
+      </div>`;
+
+    area.appendChild(wrap);
+  });
+
+  // Scroller en bas
+  area.scrollTop = area.scrollHeight;
+}
+
+async function envoyerReponse() {
+  const textarea = document.getElementById('replyText');
+  const contenu = textarea.value.trim();
+  if (!contenu) return;
+
+  const recruteurId = textarea.dataset.recruteurId;
+  const talentId = textarea.dataset.talentId;
+  const objet = 'RE: ' + (textarea.dataset.objet || 'Message');
+
+  const btn = document.getElementById('btnReply');
+  btn.disabled = true;
+
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/messages`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${currentToken}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ recruteur_id: recruteurId, talent_id: talentId, objet, contenu, lu: false })
+    });
+
+    textarea.value = '';
+    textarea.style.height = 'auto';
+
+    // Recharger le thread
+    const key = recruteurId + '_' + talentId;
+    await ouvrirConversation(key);
+    await chargerConversations();
+
+  } catch(e) {
+    alert('Erreur lors de l\'envoi.');
+  }
+  btn.disabled = false;
+}
+
+function handleReplyKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    envoyerReponse();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function filtrerConversations(q) {
+  if (!q) { afficherListeConversations(conversations); return; }
+  const filtered = conversations.filter(conv => {
+    const m = conv.lastMsg;
+    const autre = currentRole === 'talent' ? m.profils_recruteurs : m.profils_talents;
+    const nom = currentRole === 'talent'
+      ? (autre?.nom_entreprise || '')
+      : (autre?.nom_scene || ((autre?.utilisateurs?.prenom || '') + ' ' + (autre?.utilisateurs?.nom || '')));
+    return nom.toLowerCase().includes(q.toLowerCase()) || (m.objet || '').toLowerCase().includes(q.toLowerCase());
+  });
+  afficherListeConversations(filtered);
+}
+
+async function ouvrirNouveauMessage(talentIdPre) {
+  if (currentRole !== 'recruteur') return;
+  document.getElementById('modalNouveauMsg').classList.add('open');
+
+  // Charger la liste des talents
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/profils_talents?select=id,nom_scene,utilisateur_id&order=nom_scene.asc`, {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${currentToken}` }
+  });
+  const talents = await r.json();
+  const sel = document.getElementById('selectTalent');
+  sel.innerHTML = '<option value="">Choisir un talent…</option>' +
+    (Array.isArray(talents) ? talents.map(t => {
+      const nom = t.nom_scene || ((t.utilisateurs?.prenom || '') + ' ' + (t.utilisateurs?.nom || '')).trim();
+      return `<option value="${t.id}" ${t.id === talentIdPre ? 'selected' : ''}>${nom}</option>`;
+    }).join('') : '');
+}
+
+function fermerNouveauMessage() {
+  document.getElementById('modalNouveauMsg').classList.remove('open');
+}
+
+async function envoyerNouveauMessage() {
+  const talentId = document.getElementById('selectTalent').value;
+  const objet = document.getElementById('newMsgObjet').value.trim() || 'Message';
+  const contenu = document.getElementById('newMsgContenu').value.trim();
+
+  if (!talentId) { alert('Veuillez choisir un talent.'); return; }
+  if (!contenu) { alert('Veuillez écrire un message.'); return; }
+
+  const btn = document.querySelector('#modalNouveauMsg .btn-send');
+  btn.textContent = 'Envoi…';
+  btn.disabled = true;
+
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/messages`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${currentToken}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ recruteur_id: currentProfilId, talent_id: talentId, objet, contenu, lu: false })
+    });
+
+    fermerNouveauMessage();
+    document.getElementById('newMsgObjet').value = '';
+    document.getElementById('newMsgContenu').value = '';
+    await chargerConversations();
+
+    // Ouvrir la conv
+    const key = currentProfilId + '_' + talentId;
+    setTimeout(() => ouvrirConversation(key), 300);
+
+  } catch(e) {
+    alert('Erreur lors de l\'envoi.');
+  }
+  btn.textContent = 'Envoyer ✓';
+  btn.disabled = false;
+}
+
+function seDeconnecter() {
+  localStorage.removeItem('showone_token');
+  localStorage.removeItem('showone_user');
+  window.location.href = '/connexion';
+}
+
+init();
+</script>
+</body>
+</html>
