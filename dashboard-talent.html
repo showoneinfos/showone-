@@ -930,9 +930,28 @@
   }
   // ── FIN PLAYER ────────────────────────────────────────────────
 
-  function cacherBadge() {
+  async function cacherBadge() {
+    // Cacher le badge visuellement
     const b = document.getElementById('msgBadge');
     if (b) b.style.display = 'none';
+    // Cacher les points bleus
+    document.querySelectorAll('.msg-unread-dot').forEach(d => d.style.display = 'none');
+    document.querySelectorAll('.msg-item.unread').forEach(d => d.classList.remove('unread'));
+    // Marquer comme lus en base
+    if (window.profilId && window.token) {
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/messages?talent_id=eq.${window.profilId}&lu=eq.false`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${window.token}`,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ lu: true })
+        });
+      } catch(e) { console.warn('Erreur marquage lu:', e); }
+    }
   }
 
   chargerDonnees();
