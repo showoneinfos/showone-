@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard-talent
+Disallow: /dashboard-recruteur
+Disallow: /messagerie
+Disallow: /connexion
+Disallow: /mot-de-passe-oublie
+Disallow: /api/
+
+Sitemap: https://www.showone.fr/sitemap.xml
