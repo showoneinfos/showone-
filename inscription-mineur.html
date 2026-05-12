@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShowOne — Inscription Mineur</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #5B4FE8; --purple-dark: #3D32C4; --purple-deep: #1a1535;
+    --purple-mid: #2d2560; --red: #E8394F; --red-dark: #c0283c;
+    --cream: #f5f3ff; --muted: #a09dc0; --border: rgba(91,79,232,0.18);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--purple-deep); min-height:100vh; display:flex; }
+
+  .side-visual { width:40%; min-height:100vh; position:sticky; top:0; height:100vh; overflow:hidden; flex-shrink:0; }
+  .side-visual img { width:100%; height:100%; object-fit:cover; }
+  .side-overlay { position:absolute; inset:0; background:linear-gradient(160deg,rgba(26,21,53,0.85) 0%,rgba(91,79,232,0.5) 60%,rgba(232,57,79,0.2) 100%); }
+  .side-content { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:space-between; padding:40px; }
+  .logo { font-family:'Syne',sans-serif; font-weight:800; font-size:24px; color:#fff; text-decoration:none; }
+  .logo span { color:var(--red); }
+  .side-middle h2 { font-family:'Syne',sans-serif; font-size:32px; font-weight:800; color:#fff; line-height:1.1; letter-spacing:-0.5px; margin-bottom:14px; }
+  .side-middle h2 em { color:var(--red); font-style:normal; }
+  .side-middle p { color:rgba(255,255,255,0.55); font-size:14px; line-height:1.65; max-width:280px; }
+  .side-badges { display:flex; flex-direction:column; gap:10px; }
+  .side-badge { display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px 14px; }
+  .side-badge-ico { font-size:18px; flex-shrink:0; }
+  .side-badge-txt { font-size:13px; color:rgba(255,255,255,0.75); line-height:1.4; }
+
+  .side-form { flex:1; overflow-y:auto; padding:48px 52px; display:flex; flex-direction:column; }
+
+  .steps { display:flex; align-items:center; margin-bottom:40px; }
+  .stp { display:flex; align-items:center; gap:9px; }
+  .stp-num { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; border:2px solid var(--border); color:var(--muted); transition:all .3s; flex-shrink:0; }
+  .stp.active .stp-num { background:var(--purple); border-color:var(--purple); color:#fff; }
+  .stp.done .stp-num { background:#10b981; border-color:#10b981; color:#fff; }
+  .stp-lbl { font-size:12px; font-weight:600; color:var(--muted); white-space:nowrap; transition:color .3s; }
+  .stp.active .stp-lbl { color:var(--purple-deep); }
+  .stp.done .stp-lbl { color:#10b981; }
+  .stp-line { flex:1; height:1.5px; background:var(--border); margin:0 10px; transition:background .3s; }
+  .stp-line.done { background:#10b981; }
+
+  .panel { display:none; animation:fadeSlide .35s ease; }
+  .panel.active { display:block; }
+  @keyframes fadeSlide { from{opacity:0;transform:translateX(14px)} to{opacity:1;transform:translateX(0)} }
+
+  .fhead { margin-bottom:28px; }
+  .fhead h1 { font-family:'Syne',sans-serif; font-size:24px; font-weight:800; letter-spacing:-.5px; margin-bottom:6px; }
+  .fhead p { font-size:14px; color:var(--muted); }
+
+  .section-sep { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin:20px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .fg { margin-bottom:14px; }
+  .flabel { display:block; font-size:12px; font-weight:700; letter-spacing:.2px; margin-bottom:6px; color:var(--purple-deep); }
+  .finput, .fselect, .ftextarea {
+    width:100%; padding:11px 15px;
+    border:1.5px solid var(--border); border-radius:10px;
+    background:#fff; font-size:14px; color:var(--purple-deep);
+    font-family:'DM Sans',sans-serif; outline:none;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .finput:focus,.fselect:focus,.ftextarea:focus { border-color:var(--purple); box-shadow:0 0 0 3px rgba(91,79,232,.09); }
+  .finput::placeholder,.ftextarea::placeholder { color:var(--muted); }
+  .fselect { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a09dc0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 13px center; padding-right:38px; cursor:pointer; appearance:none; }
+
+  .info-note { display:flex; gap:10px; align-items:flex-start; background:rgba(91,79,232,.06); border:1px solid rgba(91,79,232,.15); border-radius:9px; padding:12px 14px; margin-bottom:16px; }
+  .info-note-ico { font-size:16px; flex-shrink:0; margin-top:1px; }
+  .info-note p { font-size:12px; color:var(--muted); line-height:1.55; }
+
+  .warning-note { display:flex; gap:10px; align-items:flex-start; background:rgba(245,158,11,.06); border:1px solid rgba(245,158,11,.25); border-radius:9px; padding:12px 14px; margin-bottom:16px; }
+  .warning-note p { font-size:12px; color:#92650a; line-height:1.55; }
+
+  .cats { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin-bottom:14px; }
+  .cat-r { display:none; }
+  .cat-l { display:flex; flex-direction:column; align-items:center; gap:7px; padding:14px 8px; border:1.5px solid var(--border); border-radius:11px; cursor:pointer; transition:all .2s; background:#fff; text-align:center; }
+  .cat-l:hover { border-color:var(--purple); background:rgba(91,79,232,.03); }
+  .cat-r:checked + .cat-l { border-color:var(--purple); background:rgba(91,79,232,.08); }
+  .cat-ico { font-size:24px; }
+  .cat-txt { font-size:11px; font-weight:700; color:var(--purple-deep); }
+  .cat-r:checked + .cat-l .cat-txt { color:var(--purple); }
+
+  .upload { border:2px dashed var(--border); border-radius:12px; padding:22px; text-align:center; cursor:pointer; transition:all .2s; background:#fff; margin-bottom:14px; }
+  .upload:hover { border-color:var(--purple); background:rgba(91,79,232,.02); }
+  .upload input { display:none; }
+  .upload-ico { font-size:28px; margin-bottom:8px; }
+  .upload-title { font-size:13px; font-weight:600; margin-bottom:3px; }
+  .upload-sub { font-size:11px; color:var(--muted); }
+
+  .chk { display:flex; gap:9px; align-items:flex-start; margin-bottom:12px; }
+  .chk input { width:17px; height:17px; margin-top:2px; accent-color:var(--purple); flex-shrink:0; cursor:pointer; }
+  .chk label { font-size:12px; color:var(--muted); line-height:1.5; }
+  .chk label a { color:var(--purple); text-decoration:none; }
+
+  .actions { display:flex; gap:10px; margin-top:10px; }
+  .btn-back { padding:12px 22px; border-radius:9px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .btn-back:hover { border-color:var(--purple); color:var(--purple); }
+  .btn-next { flex:1; padding:13px; border-radius:9px; border:none; background:var(--purple); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .btn-next:hover { background:var(--purple-dark); transform:translateY(-1px); }
+  .btn-submit { flex:1; padding:13px; border-radius:9px; border:none; background:var(--red); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .btn-submit:hover { background:var(--red-dark); transform:translateY(-1px); }
+
+  .login-link { text-align:center; margin-top:18px; font-size:13px; color:var(--muted); }
+  .login-link a { color:var(--purple); font-weight:600; text-decoration:none; }
+
+  #inscriptionError { display:none; background:rgba(232,57,79,0.08); border:1px solid rgba(232,57,79,0.3); border-radius:10px; padding:12px 16px; font-size:13px; color:#a0243a; margin-bottom:14px; line-height:1.5; }
+
+  .success { display:none; text-align:center; padding:40px 0; animation:fadeSlide .5s ease; }
+  .success.active { display:block; }
+  .success-ico { width:70px; height:70px; border-radius:50%; background:rgba(16,185,129,.1); border:2px solid #10b981; display:flex; align-items:center; justify-content:center; font-size:30px; margin:0 auto 20px; }
+  .success h2 { font-family:'Syne',sans-serif; font-size:24px; font-weight:800; margin-bottom:10px; }
+  .success p { color:var(--muted); font-size:14px; line-height:1.6; max-width:380px; margin:0 auto 28px; }
+  .btn-go { display:inline-block; padding:13px 34px; background:var(--purple); color:#fff; border-radius:9px; text-decoration:none; font-size:14px; font-weight:700; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .btn-go:hover { background:var(--purple-dark); }
+
+  @media (max-width: 768px) {
+    body { flex-direction: column; }
+    .side-visual { display: none; }
+    .side-form { padding: 32px 20px 60px; }
+    .steps { margin-bottom: 28px; }
+    .stp-lbl { font-size: 11px; }
+    .stp-num { width: 26px; height: 26px; font-size: 11px; }
+    .fhead h1 { font-size: 22px; }
+    .row2 { grid-template-columns: 1fr; gap: 10px; }
+    .cats { grid-template-columns: repeat(2, 1fr); }
+    .actions { flex-direction: column; }
+    .btn-back, .btn-next, .btn-submit { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="side-visual">
+  <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&h=1200&fit=crop&crop=center" alt="Talent mineur ShowOne">
+  <div class="side-overlay"></div>
+  <div class="side-content">
+    <a href="/" class="logo">Show<span>One</span></a>
+    <div class="side-middle">
+      <h2>Le talent n'a<br>pas d'<em>âge</em></h2>
+      <p>ShowOne permet aux jeunes talents d'être découverts par des professionnels, en toute sécurité, avec l'accord des parents.</p>
+    </div>
+    <div class="side-badges">
+      <div class="side-badge">
+        <div class="side-badge-ico">🔒</div>
+        <div class="side-badge-txt">Profil sécurisé avec validation parentale obligatoire</div>
+      </div>
+      <div class="side-badge">
+        <div class="side-badge-ico">👨‍👩‍👧</div>
+        <div class="side-badge-txt">Les parents gèrent les contacts reçus</div>
+      </div>
+      <div class="side-badge">
+        <div class="side-badge-ico">✅</div>
+        <div class="side-badge-txt">Conforme RGPD — données protégées</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="side-form">
+
+  <!-- STEPS -->
+  <div class="steps">
+    <div class="stp active" id="stp1">
+      <div class="stp-num">1</div>
+      <div class="stp-lbl">Le mineur</div>
+    </div>
+    <div class="stp-line" id="line1"></div>
+    <div class="stp" id="stp2">
+      <div class="stp-num">2</div>
+      <div class="stp-lbl">Le tuteur</div>
+    </div>
+    <div class="stp-line" id="line2"></div>
+    <div class="stp" id="stp3">
+      <div class="stp-num">3</div>
+      <div class="stp-lbl">Talent</div>
+    </div>
+    <div class="stp-line" id="line3"></div>
+    <div class="stp" id="stp4">
+      <div class="stp-num">4</div>
+      <div class="stp-lbl">Confirmation</div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 1 — INFOS MINEUR -->
+  <div class="panel active" id="p1">
+    <div class="fhead">
+      <h1>Informations du mineur</h1>
+      <p>Le talent qui souhaite être découvert sur ShowOne.</p>
+    </div>
+
+    <div class="warning-note">
+      <div class="info-note-ico">⚠️</div>
+      <p>Cette inscription est réservée aux moins de 18 ans. Un accord parental est obligatoire. Les informations du tuteur légal seront demandées à l'étape suivante.</p>
+    </div>
+
+    <div class="row2">
+      <div class="fg"><label class="flabel">Prénom du mineur *</label><input id="prenomMineur" class="finput" type="text" placeholder="Léa"></div>
+      <div class="fg"><label class="flabel">Nom *</label><input id="nomMineur" class="finput" type="text" placeholder="Dupont"></div>
+    </div>
+    <div class="row2">
+      <div class="fg">
+        <label class="flabel">Date de naissance *</label>
+        <input id="dateNaissance" class="finput" type="date" max="">
+      </div>
+      <div class="fg">
+        <label class="flabel">Ville *</label>
+        <input id="villeMineur" class="finput" type="text" placeholder="Paris">
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-next" onclick="go(2)">Continuer →</button>
+    </div>
+    <div class="login-link">Déjà un compte ? <a href="/connexion">Se connecter</a></div>
+  </div>
+
+  <!-- ÉTAPE 2 — INFOS TUTEUR -->
+  <div class="panel" id="p2">
+    <div class="fhead">
+      <h1>Informations du tuteur légal</h1>
+      <p>Le parent ou responsable légal qui gère le compte.</p>
+    </div>
+
+    <div class="info-note">
+      <div class="info-note-ico">ℹ️</div>
+      <p>Le tuteur légal recevra les demandes de contact des recruteurs et sera responsable du compte. L'adresse email utilisée sera celle du tuteur.</p>
+    </div>
+
+    <div class="row2">
+      <div class="fg"><label class="flabel">Prénom du tuteur *</label><input id="prenomTuteur" class="finput" type="text" placeholder="Marie"></div>
+      <div class="fg"><label class="flabel">Nom du tuteur *</label><input id="nomTuteur" class="finput" type="text" placeholder="Dupont"></div>
+    </div>
+    <div class="fg">
+      <label class="flabel">Lien avec le mineur *</label>
+      <select id="lienTuteur" class="fselect">
+        <option value="">Sélectionnez...</option>
+        <option value="mere">Mère</option>
+        <option value="pere">Père</option>
+        <option value="tuteur_legal">Tuteur légal</option>
+        <option value="autre">Autre responsable légal</option>
+      </select>
+    </div>
+    <div class="fg"><label class="flabel">Email du tuteur *</label><input id="emailTuteur" class="finput" type="email" placeholder="parent@exemple.com"></div>
+    <div class="fg"><label class="flabel">Téléphone du tuteur *</label><input id="telTuteur" class="finput" type="tel" placeholder="+33 6 00 00 00 00"></div>
+    <div class="fg">
+      <label class="flabel">Mot de passe *</label>
+      <input id="password" class="finput" type="password" placeholder="Minimum 8 caractères">
+    </div>
+
+    <div class="actions">
+      <button class="btn-back" onclick="go(1)">← Retour</button>
+      <button class="btn-next" onclick="go(3)">Continuer →</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 3 — TALENT & CATÉGORIE -->
+  <div class="panel" id="p3">
+    <div class="fhead">
+      <h1>Le talent de ${prenomMineur}</h1>
+      <p>Choisissez la catégorie qui correspond le mieux.</p>
+    </div>
+
+    <label class="flabel">Catégorie principale *</label>
+    <div class="cats">
+      <input type="radio" name="cat" id="c1" value="acting" class="cat-r">
+      <label for="c1" class="cat-l"><span class="cat-ico">🎬</span><span class="cat-txt">Acting</span></label>
+      <input type="radio" name="cat" id="c2" value="musique" class="cat-r">
+      <label for="c2" class="cat-l"><span class="cat-ico">🎤</span><span class="cat-txt">Musique</span></label>
+      <input type="radio" name="cat" id="c3" value="danse" class="cat-r">
+      <label for="c3" class="cat-l"><span class="cat-ico">💃</span><span class="cat-txt">Danse</span></label>
+      <input type="radio" name="cat" id="c4" value="sport" class="cat-r">
+      <label for="c4" class="cat-l"><span class="cat-ico">⚽</span><span class="cat-txt">Sport</span></label>
+      <input type="radio" name="cat" id="c5" value="mode" class="cat-r">
+      <label for="c5" class="cat-l"><span class="cat-ico">👗</span><span class="cat-txt">Mode</span></label>
+      <input type="radio" name="cat" id="c6" value="createurs" class="cat-r">
+      <label for="c6" class="cat-l"><span class="cat-ico">📱</span><span class="cat-txt">Créateur</span></label>
+      <input type="radio" name="cat" id="c7" value="art" class="cat-r">
+      <label for="c7" class="cat-l"><span class="cat-ico">🎨</span><span class="cat-txt">Art</span></label>
+      <input type="radio" name="cat" id="c8" value="talents" class="cat-r">
+      <label for="c8" class="cat-l"><span class="cat-ico">✨</span><span class="cat-txt">Talent unique</span></label>
+      <input type="radio" name="cat" id="c9" value="animaux" class="cat-r">
+      <label for="c9" class="cat-l"><span class="cat-ico">🐾</span><span class="cat-txt">Animaux</span></label>
+    </div>
+
+    <div class="fg">
+      <label class="flabel">Nom de scène (optionnel)</label>
+      <input id="nomScene" class="finput" type="text" placeholder="Ex : Léa D. ou juste Léa">
+    </div>
+
+    <div class="fg">
+      <label class="flabel">Photo de profil</label>
+      <div class="upload" onclick="this.querySelector('input').click()" id="photoZone">
+        <div class="upload-ico">📸</div>
+        <div class="upload-title">Cliquez pour ajouter une photo</div>
+        <div class="upload-sub">JPG, PNG — max 5 Mo</div>
+        <input type="file" accept="image/*" onchange="previewPhoto(this)">
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-back" onclick="go(2)">← Retour</button>
+      <button class="btn-next" onclick="go(4)">Continuer →</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 4 — CONFIRMATION -->
+  <div class="panel" id="p4">
+    <div class="fhead">
+      <h1>Confirmation et accord parental</h1>
+      <p>Dernière étape avant de rejoindre ShowOne.</p>
+    </div>
+
+    <div class="warning-note">
+      <div class="info-note-ico">📋</div>
+      <p>En cochant les cases ci-dessous, le tuteur légal confirme son accord pour l'inscription du mineur sur ShowOne et accepte d'être l'interlocuteur unique pour toute demande de contact.</p>
+    </div>
+
+    <div id="inscriptionError"></div>
+
+    <div class="chk">
+      <input type="checkbox" id="chkAccord">
+      <label for="chkAccord">J'autorise en tant que tuteur légal l'inscription de mon enfant sur ShowOne et accepte de gérer les contacts reçus en son nom. *</label>
+    </div>
+    <div class="chk">
+      <input type="checkbox" id="chkCgu">
+      <label for="chkCgu">J'accepte les <a href="/legal">Conditions Générales d'Utilisation</a> et la <a href="/legal">Politique de confidentialité</a> de ShowOne. *</label>
+    </div>
+    <div class="chk">
+      <input type="checkbox" id="chkRgpd">
+      <label for="chkRgpd">Je comprends que les données de mon enfant sont protégées conformément au RGPD et ne seront jamais vendues à des tiers. *</label>
+    </div>
+
+    <div class="actions">
+      <button class="btn-back" onclick="go(3)">← Retour</button>
+      <button class="btn-submit" onclick="inscrire()">Créer le compte ✓</button>
+    </div>
+  </div>
+
+  <!-- SUCCÈS -->
+  <div class="success" id="success">
+    <div class="success-ico">🌟</div>
+    <h2>Inscription réussie !</h2>
+    <p>Le profil de votre enfant a bien été créé sur ShowOne. Un email de confirmation a été envoyé à l'adresse du tuteur. Vous pouvez maintenant uploader la première vidéo !</p>
+    <a href="/dashboard-talent" class="btn-go">Accéder au dashboard →</a>
+  </div>
+
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://emiuzigtlomlrsofxqyf.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_U8P52zBkzF6Nqno_mmbcVQ_bKQLNmTP';
+
+  window._photoFile = null;
+
+  // Limiter la date de naissance (max aujourd'hui - 5 ans, min - 17 ans)
+  const today = new Date();
+  const maxDate = new Date(today.getFullYear() - 5, today.getMonth(), today.getDate());
+  const minDate = new Date(today.getFullYear() - 17, today.getMonth(), today.getDate());
+  document.getElementById('dateNaissance').max = maxDate.toISOString().split('T')[0];
+  document.getElementById('dateNaissance').min = minDate.toISOString().split('T')[0];
+
+  function go(step) {
+    // Validation avant de passer à l'étape suivante
+    if (step === 2) {
+      const prenom = document.getElementById('prenomMineur').value.trim();
+      const nom = document.getElementById('nomMineur').value.trim();
+      const date = document.getElementById('dateNaissance').value;
+      if (!prenom || !nom || !date) { alert('Veuillez remplir tous les champs obligatoires.'); return; }
+    }
+    if (step === 3) {
+      const prenom = document.getElementById('prenomTuteur').value.trim();
+      const nom = document.getElementById('nomTuteur').value.trim();
+      const email = document.getElementById('emailTuteur').value.trim();
+      const pwd = document.getElementById('password').value;
+      const lien = document.getElementById('lienTuteur').value;
+      if (!prenom || !nom || !email || !pwd || !lien) { alert('Veuillez remplir tous les champs obligatoires.'); return; }
+      if (pwd.length < 8) { alert('Le mot de passe doit faire au moins 8 caractères.'); return; }
+      // Mettre à jour le titre avec le prénom du mineur
+      document.querySelector('#p3 .fhead h1').textContent = 'Le talent de ' + document.getElementById('prenomMineur').value.trim();
+    }
+    if (step === 4) {
+      const cat = document.querySelector('input[name="cat"]:checked');
+      if (!cat) { alert('Veuillez choisir une catégorie.'); return; }
+    }
+
+    // Mettre à jour les steps
+    for (let i = 1; i <= 4; i++) {
+      const stp = document.getElementById('stp' + i);
+      const panel = document.getElementById('p' + i);
+      if (i < step) { stp.className = 'stp done'; }
+      else if (i === step) { stp.className = 'stp active'; }
+      else { stp.className = 'stp'; }
+      if (panel) panel.className = i === step ? 'panel active' : 'panel';
+      if (i < 4) {
+        const line = document.getElementById('line' + i);
+        if (line) line.className = i < step ? 'stp-line done' : 'stp-line';
+      }
+    }
+    document.querySelector('.side-form').scrollTo(0, 0);
+    window.scrollTo(0, 0);
+  }
+
+  function previewPhoto(input) {
+    if (input.files && input.files[0]) {
+      window._photoFile = input.files[0];
+    }
+    const zone = document.getElementById('photoZone');
+    const reader = new FileReader();
+    reader.onload = e => {
+      zone.innerHTML = `<img src="${e.target.result}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:8px;"><div class="upload-title">Photo sélectionnée ✓</div><input type="file" accept="image/*" onchange="previewPhoto(this)" style="display:none">`;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+
+  async function inscrire() {
+    const accord = document.getElementById('chkAccord').checked;
+    const cgu = document.getElementById('chkCgu').checked;
+    const rgpd = document.getElementById('chkRgpd').checked;
+    const errDiv = document.getElementById('inscriptionError');
+
+    if (!accord || !cgu || !rgpd) {
+      errDiv.innerHTML = '⚠️ Veuillez cocher toutes les cases obligatoires.';
+      errDiv.style.display = 'block';
+      return;
+    }
+
+    const prenomMineur = document.getElementById('prenomMineur').value.trim();
+    const nomMineur = document.getElementById('nomMineur').value.trim();
+    const dateNaissance = document.getElementById('dateNaissance').value;
+    const villeMineur = document.getElementById('villeMineur').value.trim();
+    const prenomTuteur = document.getElementById('prenomTuteur').value.trim();
+    const nomTuteur = document.getElementById('nomTuteur').value.trim();
+    const lienTuteur = document.getElementById('lienTuteur').value;
+    const emailTuteur = document.getElementById('emailTuteur').value.trim();
+    const telTuteur = document.getElementById('telTuteur').value.trim();
+    const password = document.getElementById('password').value;
+    const categorie = document.querySelector('input[name="cat"]:checked')?.value || 'autre';
+    const nomScene = document.getElementById('nomScene').value.trim() || prenomMineur;
+
+    const btnSubmit = document.querySelector('.btn-submit');
+    btnSubmit.textContent = 'Création en cours…';
+    btnSubmit.disabled = true;
+    errDiv.style.display = 'none';
+
+    try {
+      // 1. Créer le compte Auth avec l'email du tuteur
+      const authRes = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY },
+        body: JSON.stringify({ email: emailTuteur, password })
+      });
+      const authData = await authRes.json();
+
+      if (authData.error) {
+        const msg = authData.error.message || '';
+        const emailExiste = msg.toLowerCase().includes('already') || msg.toLowerCase().includes('registered');
+        errDiv.innerHTML = emailExiste
+          ? '⚠️ Cette adresse email est déjà utilisée. <a href="/connexion" style="color:var(--red);font-weight:700;">Connectez-vous ici →</a>'
+          : '⚠️ ' + (msg || 'Une erreur est survenue.');
+        errDiv.style.display = 'block';
+        btnSubmit.textContent = 'Créer le compte ✓';
+        btnSubmit.disabled = false;
+        return;
+      }
+
+      const userId = authData.user?.id;
+      const token = authData.access_token;
+
+      // 2. Créer dans la table utilisateurs (avec infos tuteur)
+      await fetch(`${SUPABASE_URL}/rest/v1/utilisateurs`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}`, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({
+          id: userId,
+          email: emailTuteur,
+          prenom: prenomTuteur,
+          nom: nomTuteur,
+          telephone: telTuteur || null,
+          ville: villeMineur || null,
+          type_compte: 'talent',
+          plan: 'gratuit'
+        })
+      });
+
+      // 3. Créer le profil talent (avec infos mineur)
+      await fetch(`${SUPABASE_URL}/rest/v1/profils_talents`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}`, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({
+          utilisateur_id: userId,
+          nom_scene: nomScene,
+          categorie,
+          description: null
+        })
+      });
+
+      // 4. Créer dans la table mineurs
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/mineurs`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}`, 'Prefer': 'return=minimal' },
+          body: JSON.stringify({
+            utilisateur_id: userId,
+            prenom_mineur: prenomMineur,
+            nom_mineur: nomMineur,
+            date_naissance: dateNaissance,
+            prenom_tuteur: prenomTuteur,
+            nom_tuteur: nomTuteur,
+            lien_tuteur: lienTuteur,
+            tel_tuteur: telTuteur || null
+          })
+        });
+      } catch(e) { console.warn('Table mineurs:', e); }
+
+      // 5. Upload photo si sélectionnée
+      let photo_url = '';
+      if (window._photoFile) {
+        try {
+          const file = window._photoFile;
+          const ext = file.name.split('.').pop();
+          const fileName = `avatar_${userId}_${Date.now()}.${ext}`;
+          const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/avatars/${fileName}`, {
+            method: 'POST',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}`, 'Content-Type': file.type, 'x-upsert': 'true' },
+            body: file
+          });
+          if (uploadRes.ok) {
+            photo_url = `${SUPABASE_URL}/storage/v1/object/public/avatars/${fileName}`;
+            await fetch(`${SUPABASE_URL}/rest/v1/profils_talents?utilisateur_id=eq.${userId}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}`, 'Prefer': 'return=minimal' },
+              body: JSON.stringify({ photo_url })
+            });
+          }
+        } catch(e) { console.warn('Photo:', e); }
+      }
+
+      // 6. Sauvegarder session
+      localStorage.setItem('showone_token', token);
+      localStorage.setItem('showone_user', JSON.stringify({
+        id: userId, email: emailTuteur,
+        prenom: prenomTuteur, nom: nomTuteur,
+        photo_url, type_compte: 'talent'
+      }));
+
+      // 7. Succès
+      document.getElementById('p4').className = 'panel';
+      document.getElementById('success').className = 'success active';
+      document.querySelectorAll('.steps, .stp').forEach(el => el.style.display = 'none');
+
+    } catch(err) {
+      errDiv.innerHTML = '⚠️ Une erreur est survenue. Veuillez réessayer.';
+      errDiv.style.display = 'block';
+      btnSubmit.textContent = 'Créer le compte ✓';
+      btnSubmit.disabled = false;
+    }
+  }
+</script>
+</body>
+</html>
