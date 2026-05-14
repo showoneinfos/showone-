@@ -444,11 +444,11 @@
           <div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">Chargement…</div>
         </div>
 
-        <div class="upload-zone" id="uploadZone" onclick="this.querySelector('input').click()">
+        <div class="upload-zone" id="uploadZone" onclick="ouvrirModalUpload()">
           <div style="font-size:28px;" id="uploadIco">📤</div>
           <div class="upload-txt" id="uploadTxt">Glissez une vidéo ou cliquez pour uploader</div>
           <div class="upload-sub" id="uploadSub">MP4, MOV — max 2 min 30 · Quota : <span id="quotaUploadTxt">1 vidéo sur plan Gratuit</span></div>
-          <input type="file" accept="video/*" id="videoFileInput" onchange="lancerUpload(this)" onclick="event.stopPropagation()">
+          <input type="file" accept="video/*" id="videoFileInput" onchange="lancerUpload(this)" onclick="event.stopPropagation()" style="display:none;">
         </div>
 
         <!-- Modal titre/description avant upload -->
