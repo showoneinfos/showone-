@@ -598,8 +598,8 @@
 <section class="hero">
   <div class="hero-noise"></div>
   <div class="hero-content">
-    <div class="hero-tag">Plateforme de découverte de talents · 2025</div>
-    <h1>Entrez en scène.<br><em>Faites-vous</em><br>remarquer.</h1>
+    <div class="hero-tag" data-i18n="hero_tag">Plateforme de découverte de talents · 2025</div>
+    <h1 data-i18n="hero_line1">Entrez en scène.<br><em data-i18n="hero_line2">Faites-vous</em><br data-i18n="hero_line3">remarquer.</h1>
     <p class="hero-sub">ShowOne rassemble chanteurs, danseurs, sportifs, mannequins, animateurs et humoristes. Une vitrine éditoriale pour révéler les artistes de demain aux recruteurs d'aujourd'hui.</p>
     <div class="hero-search">
       <input type="text" placeholder="Rechercher un talent, une catégorie…">
@@ -646,7 +646,7 @@
 <section>
   <div class="section-header">
     <div>
-      <div class="section-label">Showcase</div>
+      <div class="section-label" data-i18n="showcase_label2">Showcase</div>
       <div class="section-title" data-i18n="showcase_title" data-i18n="showcase_title">Tendances du moment</div>
     </div>
     <a href="/categories" class="section-link" data-i18n="showcase_link" data-i18n="showcase_link">Voir tous les talents →</a>
@@ -713,39 +713,39 @@
 
 <section class="pricing" id="pricing">
   <div class="pricing-header">
-    <span class="section-label">ShowOne</span>
-    <div class="section-title">Choisissez votre scène</div>
-    <p>Plus de visibilité, plus de vidéos, plus d'opportunités.</p>
+    <span class="section-label" data-i18n="pricing_showone">ShowOne</span>
+    <div class="section-title" data-i18n="pricing_title">Choisissez votre scène</div>
+    <p data-i18n="pricing_sub">Plus de visibilité, plus de vidéos, plus d'opportunités.</p>
   </div>
   <div class="pricing-grid">
     <!-- Gratuit -->
     <div class="pricing-card">
       <div class="pricing-plan">Gratuit</div>
       <div class="pricing-price">0€</div>
-      <div class="pricing-period">pour toujours</div>
+      <div class="pricing-period" data-i18n="pricing_forever">pour toujours</div>
       <div class="pricing-divider"></div>
       <ul class="pricing-features">
         <li>1 vidéo de 1 minute</li>
-        <li>Profil public visible</li>
-        <li>Contactable par les recruteurs</li>
-        <li>Messagerie limitée</li>
+        <li data-i18n="feat_profil">Profil public visible</li>
+        <li data-i18n="feat_contact">Contactable par les recruteurs</li>
+        <li data-i18n="feat_msg_lim">Messagerie limitée</li>
       </ul>
       <button class="btn-pricing" onclick="window.location.href='/inscription-talent'" data-i18n="pricing_btn1">Commencer gratuitement</button>
       <p style="text-align:center;font-size:11px;color:var(--text-muted);margin-top:10px;">Moins de 18 ans ? <a href="/inscription-mineur" style="color:var(--purple);font-weight:600;text-decoration:none;">Inscription mineur →</a></p>
     </div>
     <!-- Boost -->
     <div class="pricing-card featured">
-      <div class="pricing-popular">Populaire</div>
+      <div class="pricing-popular" data-i18n="feat_popular">Populaire</div>
       <div class="pricing-plan">Boost</div>
       <div class="pricing-price">1€</div>
-      <div class="pricing-period">paiement unique</div>
+      <div class="pricing-period" data-i18n="feat_once">paiement unique</div>
       <div class="pricing-divider"></div>
       <ul class="pricing-features">
         <li>2 vidéos de 2 min 30</li>
-        <li>Profil mis en avant</li>
+        <li data-i18n="feat_avant">Profil mis en avant</li>
         <li>Contactable par les recruteurs</li>
-        <li>Messagerie illimitée</li>
-        <li>Badge Boost</li>
+        <li data-i18n="feat_msg_ill">Messagerie illimitée</li>
+        <li data-i18n="feat_badge_boost">Badge Boost</li>
       </ul>
       <button class="btn-pricing featured-btn" onclick="window.location.href='/inscription-talent'">Activer Boost · 1€</button>
     </div>
@@ -753,14 +753,14 @@
     <div class="pricing-card">
       <div class="pricing-plan">Pro</div>
       <div class="pricing-price">4,99€</div>
-      <div class="pricing-period">par mois</div>
+      <div class="pricing-period" data-i18n="feat_per_month">par mois</div>
       <div class="pricing-divider"></div>
       <ul class="pricing-features">
         <li>Jusqu'à 5 vidéos / jour (non cumulables)</li>
         <li>Vidéos de 2 min 30 max</li>
         <li>Profil prioritaire en recherche</li>
         <li>Contactable en priorité</li>
-        <li>Badge Pro exclusif</li>
+        <li data-i18n="feat_badge_pro">Badge Pro exclusif</li>
       </ul>
       <button class="btn-pricing" onclick="window.location.href='/inscription-talent'">Passer Pro · 4,99€/mois</button>
     </div>
@@ -769,19 +769,19 @@
 
 <!-- RECRUTEUR -->
 <section class="recruiter">
-  <div class="recruiter-tag">Pour les recruteurs</div>
+  <div class="recruiter-tag" data-i18n="rec_pour">Pour les recruteurs</div>
   <h2 data-i18n="rec_title">Vous êtes recruteur ?</h2>
-  <p>Accédez à tous les talents de la plateforme.</p>
+  <p data-i18n="rec_acces">Accédez à tous les talents de la plateforme.</p>
   <div class="recruiter-card">
     <div class="recruiter-price">49,99€ <span>/ mois</span></div>
-    <div class="recruiter-subtitle">Plan Recruteur Pro — Accès complet</div>
+    <div class="recruiter-subtitle" data-i18n="rec_plan">Plan Recruteur Pro — Accès complet</div>
     <ul class="recruiter-features">
-      <li>Contacter n'importe quel talent</li>
+      <li data-i18n="rec_feat1">Contacter n'importe quel talent</li>
       <li>Messagerie illimitée</li>
-      <li>Recherche avancée par catégorie</li>
-      <li>Lecture des vidéos en illimité</li>
+      <li data-i18n="rec_feat3">Recherche avancée par catégorie</li>
+      <li data-i18n="rec_feat4">Lecture des vidéos en illimité</li>
     </ul>
-    <button class="btn-recruiter" onclick="window.location.href='/inscription-recruteur'">Devenir Recruteur</button>
+    <button class="btn-recruiter" onclick="window.location.href='/inscription-recruteur'" data-i18n="rec_cta">Devenir Recruteur</button>
   </div>
 </section>
 
@@ -790,8 +790,8 @@
   <div class="footer-logo">Show<span>One</span></div>
   <p>© 2025 ShowOne — Plateforme de découverte de talents</p>
   <div class="footer-links">
-    <a href="/legal">CGU</a>
-    <a href="/legal">Confidentialité</a>
+    <a href="/legal" data-i18n="footer_cgu">CGU</a>
+    <a href="/legal" data-i18n="footer_confidentialite">Confidentialité</a>
     <a href="mailto:contact@showone.fr">Contact</a>
     <a href="/contact" style="color:var(--red-accent);font-weight:700;">📞 Nous contacter</a>
   </div>
