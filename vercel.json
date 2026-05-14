@@ -18,6 +18,9 @@
     { "source": "/contact", "destination": "/contact.html" },
     { "source": "/messagerie", "destination": "/messagerie.html" },
     { "source": "/rejoindre", "destination": "/rejoindre.html" },
+    { "source": "/paiement-succes", "destination": "/paiement-succes.html" },
+    { "source": "/api/create-checkout", "destination": "/api/create-checkout.js" },
+    { "source": "/api/webhook", "destination": "/api/webhook.js" },
     { "source": "/castings", "destination": "/castings.html" },
     { "source": "/deposer-casting", "destination": "/deposer-casting.html" }
   ],
