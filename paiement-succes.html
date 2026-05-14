@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShowOne — Paiement confirmé !</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:#f5f3ff; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .card { background:#fff; border-radius:24px; padding:48px 40px; max-width:480px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(91,79,232,0.12); }
+  .ico { font-size:64px; margin-bottom:20px; animation:bounce .6s ease; }
+  @keyframes bounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+  h1 { font-family:'Syne',sans-serif; font-size:28px; font-weight:800; color:#1a1535; margin-bottom:12px; }
+  p { color:#a09dc0; font-size:15px; line-height:1.6; margin-bottom:28px; }
+  .badge { display:inline-flex; align-items:center; gap:8px; padding:10px 20px; border-radius:999px; background:rgba(91,79,232,0.08); color:#5B4FE8; font-size:14px; font-weight:700; margin-bottom:32px; }
+  .features { text-align:left; background:#f5f3ff; border-radius:14px; padding:20px; margin-bottom:32px; }
+  .feature { display:flex; align-items:center; gap:10px; font-size:14px; color:#1a1535; padding:6px 0; }
+  .feature span:first-child { color:#5B4FE8; font-weight:700; }
+  .btn { display:block; width:100%; padding:14px; border-radius:12px; border:none; background:#5B4FE8; color:#fff; font-size:15px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; text-decoration:none; transition:all .2s; }
+  .btn:hover { background:#3D32C4; transform:translateY(-1px); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="ico">🎉</div>
+  <h1>Bienvenue dans ShowOne Pro !</h1>
+  <p>Votre paiement a été confirmé. Votre compte est maintenant activé avec tous les avantages Pro.</p>
+  <div class="badge" id="planBadge">⭐ Plan Pro activé</div>
+  <div class="features" id="featuresList">
+    <div class="feature"><span>✅</span> Chargement...</div>
+  </div>
+  <a href="#" class="btn" id="btnDashboard">Accéder à mon espace →</a>
+</div>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  const type = params.get('type') || 'talent';
+
+  if (type === 'recruteur') {
+    document.getElementById('planBadge').textContent = '🔍 Recruteur Pro activé';
+    document.getElementById('featuresList').innerHTML = `
+      <div class="feature"><span>✅</span> Accès illimité à tous les talents</div>
+      <div class="feature"><span>✅</span> Messagerie illimitée</div>
+      <div class="feature"><span>✅</span> Publication de castings illimitée</div>
+      <div class="feature"><span>✅</span> Recherche avancée par catégorie</div>
+      <div class="feature"><span>✅</span> Lecture des vidéos en illimité</div>
+    `;
+    document.getElementById('btnDashboard').href = '/dashboard-recruteur';
+  } else {
+    document.getElementById('planBadge').textContent = '🌟 Plan Pro activé';
+    document.getElementById('featuresList').innerHTML = `
+      <div class="feature"><span>✅</span> 10 vidéos sur le profil</div>
+      <div class="feature"><span>✅</span> Changement de vidéos illimité</div>
+      <div class="feature"><span>✅</span> Postulations casting illimitées</div>
+      <div class="feature"><span>✅</span> Profil prioritaire en recherche</div>
+      <div class="feature"><span>✅</span> Badge Pro exclusif</div>
+    `;
+    document.getElementById('btnDashboard').href = '/dashboard-talent';
+  }
+
+  // Mettre à jour le plan dans localStorage
+  try {
+    const userStr = localStorage.getItem('showone_user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      user.plan = 'pro';
+      localStorage.setItem('showone_user', JSON.stringify(user));
+    }
+  } catch(e) {}
+</script>
+</body>
+</html>
