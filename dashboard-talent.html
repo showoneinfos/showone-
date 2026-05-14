@@ -427,7 +427,7 @@
         <div class="quota-val" id="castingVal">3 / mois</div>
       </div>
     </div>
-    <button class="btn-upgrade-banner" id="btnUpgradeBanner" onclick="window.location.href='/inscription-talent#pricing'">⚡ Passer Pro · 4,99€/mois</button>
+    <button class="btn-upgrade-banner" id="btnUpgradeBanner" onclick="afficherModalePro()">⚡ Passer Pro · 4,99€/mois</button>
   </div>
 
   <!-- GRILLE PRINCIPALE -->
@@ -559,6 +559,43 @@
     if (uploadZone) {
       uploadZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setTimeout(() => uploadZone.querySelector('input').click(), 400);
+    }
+  }
+
+  async function lancerPaiementPro() {
+    const btn = document.getElementById('btnPaiementPro');
+    btn.textContent = 'Redirection…';
+    btn.disabled = true;
+
+    try {
+      const userStr = localStorage.getItem('showone_user');
+      const user = userStr ? JSON.parse(userStr) : {};
+
+      const res = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          plan: 'talent_pro',
+          userId: user.id,
+          userEmail: user.email,
+          successUrl: 'https://www.showone.fr/paiement-succes?type=talent',
+          cancelUrl: 'https://www.showone.fr/dashboard-talent'
+        })
+      });
+
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert('Erreur lors de la redirection vers le paiement.');
+        btn.textContent = 'Passer Pro · 4,99€/mois';
+        btn.disabled = false;
+      }
+    } catch(e) {
+      console.error(e);
+      alert('Erreur de connexion. Réessayez.');
+      btn.textContent = 'Passer Pro · 4,99€/mois';
+      btn.disabled = false;
     }
   }
 
@@ -1224,7 +1261,7 @@ if (window.innerWidth <= 768) {
     </div>
     <div style="display:flex;gap:10px;">
       <button onclick="fermerModalePro()" style="flex:1;padding:12px;border-radius:10px;border:1.5px solid #e0dff5;background:transparent;color:#a09dc0;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Plus tard</button>
-      <button onclick="fermerModalePro()" style="flex:2;padding:12px;border-radius:10px;border:none;background:#5B4FE8;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">⚡ Passer Pro · 4,99€/mois</button>
+      <button onclick="lancerPaiementPro()" id="btnPaiementPro" style="flex:2;padding:12px;border-radius:10px;border:none;background:#5B4FE8;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">⚡ Passer Pro · 4,99€/mois</button>
     </div>
   </div>
 </div>
