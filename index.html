@@ -554,7 +554,18 @@
     footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 20px; }
     .footer-links { gap: 16px; flex-wrap: wrap; justify-content: center; }
   }
+
+  .lang-selector { display:flex; align-items:center; gap:4px; margin-left:8px; }
+  .lang-btn { padding:4px 8px; border-radius:6px; border:1.5px solid rgba(255,255,255,0.2); background:transparent; color:rgba(255,255,255,0.6); font-size:11px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; letter-spacing:.3px; }
+  .lang-btn:hover { background:rgba(255,255,255,0.1); color:#fff; }
+  .lang-btn.active { background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.4); }
+  .lang-selector.light .lang-btn { border-color:var(--border); color:var(--muted); }
+  .lang-selector.light .lang-btn:hover { border-color:var(--purple); color:var(--purple); }
+  .lang-selector.light .lang-btn.active { background:var(--purple); color:#fff; border-color:var(--purple); }
+
 </style>
+
+<script src="/translations.js"></script>
 </head>
 <body>
 
@@ -562,17 +573,24 @@
 <nav>
   <a href="/" class="nav-logo" style="text-decoration:none;color:#fff;">Show<span>One</span></a>
   <div class="nav-links">
-    <a href="/comment-ca-marche">Découvrir</a>
-    <a href="/categories">Catégories</a>
-    <a href="/castings">Castings</a>
-    <a href="/inscription-recruteur">Recruteurs</a>
-    <a href="#pricing">Tarifs</a>
+    <a href="/comment-ca-marche" data-i18n="nav_decouvrir">Découvrir</a>
+    <a href="/categories" data-i18n="nav_categories">Catégories</a>
+    <a href="/castings" data-i18n="nav_castings">Castings</a>
+    <a href="/inscription-recruteur" data-i18n="nav_recruteurs">Recruteurs</a>
+    <a href="#pricing" data-i18n="nav_tarifs">Tarifs</a>
     <a href="/contact" style="color:#E8394F;font-weight:700;">Contact</a>
   </div>
   <div class="nav-cta">
+  <div class="lang-selector" id="langSelector">
+    <button class="lang-btn" data-lang="fr" onclick="applyTranslations('fr')">FR</button>
+    <button class="lang-btn" data-lang="es" onclick="applyTranslations('es')">ES</button>
+    <button class="lang-btn" data-lang="pt" onclick="applyTranslations('pt')">PT</button>
+    <button class="lang-btn" data-lang="it" onclick="applyTranslations('it')">IT</button>
+  </div>
+  
     <a href="/contact" class="btn-nav-outline" id="btnContact" style="text-decoration:none;display:inline-block;padding:7px 12px;font-size:12px;">✉️</a>
-    <button class="btn-nav-outline" onclick="window.location.href='/connexion'">Connexion</button>
-    <button class="btn-nav-fill" onclick="window.location.href='/rejoindre'">Rejoindre</button>
+    <button class="btn-nav-outline" onclick="window.location.href='/connexion'" data-i18n="nav_connexion">Connexion</button>
+    <button class="btn-nav-fill" onclick="window.location.href='/rejoindre'" data-i18n="nav_rejoindre">Rejoindre</button>
   </div>
 </nav>
 
@@ -611,8 +629,8 @@
   <div style="display:flex;align-items:center;gap:16px;flex:1;min-width:0;">
     <div style="flex-shrink:0;background:var(--red-accent);width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">🎬</div>
     <div style="min-width:0;overflow:hidden;">
-      <div style="font-size:10px;font-weight:700;color:var(--red-accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;">Castings disponibles</div>
-      <div id="castingTicker" style="color:#fff;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:opacity .3s;">Des recruteurs cherchent des talents comme vous</div>
+      <div style="font-size:10px;font-weight:700;color:var(--red-accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;" data-i18n="casting_banner_label">Castings disponibles</div>
+      <div id="castingTicker" style="color:#fff;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:opacity .3s;" data-i18n="casting_banner_desc">Des recruteurs cherchent des talents comme vous</div>
     </div>
   </div>
   <a href="/castings" style="flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:10px;background:var(--red-accent);color:#fff;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Postuler →</a>
@@ -629,9 +647,9 @@
   <div class="section-header">
     <div>
       <div class="section-label">Showcase</div>
-      <div class="section-title">Tendances du moment</div>
+      <div class="section-title" data-i18n="showcase_title">Tendances du moment</div>
     </div>
-    <a href="/categories" class="section-link">Voir tous les talents →</a>
+    <a href="/categories" class="section-link" data-i18n="showcase_link">Voir tous les talents →</a>
   </div>
   <div class="talents-grid" id="talentsGrid">
     <!-- Chargement -->

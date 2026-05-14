@@ -35,7 +35,18 @@
   .resend { margin-top:20px; font-size:13px; color:var(--muted); }
   .resend a { color:var(--purple); font-weight:600; cursor:pointer; }
   .countdown { font-weight:700; color:var(--purple); }
+
+  .lang-selector { display:flex; align-items:center; gap:4px; margin-left:8px; }
+  .lang-btn { padding:4px 8px; border-radius:6px; border:1.5px solid rgba(255,255,255,0.2); background:transparent; color:rgba(255,255,255,0.6); font-size:11px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; letter-spacing:.3px; }
+  .lang-btn:hover { background:rgba(255,255,255,0.1); color:#fff; }
+  .lang-btn.active { background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.4); }
+  .lang-selector.light .lang-btn { border-color:var(--border); color:var(--muted); }
+  .lang-selector.light .lang-btn:hover { border-color:var(--purple); color:var(--purple); }
+  .lang-selector.light .lang-btn.active { background:var(--purple); color:#fff; border-color:var(--purple); }
+
 </style>
+
+<script src="/translations.js"></script>
 </head>
 <body>
 <div class="card">
@@ -123,5 +134,11 @@
     }, 1000);
   }
 </script>
+<div class="lang-selector light" id="langSelector" style="position:fixed;top:16px;right:16px;z-index:10;">
+    <button class="lang-btn" data-lang="fr" onclick="applyTranslations('fr')">FR</button>
+    <button class="lang-btn" data-lang="es" onclick="applyTranslations('es')">ES</button>
+    <button class="lang-btn" data-lang="pt" onclick="applyTranslations('pt')">PT</button>
+    <button class="lang-btn" data-lang="it" onclick="applyTranslations('it')">IT</button>
+  </div>
 </body>
 </html>

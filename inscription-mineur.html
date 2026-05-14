@@ -127,7 +127,18 @@
     .actions { flex-direction: column; }
     .btn-back, .btn-next, .btn-submit { width: 100%; }
   }
+
+  .lang-selector { display:flex; align-items:center; gap:4px; margin-left:8px; }
+  .lang-btn { padding:4px 8px; border-radius:6px; border:1.5px solid rgba(255,255,255,0.2); background:transparent; color:rgba(255,255,255,0.6); font-size:11px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; letter-spacing:.3px; }
+  .lang-btn:hover { background:rgba(255,255,255,0.1); color:#fff; }
+  .lang-btn.active { background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.4); }
+  .lang-selector.light .lang-btn { border-color:var(--border); color:var(--muted); }
+  .lang-selector.light .lang-btn:hover { border-color:var(--purple); color:var(--purple); }
+  .lang-selector.light .lang-btn.active { background:var(--purple); color:#fff; border-color:var(--purple); }
+
 </style>
+
+<script src="/translations.js"></script>
 </head>
 <body>
 
@@ -157,7 +168,13 @@
   </div>
 </div>
 
-<div class="side-form">
+<div class="side-form" style="position:relative;">
+  <div class="lang-selector light" id="langSelector" style="position:absolute;top:16px;right:16px;z-index:10;">
+    <button class="lang-btn" data-lang="fr" onclick="applyTranslations('fr')">FR</button>
+    <button class="lang-btn" data-lang="es" onclick="applyTranslations('es')">ES</button>
+    <button class="lang-btn" data-lang="pt" onclick="applyTranslations('pt')">PT</button>
+    <button class="lang-btn" data-lang="it" onclick="applyTranslations('it')">IT</button>
+  </div>
 
   <!-- STEPS -->
   <div class="steps">
