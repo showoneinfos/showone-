@@ -409,25 +409,25 @@
   </div>
 
   <!-- PLAN BANNER -->
-  <div class="plan-banner">
-    <div class="plan-banner-ico">🎯</div>
+  <div class="plan-banner" id="planBanner">
+    <div class="plan-banner-ico" id="planIco">🎯</div>
     <div class="plan-banner-info">
-      <h3>Plan Gratuit</h3>
-      <p>Passez en Pro pour débloquer 5 vidéos/jour</p>
+      <h3 id="planNom">Plan Gratuit</h3>
+      <p id="planDesc">Passez en Pro pour accéder à 10 vidéos et aux castings illimités</p>
     </div>
-    <div class="plan-banner-quota">
+    <div class="plan-banner-quota" id="planQuota">
       <div class="quota-bar-wrap">
         <div class="quota-label">Vidéos</div>
-        <div class="quota-bar"><div class="quota-fill red" style="width:100%"></div></div>
-        <div class="quota-val">1 / 1</div>
+        <div class="quota-bar"><div class="quota-fill red" id="quotaFill" style="width:100%"></div></div>
+        <div class="quota-val" id="quotaVal">1 / 1</div>
       </div>
       <div class="quota-bar-wrap">
-        <div class="quota-label">Durée max</div>
-        <div class="quota-bar"><div class="quota-fill" style="width:20%"></div></div>
-        <div class="quota-val">1 min</div>
+        <div class="quota-label">Castings</div>
+        <div class="quota-bar"><div class="quota-fill" id="castingFill" style="width:0%"></div></div>
+        <div class="quota-val" id="castingVal">3 / mois</div>
       </div>
     </div>
-    <button class="btn-upgrade-banner">⚡ Upgrader</button>
+    <button class="btn-upgrade-banner" id="btnUpgradeBanner" onclick="window.location.href='/inscription-talent#pricing'">⚡ Passer Pro · 4,99€/mois</button>
   </div>
 
   <!-- GRILLE PRINCIPALE -->
@@ -447,7 +447,7 @@
         <div class="upload-zone" id="uploadZone" onclick="this.querySelector('input').click()">
           <div style="font-size:28px;" id="uploadIco">📤</div>
           <div class="upload-txt" id="uploadTxt">Glissez une vidéo ou cliquez pour uploader</div>
-          <div class="upload-sub" id="uploadSub">MP4, MOV — max 2 min 30 · Quota : 1 vidéo sur plan Gratuit</div>
+          <div class="upload-sub" id="uploadSub">MP4, MOV — max 2 min 30 · Quota : <span id='quotaUploadTxt'>1 vidéo sur plan Gratuit</span></div>
           <input type="file" accept="video/*" id="videoFileInput" onchange="lancerUpload(this)" onclick="event.stopPropagation()">
         </div>
 
@@ -573,9 +573,36 @@
 
         document.getElementById('avatarName').textContent = prenom + ' ' + nom;
         document.getElementById('avatarImg').textContent = initiales || '?';
-        document.getElementById('avatarPlan').textContent = plan === 'pro' ? '⭐ Plan Pro' : plan === 'boost' ? '🚀 Plan Boost' : '⭐ Plan Gratuit';
+        document.getElementById('avatarPlan').textContent = plan === 'pro' ? '⭐ Plan Pro' : '⭐ Plan Gratuit';
         document.getElementById('topbarNom').textContent = 'Bonjour, ' + prenom + ' 👋';
-        if (plan === 'pro') { const btn = document.querySelector('.btn-upgrade'); if (btn) btn.style.display = 'none'; }
+        
+        // Mettre à jour le plan banner selon le plan
+        if (plan === 'pro') {
+          // Plan Pro
+          document.getElementById('planIco').textContent = '🌟';
+          document.getElementById('planNom').textContent = 'Plan Pro';
+          document.getElementById('planDesc').textContent = '10 vidéos · Changement illimité · Castings illimités · Badge Pro';
+          document.getElementById('quotaVal').textContent = '10 vidéos max';
+          document.getElementById('quotaFill').style.width = '0%';
+          document.getElementById('quotaFill').classList.remove('red');
+          document.getElementById('castingVal').textContent = 'Illimités';
+          document.getElementById('castingFill').style.width = '100%';
+          document.getElementById('btnUpgradeBanner').style.display = 'none';
+          document.getElementById('planQuota').style.display = 'none';
+          // Masquer le bouton upgrade dans la topbar
+          const btn = document.querySelector('.btn-upgrade');
+          if (btn) btn.style.display = 'none';
+        } else {
+          // Plan Gratuit
+          document.getElementById('planIco').textContent = '🎯';
+          document.getElementById('planNom').textContent = 'Plan Gratuit';
+          document.getElementById('planDesc').textContent = 'Passez en Pro pour accéder à 10 vidéos et aux castings illimités';
+          document.getElementById('quotaVal').textContent = '1 vidéo max';
+          document.getElementById('castingVal').textContent = '3 / mois';
+          // Mettre à jour le texte upload
+          const quotaTxt = document.getElementById('quotaUploadTxt');
+          if (quotaTxt) quotaTxt.textContent = '1 vidéo sur plan Gratuit — Passez Pro pour 10 vidéos';
+        }
       }
 
       // Profil talent
@@ -811,9 +838,9 @@
           <div class="video-thumb-bg" style="background:var(--border);border-radius:8px;width:60px;height:60px;display:flex;align-items:center;justify-content:center;">🔒</div>
           <div class="video-info">
             <div class="video-title" style="color:var(--muted);">Vidéo suivante — Déverrouillée avec Boost ou Pro</div>
-            <div class="video-meta"><span>Passez à un plan payant pour ajouter plus de vidéos</span></div>
+            <div class="video-meta"><span>Passez en Pro (4,99€/mois) pour ajouter jusqu'à 10 vidéos</span></div>
           </div>
-          <span class="video-status" style="background:rgba(0,0,0,0.05);color:var(--muted);">Verrouillé</span>
+          <span class="video-status" style="background:rgba(0,0,0,0.05);color:var(--muted);">Passer Pro</span>
         </div>`;
 
     } catch(e) { console.error(e); }
@@ -1019,7 +1046,7 @@
       setTimeout(() => {
         document.getElementById('uploadIco').textContent = '📤';
         document.getElementById('uploadTxt').textContent = 'Glissez une vidéo ou cliquez pour uploader';
-        document.getElementById('uploadSub').textContent = 'MP4, MOV — max 2 min 30 · Quota : 1 vidéo sur plan Gratuit';
+        document.getElementById('uploadSub').textContent = 'MP4, MOV — max 2 min 30 · Quota : <span id='quotaUploadTxt'>1 vidéo sur plan Gratuit</span>';
       }, 3000);
 
     } catch(err) {
