@@ -127,12 +127,12 @@
     <button class="lang-btn" data-lang="it" onclick="applyTranslations('it')">IT</button>
   </div>
   <div class="form-box">
-    <h1 data-i18n="connexion_title">Connexion</h1>
-    <p data-i18n="connexion_sub">Accédez à votre espace ShowOne.</p>
+    <h1 data-i18n="connexion_title" data-i18n="cnx_title">Connexion</h1>
+    <p data-i18n="connexion_sub" data-i18n="cnx_sub">Accédez à votre espace ShowOne.</p>
 
     <div class="toggle-type">
-      <button class="toggle-btn active" onclick="setType('talent',this)" data-i18n="je_talent">🌟 Je suis un talent</button>
-      <button class="toggle-btn" onclick="setType('recruteur',this)" data-i18n="je_recruteur">🔍 Je suis recruteur</button>
+      <button class="toggle-btn active" onclick="setType('talent',this)" data-i18n="je_talent" data-i18n="je_talent">🌟 Je suis un talent</button>
+      <button class="toggle-btn" onclick="setType('recruteur',this)" data-i18n="je_recruteur" data-i18n="je_rec">🔍 Je suis recruteur</button>
     </div>
 
     <div class="fg">
@@ -149,16 +149,16 @@
 
     <div class="form-options">
       <label class="remember"><input type="checkbox" checked> Se souvenir de moi</label>
-      <a href="/mot-de-passe-oublie" class="forgot" data-i18n="mdp_oublie">Mot de passe oublié ?</a>
+      <a href="/mot-de-passe-oublie" class="forgot" data-i18n="mdp_oublie" data-i18n="mdp_oublie">Mot de passe oublié ?</a>
     </div>
 
     <div id="loginError" style="display:none;background:rgba(232,57,79,0.08);border:1px solid rgba(232,57,79,0.25);border-radius:9px;padding:10px 14px;font-size:13px;color:#a0243a;margin-bottom:14px;"></div>
 
-    <button class="btn-login" onclick="seConnecter()" data-i18n="btn_connexion">Se connecter</button>
+    <button class="btn-login" onclick="seConnecter()" data-i18n="btn_connexion" data-i18n="btn_cnx">Se connecter</button>
 
     <div class="divider">
       <div class="divider-line"></div>
-      <span data-i18n="ou_continuer">ou continuer avec</span>
+      <span data-i18n="ou_continuer" data-i18n="ou_avec">ou continuer avec</span>
       <div class="divider-line"></div>
     </div>
 

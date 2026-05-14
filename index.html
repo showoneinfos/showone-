@@ -573,11 +573,11 @@
 <nav>
   <a href="/" class="nav-logo" style="text-decoration:none;color:#fff;">Show<span>One</span></a>
   <div class="nav-links">
-    <a href="/comment-ca-marche" data-i18n="nav_decouvrir">Découvrir</a>
-    <a href="/categories" data-i18n="nav_categories">Catégories</a>
-    <a href="/castings" data-i18n="nav_castings">Castings</a>
-    <a href="/inscription-recruteur" data-i18n="nav_recruteurs">Recruteurs</a>
-    <a href="#pricing" data-i18n="nav_tarifs">Tarifs</a>
+    <a href="/comment-ca-marche" data-i18n="nav_decouvrir" data-i18n="nav_decouvrir">Découvrir</a>
+    <a href="/categories" data-i18n="nav_categories" data-i18n="nav_categories">Catégories</a>
+    <a href="/castings" data-i18n="nav_castings" data-i18n="nav_castings">Castings</a>
+    <a href="/inscription-recruteur" data-i18n="nav_recruteurs" data-i18n="nav_recruteurs">Recruteurs</a>
+    <a href="#pricing" data-i18n="nav_tarifs" data-i18n="nav_tarifs">Tarifs</a>
     <a href="/contact" style="color:#E8394F;font-weight:700;">Contact</a>
   </div>
   <div class="nav-cta">
@@ -589,8 +589,8 @@
   </div>
   
     <a href="/contact" class="btn-nav-outline" id="btnContact" style="text-decoration:none;display:inline-block;padding:7px 12px;font-size:12px;">✉️</a>
-    <button class="btn-nav-outline" onclick="window.location.href='/connexion'" data-i18n="nav_connexion">Connexion</button>
-    <button class="btn-nav-fill" onclick="window.location.href='/rejoindre'" data-i18n="nav_rejoindre">Rejoindre</button>
+    <button class="btn-nav-outline" onclick="window.location.href='/connexion'" data-i18n="nav_connexion" data-i18n="nav_connexion">Connexion</button>
+    <button class="btn-nav-fill" onclick="window.location.href='/rejoindre'" data-i18n="nav_rejoindre" data-i18n="nav_rejoindre">Rejoindre</button>
   </div>
 </nav>
 
@@ -603,7 +603,7 @@
     <p class="hero-sub">ShowOne rassemble chanteurs, danseurs, sportifs, mannequins, animateurs et humoristes. Une vitrine éditoriale pour révéler les artistes de demain aux recruteurs d'aujourd'hui.</p>
     <div class="hero-search">
       <input type="text" placeholder="Rechercher un talent, une catégorie…">
-      <button>Chercher</button>
+      <button data-i18n="hero_btn">Chercher</button>
     </div>
     <div class="hero-tags">
       <a href="/categorie-detail?cat=acting" class="hero-tag-link">🎬 Acting / Cinéma</a>
@@ -629,8 +629,8 @@
   <div style="display:flex;align-items:center;gap:16px;flex:1;min-width:0;">
     <div style="flex-shrink:0;background:var(--red-accent);width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">🎬</div>
     <div style="min-width:0;overflow:hidden;">
-      <div style="font-size:10px;font-weight:700;color:var(--red-accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;" data-i18n="casting_banner_label">Castings disponibles</div>
-      <div id="castingTicker" style="color:#fff;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:opacity .3s;" data-i18n="casting_banner_desc">Des recruteurs cherchent des talents comme vous</div>
+      <div style="font-size:10px;font-weight:700;color:var(--red-accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;" data-i18n="casting_banner_label" data-i18n="cast_label">Castings disponibles</div>
+      <div id="castingTicker" style="color:#fff;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:opacity .3s;" data-i18n="casting_banner_desc" data-i18n="cast_desc">Des recruteurs cherchent des talents comme vous</div>
     </div>
   </div>
   <a href="/castings" style="flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:10px;background:var(--red-accent);color:#fff;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Postuler →</a>
@@ -647,9 +647,9 @@
   <div class="section-header">
     <div>
       <div class="section-label">Showcase</div>
-      <div class="section-title" data-i18n="showcase_title">Tendances du moment</div>
+      <div class="section-title" data-i18n="showcase_title" data-i18n="showcase_title">Tendances du moment</div>
     </div>
-    <a href="/categories" class="section-link" data-i18n="showcase_link">Voir tous les talents →</a>
+    <a href="/categories" class="section-link" data-i18n="showcase_link" data-i18n="showcase_link">Voir tous les talents →</a>
   </div>
   <div class="talents-grid" id="talentsGrid">
     <!-- Chargement -->
@@ -668,10 +668,10 @@
 <section class="editorial">
   <div class="section-header">
     <div>
-      <div class="section-label">Sélection ShowOne</div>
-      <div class="section-title">Coups de cœur de la rédaction</div>
+      <div class="section-label" data-i18n="editorial_title">Sélection ShowOne</div>
+      <div class="section-title" data-i18n="editorial_sub">Coups de cœur de la rédaction</div>
     </div>
-    <a href="#" class="section-link">Voir toute la sélection →</a>
+    <a href="#" class="section-link" data-i18n="editorial_link">Voir toute la sélection →</a>
   </div>
   <div class="editorial-grid">
     <div class="editorial-card">
@@ -730,7 +730,7 @@
         <li>Contactable par les recruteurs</li>
         <li>Messagerie limitée</li>
       </ul>
-      <button class="btn-pricing" onclick="window.location.href='/inscription-talent'">Commencer gratuitement</button>
+      <button class="btn-pricing" onclick="window.location.href='/inscription-talent'" data-i18n="pricing_btn1">Commencer gratuitement</button>
       <p style="text-align:center;font-size:11px;color:var(--text-muted);margin-top:10px;">Moins de 18 ans ? <a href="/inscription-mineur" style="color:var(--purple);font-weight:600;text-decoration:none;">Inscription mineur →</a></p>
     </div>
     <!-- Boost -->
@@ -770,7 +770,7 @@
 <!-- RECRUTEUR -->
 <section class="recruiter">
   <div class="recruiter-tag">Pour les recruteurs</div>
-  <h2>Vous êtes recruteur ?</h2>
+  <h2 data-i18n="rec_title">Vous êtes recruteur ?</h2>
   <p>Accédez à tous les talents de la plateforme.</p>
   <div class="recruiter-card">
     <div class="recruiter-price">49,99€ <span>/ mois</span></div>

@@ -268,7 +268,7 @@ function afficherCastings(castings) {
             <div class="casting-recruteur">Par <strong>${c.recruteur_nom || 'Recruteur ShowOne'}</strong></div>
             ${_isRecruteur
               ? `<span style="font-size:12px;color:var(--muted);font-style:italic;">✏️ Votre casting</span>`
-              : `<button class="btn-postuler" onclick="ouvrirModal('${cid}', '${titreEsc}', '${c.categorie||''}', '${c.ville||''}')" data-i18n="postuler">Postuler →</button>`
+              : `<button class="btn-postuler" onclick="ouvrirModal('${cid}', '${titreEsc}', '${c.categorie||''}', '${c.ville||''}')" data-i18n="postuler" data-i18n="postuler">Postuler →</button>`
             }
           </div>
           ${_isRecruteur ? `
