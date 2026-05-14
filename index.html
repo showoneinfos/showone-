@@ -578,7 +578,7 @@
     <a href="/castings" data-i18n="nav_castings" data-i18n="nav_castings">Castings</a>
     <a href="/inscription-recruteur" data-i18n="nav_recruteurs" data-i18n="nav_recruteurs">Recruteurs</a>
     <a href="#pricing" data-i18n="nav_tarifs" data-i18n="nav_tarifs">Tarifs</a>
-    <a href="/contact" style="color:#E8394F;font-weight:700;">Contact</a>
+    <a href="/contact" style="color:#E8394F;font-weight:700;" data-i18n="nav_contact">Contact</a>
   </div>
   <div class="nav-cta">
   <div class="lang-selector" id="langSelector">
@@ -720,31 +720,31 @@
   <div class="pricing-grid">
     <!-- Gratuit -->
     <div class="pricing-card">
-      <div class="pricing-plan">Gratuit</div>
+      <div class="pricing-plan" data-i18n="pricing_free">Gratuit</div>
       <div class="pricing-price">0€</div>
       <div class="pricing-period" data-i18n="pricing_forever">pour toujours</div>
       <div class="pricing-divider"></div>
       <ul class="pricing-features">
         <li data-i18n="feat_1vid">1 vidéo de 1 minute</li>
         <li data-i18n="feat_profil">Profil public visible</li>
-        <li data-i18n="feat_contact">Contactable par les recruteurs</li>
+        <li data-i18n="feat_contact" data-i18n="feat_contact">Contactable par les recruteurs</li>
         <li data-i18n="feat_msg_lim">Messagerie limitée</li>
       </ul>
       <button class="btn-pricing" onclick="window.location.href='/inscription-talent'" data-i18n="pricing_btn1">Commencer gratuitement</button>
-      <p style="text-align:center;font-size:11px;color:var(--text-muted);margin-top:10px;">Moins de 18 ans ? <a href="/inscription-mineur" style="color:var(--purple);font-weight:600;text-decoration:none;">Inscription mineur →</a></p>
+      <p style="text-align:center;font-size:11px;color:var(--text-muted);margin-top:10px;">Moins de 18 ans ? <a href="/inscription-mineur" style="color:var(--purple);font-weight:600;text-decoration:none;" data-i18n="mineur_lnk">Inscription mineur →</a></p>
     </div>
     <!-- Boost -->
     <div class="pricing-card featured">
       <div class="pricing-popular" data-i18n="feat_popular">Populaire</div>
-      <div class="pricing-plan">Boost</div>
+      <div class="pricing-plan" data-i18n="feat_boost_name">Boost</div>
       <div class="pricing-price">1€</div>
       <div class="pricing-period" data-i18n="feat_once">paiement unique</div>
       <div class="pricing-divider"></div>
       <ul class="pricing-features">
         <li data-i18n="feat_2vid">2 vidéos de 2 min 30</li>
         <li data-i18n="feat_avant">Profil mis en avant</li>
-        <li>Contactable par les recruteurs</li>
-        <li data-i18n="feat_msg_ill" data-i18n="feat_msg_ill">Messagerie illimitée</li>
+        <li data-i18n="feat_contact">Contactable par les recruteurs</li>
+        <li data-i18n="feat_msg_ill" data-i18n="feat_msg_ill" data-i18n="feat_msg_ill">Messagerie illimitée</li>
         <li data-i18n="feat_badge_boost">Badge Boost</li>
       </ul>
       <button class="btn-pricing featured-btn" onclick="window.location.href='/inscription-talent'" data-i18n="btn_boost">Activer Boost · 1€</button>
@@ -773,11 +773,11 @@
   <h2 data-i18n="rec_title">Vous êtes recruteur ?</h2>
   <p data-i18n="rec_acces" data-i18n="rec_acces">Accédez à tous les talents de la plateforme.</p>
   <div class="recruiter-card">
-    <div class="recruiter-price">49,99€ <span>/ mois</span></div>
+    <div class="recruiter-price">49,99€ <span data-i18n="feat_per_month2">/ mois</span></div>
     <div class="recruiter-subtitle" data-i18n="rec_plan">Plan Recruteur Pro — Accès complet</div>
     <ul class="recruiter-features">
       <li data-i18n="rec_feat1" data-i18n="rec_feat1">Contacter n'importe quel talent</li>
-      <li>Messagerie illimitée</li>
+      <li data-i18n="feat_msg_ill">Messagerie illimitée</li>
       <li data-i18n="rec_feat3">Recherche avancée par catégorie</li>
       <li data-i18n="rec_feat4">Lecture des vidéos en illimité</li>
     </ul>
