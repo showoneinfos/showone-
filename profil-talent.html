@@ -446,12 +446,33 @@
     }
   }
 
-  function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
+  function openModal() {
+    const token = localStorage.getItem('showone_token');
+    const userStr = localStorage.getItem('showone_user');
+    
+    if (!token || !userStr) {
+      if (confirm('Vous devez être connecté en tant que recruteur pour contacter un talent.\n\nVoulez-vous vous connecter ?')) {
+        window.location.href = '/connexion';
+      }
+      return;
+    }
+    
+    const user = JSON.parse(userStr);
+    if (user.type_compte !== 'recruteur') {
+      alert('Seuls les recruteurs peuvent envoyer des messages aux talents.\n\nInscrivez-vous en tant que recruteur sur ShowOne !');
+      return;
+    }
+    
+    document.getElementById('modalOverlay').classList.add('open');
+  }
   function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
 
   async function envoyerMessage() {
     const token = localStorage.getItem('showone_token');
-    if (!token) { alert('Vous devez être connecté en tant que recruteur.'); window.location.href = '/connexion'; return; }
+    const userStr = localStorage.getItem('showone_user');
+    if (!token || !userStr) { alert('Vous devez être connecté en tant que recruteur.'); window.location.href = '/connexion'; return; }
+    const user = JSON.parse(userStr);
+    if (user.type_compte !== 'recruteur') { alert('Seuls les recruteurs peuvent envoyer des messages.'); return; }
     const objet = document.getElementById('msgObjet').value || 'Proposition';
     const contenu = document.getElementById('msgContenu').value;
     if (!contenu.trim()) { alert('Veuillez écrire un message !'); return; }
