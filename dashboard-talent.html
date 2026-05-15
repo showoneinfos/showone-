@@ -925,6 +925,8 @@
           </div>`;
       }).join('');
 
+      // Setter _hasVideo avant de calculer la complétion
+      window._hasVideo = Array.isArray(videos) && videos.some(v => v.statut === 'en_ligne');
       // Recalculer la complétion après chargement vidéos
       calculerCompletion();
       // Slot verrouillé si plan gratuit
