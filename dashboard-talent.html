@@ -736,15 +736,36 @@
         document.getElementById('profileNom').textContent = nom || '—';
         document.getElementById('profileCat').textContent = (cat || '') + (ville ? ' · ' + ville : '');
 
-        // Complétion du profil
+        // Complétion du profil (total 100%)
         let score = 0;
-        if (p.photo_url) score += 30;
-        if (p.bio) score += 20;
-        if (p.categorie) score += 20;
-        if (nom) score += 15;
-        if (ville) score += 15;
-        document.getElementById('completionPct').textContent = score + '%';
-        document.getElementById('completionFill').style.width = score + '%';
+        const criteres = [];
+        if (nom) { score += 20; } else { criteres.push('Nom scène'); }
+        if (p.photo_url) { score += 25; } else { criteres.push('Photo de profil'); }
+        if (p.bio) { score += 20; } else { criteres.push('Biographie'); }
+        if (p.categorie) { score += 15; } else { criteres.push('Catégorie'); }
+        if (ville) { score += 10; } else { criteres.push('Ville'); }
+        // Vidéo vérifiée via les stats déjà chargées
+        if (window._hasVideo) { score += 10; } else { criteres.push('1ère vidéo'); }
+        
+        const pct = Math.min(score, 100);
+        document.getElementById('completionPct').textContent = pct + '%';
+        document.getElementById('completionFill').style.width = pct + '%';
+        document.getElementById('completionFill').style.background = pct === 100 ? '#10b981' : 'var(--purple)';
+        
+        // Afficher les critères manquants
+        if (pct < 100 && criteres.length > 0) {
+          const profCat = document.getElementById('profileCat');
+          if (profCat) {
+            profCat.innerHTML = (p.sous_categorie || p.categorie || '') + (ville ? ' · ' + ville : '') +
+              '<br><span style="font-size:11px;color:var(--red);">Manque : ' + criteres.join(', ') + '</span>';
+          }
+        } else if (pct === 100) {
+          const profCat = document.getElementById('profileCat');
+          if (profCat) {
+            profCat.innerHTML = (p.sous_categorie || p.categorie || '') + (ville ? ' · ' + ville : '') +
+              '<br><span style="font-size:11px;color:#10b981;">✅ Profil complet !</span>';
+          }
+        }
       } else {
         // Pas encore de profil — afficher quand même le nom
         if (data && data.length > 0) {
