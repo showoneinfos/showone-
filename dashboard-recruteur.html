@@ -457,18 +457,28 @@
         <div class="section-head">
           <div class="section-title">🧾 Mon abonnement</div>
         </div>
-        <div class="sub-card">
-          <h3>Recruteur Pro</h3>
-          <p>Accès illimité à tous les talents</p>
-          <div class="sub-renew">
-            <span>Prochain renouvellement</span>
-            <span>4 juin 2025</span>
-          </div>
+        <!-- Pro -->
+        <div id="subCardPro" class="sub-card" style="display:none;">
+          <h3>✅ Recruteur Pro</h3>
+          <p>Accès illimité à tous les talents ShowOne</p>
           <div class="sub-renew" style="margin-bottom:12px;">
-            <span>Montant</span>
-            <span>49,99€ / mois</span>
+            <span>Montant</span><span>19,99€ / mois</span>
           </div>
-          <button class="btn-manage">Gérer mon abonnement</button>
+          <button class="btn-manage" onclick="alert('Gestion abonnement bientôt disponible.')">Gérer mon abonnement</button>
+        </div>
+        <!-- Gratuit -->
+        <div id="subCardGratuit" style="background:var(--purple-deep);border-radius:12px;padding:18px 20px;">
+          <h3 style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:6px;">🔓 Passez Recruteur Pro</h3>
+          <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:14px;">Contactez tous les talents et publiez des castings illimités.</p>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:rgba(255,255,255,0.75);margin-bottom:16px;">
+            <span>✓ Contacter tous les talents</span>
+            <span>✓ Messagerie illimitée</span>
+            <span>✓ Castings illimités</span>
+            <span>✓ Recherche avancée</span>
+          </div>
+          <button id="btnPaiementRecruteur" onclick="lancerPaiementRecruteur()" style="width:100%;padding:13px;border-radius:10px;border:none;background:var(--red);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">
+            🔍 Devenir Recruteur Pro — 19,99€/mois
+          </button>
         </div>
       </div>
 
@@ -521,12 +531,6 @@
 
           const recruteurId = profData[0].id;
           window.recruteurId = recruteurId;
-          // Afficher la bonne card abonnement
-          const plan = u.plan || 'gratuit';
-          if (plan === 'pro') {
-            document.getElementById('subCardPro').style.display = 'block';
-            document.getElementById('subCardGratuit').style.display = 'none';
-          }
 
           // Nombre de talents disponibles
           const talentsRes = await fetch(`${SUPABASE_URL}/rest/v1/profils_talents?select=id`, {
@@ -999,39 +1003,6 @@
 
   function contacterTalentRetenu(talentId) {
     window.location.href = `/messagerie?talent_id=${talentId}`;
-  }
-
-  async function lancerPaiementRecruteur() {
-    const btn = document.getElementById('btnPaiementRecruteur');
-    btn.textContent = 'Redirection…';
-    btn.disabled = true;
-    try {
-      const userStr = localStorage.getItem('showone_user');
-      const user = userStr ? JSON.parse(userStr) : {};
-      const res = await fetch('/api/create-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          plan: 'recruteur_pro',
-          userId: user.id,
-          userEmail: user.email,
-          successUrl: 'https://www.showone.fr/paiement-succes?type=recruteur',
-          cancelUrl: 'https://www.showone.fr/dashboard-recruteur'
-        })
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert('Erreur lors de la redirection.');
-        btn.textContent = 'Devenir Recruteur Pro — 19,99€/mois';
-        btn.disabled = false;
-      }
-    } catch(e) {
-      alert('Erreur de connexion. Réessayez.');
-      btn.textContent = 'Devenir Recruteur Pro — 19,99€/mois';
-      btn.disabled = false;
-    }
   }
 
   function seDeconnecter() {
