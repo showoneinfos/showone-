@@ -400,7 +400,7 @@
 
     <div class="plan-recruiter">
       <div class="plan-recruiter-tag">Plan unique</div>
-      <div class="plan-recruiter-price">49,99€ <span>/ mois</span></div>
+      <div class="plan-recruiter-price">19,99€ <span>/ mois</span></div>
       <div class="plan-recruiter-sub">Sans engagement — résiliable à tout moment</div>
       <div class="plan-recruiter-feats">
         <div class="plan-recruiter-feat">Contacter n'importe quel talent sur la plateforme</div>
@@ -432,7 +432,7 @@
 
     <div class="actions">
       <button class="btn-back" onclick="go(3)">← Retour</button>
-      <button class="btn-submit" onclick="showSuccess()">Créer mon compte · 49,99€/mois</button>
+      <button class="btn-submit" onclick="showSuccess()">Créer mon compte · 19,99€/mois</button>
     </div>
   </div>
 
@@ -524,7 +524,7 @@
 
       if (authData.error) {
         alert('Erreur : ' + (authData.error.message || 'Email déjà utilisé ou invalide.'));
-        if (btnSubmit) { btnSubmit.textContent = 'Créer mon compte · 49,99€/mois'; btnSubmit.disabled = false; }
+        if (btnSubmit) { btnSubmit.textContent = 'Créer mon compte · 19,99€/mois'; btnSubmit.disabled = false; }
         return;
       }
 
@@ -544,42 +544,27 @@
         body: JSON.stringify({ utilisateur_id: userId, nom_societe: nomsociete, siret, type_recruteur: typeRecruteur, site_web: siteweb, description: descactivite, categories_recherchees: categories })
       });
 
-      // 4. Sauvegarder token
-      localStorage.setItem('showone_token', authData.access_token);
-      localStorage.setItem('showone_user', JSON.stringify({
-        id: userId, email, prenom, nom,
-        type_compte: 'recruteur', plan: 'gratuit'
-      }));
-
-      // 5. Rediriger vers Stripe
-      if (btnSubmit) btnSubmit.textContent = 'Redirection vers le paiement…';
+      // 4. Envoyer l'email de confirmation
       try {
-        const stripeRes = await fetch('/api/create-checkout', {
+        await fetch('/api/send-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            plan: 'recruteur_pro',
-            userId,
-            userEmail: email,
-            successUrl: 'https://www.showone.fr/paiement-succes?type=recruteur',
-            cancelUrl: 'https://www.showone.fr/dashboard-recruteur'
-          })
+          body: JSON.stringify({ type: 'confirmation_recruteur', to: email, prenom })
         });
-        const stripeData = await stripeRes.json();
-        if (stripeData.url) {
-          window.location.href = stripeData.url;
-        } else {
-          window.location.href = '/dashboard-recruteur';
-        }
-      } catch(e) {
-        console.log('Stripe non disponible:', e);
-        window.location.href = '/dashboard-recruteur';
-      }
+      } catch(e) { console.log('Email non envoyé:', e); }
+
+      // 5. Afficher le succès
+      document.getElementById('p4').classList.remove('active');
+      document.getElementById('s4').classList.remove('active');
+      document.getElementById('s4').classList.add('done');
+      document.getElementById('l3').classList.add('done');
+      document.getElementById('stepsBar').style.display = 'none';
+      document.getElementById('success').classList.add('active');
 
     } catch (err) {
       console.error(err);
       alert('Une erreur est survenue. Veuillez réessayer.');
-      if (btnSubmit) { btnSubmit.textContent = 'Créer mon compte · 49,99€/mois'; btnSubmit.disabled = false; }
+      if (btnSubmit) { btnSubmit.textContent = 'Créer mon compte · 19,99€/mois'; btnSubmit.disabled = false; }
     }
   }
 
