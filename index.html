@@ -496,6 +496,7 @@
 
   /* ===================== RESPONSIVE MOBILE ===================== */
   @media (max-width: 768px) {
+    .d-none-mobile { display: none !important; }
 
     /* NAV */
     nav { padding: 14px 20px; }
@@ -588,7 +589,7 @@
   <div class="nav-cta">
   <div id="navConnecte" style="display:none;align-items:center;gap:8px;">
     <span id="navPrenom" style="color:rgba(255,255,255,0.7);font-size:13px;"></span>
-    <button class="btn-nav-fill" onclick="allerMonEspace()" style="font-weight:700;">Mon espace →</button>
+    <button class="btn-nav-fill d-none-mobile" onclick="allerMonEspace()" style="font-weight:700;white-space:nowrap;padding:8px 14px;font-size:12px;">Mon espace →</button>
   </div>
   <div id="navDeconnecte" style="display:flex;align-items:center;gap:8px;">
     <button class="btn-nav-outline" onclick="window.location.href='/connexion'">Connexion</button>
@@ -596,6 +597,10 @@
   </div>
   </div>
 </nav>
+<!-- BARRE MON ESPACE MOBILE -->
+<div id="barreMonEspace" style="display:none;background:var(--purple-deep);padding:8px 16px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.08);">
+  <button onclick="allerMonEspace()" style="background:var(--red-accent);border:none;color:#fff;font-weight:700;font-size:14px;padding:10px 24px;border-radius:999px;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;max-width:300px;">Mon espace →</button>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -1030,9 +1035,13 @@ function mettreAJourNav() {
       const prenom = user.prenom || user.email?.split('@')[0] || '';
       document.getElementById('navPrenom').textContent = prenom + ' 👋';
       nc.style.display = 'flex'; nd.style.display = 'none';
+      const barre = document.getElementById('barreMonEspace');
+      if (barre) barre.style.display = 'block';
     } catch(e) { nc.style.display = 'none'; nd.style.display = 'flex'; }
   } else {
     nc.style.display = 'none'; nd.style.display = 'flex';
+    const barre = document.getElementById('barreMonEspace');
+    if (barre) barre.style.display = 'none';
   }
 }
 function afficherWelcome() {
