@@ -925,6 +925,8 @@
           </div>`;
       }).join('');
 
+      // Recalculer la complétion après chargement vidéos
+      calculerCompletion();
       // Slot verrouillé si plan gratuit
       list.innerHTML += `
         <div class="video-item" style="opacity:.5;cursor:not-allowed;">
