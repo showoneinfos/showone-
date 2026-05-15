@@ -4,184 +4,160 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profil Talent — ShowOne</title>
-  <meta name="description" content="Découvrez le profil et les vidéos de ce talent sur ShowOne. Contactez-le directement si vous êtes recruteur.">
-  <meta name="keywords" content="profil talent, vidéo talent, casting, showone">
+  <meta name="description" content="Découvrez le profil et les vidéos de ce talent sur ShowOne.">
   <meta name="robots" content="index, follow">
-  <meta name="author" content="ShowOne">
   <link rel="canonical" href="https://www.showone.fr/profil-talent">
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="ShowOne">
-  <meta property="og:title" content="Profil Talent ShowOne">
-  <meta property="og:description" content="Découvrez les vidéos et le profil de ce talent sur ShowOne.">
-  <meta property="og:image" content="https://www.showone.fr/og-image.jpg">
-  <meta property="og:url" content="https://www.showone.fr/profil-talent">
-  <meta property="og:locale" content="fr_FR">
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Profil Talent ShowOne">
-  <meta name="twitter:description" content="Découvrez les vidéos et le profil de ce talent sur ShowOne.">
-  <meta name="twitter:image" content="https://www.showone.fr/og-image.jpg">
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<title id="pageTitle">Profil Talent — ShowOne</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --purple:#5B4FE8; --purple-dark:#3D32C4; --purple-deep:#1a1535;
-    --purple-mid:#2d2560; --red:#E8394F; --red-dark:#c0283c;
-    --cream:#f5f3ff; --muted:#a09dc0; --border:rgba(91,79,232,0.13);
-    --white:#fff;
+    --red:#E8394F; --red-dark:#c0283c;
+    --cream:#f5f3ff; --muted:#a09dc0; --border:rgba(91,79,232,0.13); --white:#fff;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior:smooth; }
   body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--purple-deep); }
 
   /* NAV */
-  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:16px 48px; background:rgba(26,21,53,0.9); backdrop-filter:blur(16px); border-bottom:1px solid rgba(255,255,255,0.06); }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:14px 48px; background:rgba(26,21,53,0.95); backdrop-filter:blur(16px); border-bottom:1px solid rgba(255,255,255,0.06); }
   .nav-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:22px; color:#fff; text-decoration:none; }
   .nav-logo span { color:var(--red); }
-  .nav-right { display:flex; gap:12px; align-items:center; }
-  .btn-nav { padding:8px 18px; border-radius:999px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; text-decoration:none; }
-  .btn-nav-outline { border:1px solid rgba(255,255,255,0.25); color:#fff; background:transparent; }
-  .btn-nav-outline:hover { background:rgba(255,255,255,0.08); }
-  .btn-nav-fill { border:none; background:var(--red); color:#fff; }
-  .btn-nav-fill:hover { background:var(--red-dark); transform:translateY(-1px); }
+  .nav-right { display:flex; gap:10px; align-items:center; }
+  .btn-nav { padding:8px 18px; border-radius:999px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; text-decoration:none; border:none; }
+  .btn-outline { border:1.5px solid rgba(255,255,255,0.25); color:#fff; background:transparent; }
+  .btn-fill { background:var(--red); color:#fff; }
 
-  /* HERO PROFIL */
-  .hero { position:relative; height:420px; overflow:hidden; }
-  .hero-bg { width:100%; height:100%; object-fit:cover; object-position:center 30%; filter:brightness(.55); }
-  .hero-overlay { position:absolute; inset:0; background:linear-gradient(to bottom, rgba(26,21,53,0.3) 0%, rgba(26,21,53,0.95) 100%); }
-  .hero-content { position:absolute; bottom:0; left:0; right:0; padding:0 64px 40px; display:flex; align-items:flex-end; gap:28px; }
-  .hero-avatar-wrap { position:relative; flex-shrink:0; }
-  .hero-avatar { width:110px; height:110px; border-radius:50%; object-fit:cover; border:4px solid var(--purple); display:block; }
-  .hero-online { position:absolute; bottom:6px; right:6px; width:18px; height:18px; border-radius:50%; background:#10b981; border:3px solid var(--purple-deep); }
-  .hero-info { flex:1; padding-bottom:4px; }
-  .hero-badges { display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
-  .hero-badge { padding:4px 12px; border-radius:999px; font-size:11px; font-weight:700; letter-spacing:.3px; }
+  /* HERO */
+  .hero { position:relative; height:380px; overflow:hidden; margin-top:57px; }
+  .hero-bg { width:100%; height:100%; object-fit:cover; object-position:center 30%; filter:brightness(.5); }
+  .hero-overlay { position:absolute; inset:0; background:linear-gradient(to bottom, rgba(26,21,53,0.2) 0%, rgba(26,21,53,0.95) 100%); }
+  .hero-content { position:absolute; bottom:0; left:0; right:0; padding:0 48px 32px; display:flex; align-items:flex-end; gap:24px; }
+  .hero-avatar { width:100px; height:100px; border-radius:50%; object-fit:cover; border:4px solid var(--purple); flex-shrink:0; }
+  .hero-info { flex:1; }
+  .hero-badges { display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
+  .hero-badge { padding:4px 12px; border-radius:999px; font-size:11px; font-weight:700; }
   .badge-cat { background:rgba(232,57,79,0.85); color:#fff; }
-  .badge-plan { background:rgba(91,79,232,0.85); color:#fff; }
   .badge-verified { background:rgba(16,185,129,0.85); color:#fff; }
-  .hero-name { font-family:'Syne',sans-serif; font-size:36px; font-weight:800; color:#fff; letter-spacing:-1px; margin-bottom:6px; }
-  .hero-sub { color:rgba(255,255,255,0.6); font-size:15px; display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
-  .hero-sub span { display:flex; align-items:center; gap:5px; }
-  .hero-actions { display:flex; flex-direction:column; gap:10px; align-items:flex-end; padding-bottom:4px; flex-shrink:0; }
-  .btn-contact-main { padding:13px 28px; border-radius:10px; border:none; background:var(--red); color:#fff; font-size:15px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; white-space:nowrap; }
-  .btn-contact-main:hover { background:var(--red-dark); transform:translateY(-1px); }
-  .hero-action-row { display:flex; gap:8px; }
-  .btn-icon { width:38px; height:38px; border-radius:9px; border:1.5px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; font-size:16px; cursor:pointer; transition:all .2s; }
-  .btn-icon:hover { background:rgba(255,255,255,0.15); }
+  .hero-name { font-family:'Syne',sans-serif; font-size:32px; font-weight:800; color:#fff; letter-spacing:-1px; margin-bottom:4px; }
+  .hero-sub { color:rgba(255,255,255,0.6); font-size:14px; display:flex; gap:14px; flex-wrap:wrap; }
+  .hero-actions { display:flex; flex-direction:column; gap:8px; align-items:flex-end; flex-shrink:0; }
+  .btn-contact-main { padding:12px 24px; border-radius:10px; border:none; background:var(--red); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; white-space:nowrap; }
+  .hero-icons { display:flex; gap:8px; }
+  .btn-icon { width:36px; height:36px; border-radius:9px; border:1.5px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; font-size:15px; cursor:pointer; }
   .btn-icon.faved { background:rgba(232,57,79,0.3); border-color:var(--red); }
 
-  /* STATS RAPIDES */
-  .quick-stats { background:var(--purple-deep); padding:16px 64px; display:flex; gap:0; border-bottom:1px solid rgba(255,255,255,0.06); }
-  .qs { flex:1; text-align:center; padding:8px 0; border-right:1px solid rgba(255,255,255,0.06); }
+  /* STATS */
+  .quick-stats { background:var(--purple-deep); padding:12px 48px; display:flex; gap:0; border-bottom:1px solid rgba(255,255,255,0.06); }
+  .qs { flex:1; text-align:center; padding:6px 0; border-right:1px solid rgba(255,255,255,0.06); }
   .qs:last-child { border-right:none; }
-  .qs-num { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:#fff; }
-  .qs-label { font-size:11px; color:rgba(255,255,255,0.4); margin-top:2px; }
+  .qs-num { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; color:#fff; }
+  .qs-label { font-size:10px; color:rgba(255,255,255,0.4); margin-top:2px; }
 
   /* CONTENU */
-  .content { max-width:1100px; margin:0 auto; padding:40px 40px 80px; display:grid; grid-template-columns:1fr 320px; gap:24px; }
-
-  /* SECTION */
-  .section { background:var(--white); border:1.5px solid var(--border); border-radius:16px; padding:24px 26px; margin-bottom:20px; }
-  .section-title { font-family:'Syne',sans-serif; font-size:17px; font-weight:700; margin-bottom:18px; display:flex; align-items:center; gap:8px; }
+  .content { max-width:1100px; margin:0 auto; padding:32px 40px 80px; display:grid; grid-template-columns:1fr 300px; gap:20px; }
+  .section { background:var(--white); border:1.5px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:16px; }
+  .section-title { font-family:'Syne',sans-serif; font-size:16px; font-weight:700; margin-bottom:16px; }
 
   /* VIDÉOS */
-  .videos-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-  .video-card { border-radius:12px; overflow:hidden; position:relative; cursor:pointer; background:var(--purple-deep); aspect-ratio:16/9; transition:transform .3s; }
-  .video-card:hover { transform:scale(1.02); }
-  .video-card img { width:100%; height:100%; object-fit:cover; opacity:.7; display:block; transition:opacity .3s; }
-  .video-card:hover img { opacity:.85; }
+  .videos-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .video-card { border-radius:12px; overflow:hidden; position:relative; cursor:pointer; background:var(--purple-deep); aspect-ratio:16/9; }
+  .video-card img { width:100%; height:100%; object-fit:cover; opacity:.75; display:block; }
   .video-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(26,21,53,0.9) 0%,transparent 50%); }
-  .video-play-btn { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,0.9); display:flex; align-items:center; justify-content:center; font-size:18px; transition:all .3s; }
-  .video-card:hover .video-play-btn { transform:translate(-50%,-50%) scale(1.1); background:#fff; }
-  .video-info { position:absolute; bottom:0; left:0; right:0; padding:12px 14px; }
-  .video-title { font-size:13px; font-weight:600; color:#fff; margin-bottom:3px; }
-  .video-duration { font-size:11px; color:rgba(255,255,255,0.55); display:flex; align-items:center; gap:5px; }
-  .video-views { position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.5); color:#fff; font-size:10px; font-weight:600; padding:3px 8px; border-radius:999px; display:flex; align-items:center; gap:4px; }
+  .video-play { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.9); display:flex; align-items:center; justify-content:center; font-size:16px; }
+  .video-info { position:absolute; bottom:0; left:0; right:0; padding:10px 12px; }
+  .video-title { font-size:12px; font-weight:600; color:#fff; }
+  .video-views { position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.5); color:#fff; font-size:10px; padding:2px 7px; border-radius:999px; }
 
   /* À PROPOS */
-  .about-text { font-size:15px; line-height:1.75; color:#3d3760; }
-  .about-tags { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
-  .about-tag { padding:5px 14px; border-radius:999px; background:rgba(91,79,232,0.08); border:1px solid rgba(91,79,232,0.15); font-size:12px; font-weight:600; color:var(--purple); }
-
-  /* RÉSEAUX SOCIAUX */
-  .socials-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .social-card { display:flex; align-items:center; gap:12px; padding:12px 16px; border:1.5px solid var(--border); border-radius:11px; text-decoration:none; transition:all .2s; background:var(--white); }
-  .social-card:hover { border-color:var(--purple); transform:translateY(-1px); }
-  .social-ico { width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
-  .social-tiktok { background:#010101; }
-  .social-insta { background:linear-gradient(135deg,#f58529,#dd2a7b,#515bd4); }
-  .social-fb { background:#1877F2; }
-  .social-yt { background:#FF0000; }
-  .social-info { flex:1; }
-  .social-name { font-size:13px; font-weight:700; color:var(--purple-deep); }
-  .social-handle { font-size:11px; color:var(--muted); }
-  .social-arrow { font-size:14px; color:var(--muted); }
+  .about-text { font-size:14px; line-height:1.75; color:#3d3760; }
+  .about-tags { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+  .about-tag { padding:4px 12px; border-radius:999px; background:rgba(91,79,232,0.08); border:1px solid rgba(91,79,232,0.15); font-size:12px; font-weight:600; color:var(--purple); }
 
   /* COLONNE DROITE */
   .right-col { display:flex; flex-direction:column; gap:16px; }
-
-  /* CARTE CONTACT */
-  .contact-card { background:var(--purple-deep); border-radius:16px; padding:24px; text-align:center; }
-  .contact-card-avatar { width:64px; height:64px; border-radius:50%; object-fit:cover; border:3px solid rgba(91,79,232,0.5); margin:0 auto 12px; display:block; }
-  .contact-card h3 { font-family:'Syne',sans-serif; font-size:17px; font-weight:700; color:#fff; margin-bottom:4px; }
-  .contact-card p { font-size:13px; color:rgba(255,255,255,0.45); margin-bottom:20px; line-height:1.5; }
-  .btn-contact-card { width:100%; padding:13px; border-radius:10px; border:none; background:var(--red); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; margin-bottom:10px; }
-  .btn-contact-card:hover { background:var(--red-dark); transform:translateY(-1px); }
-  .btn-fav-card { width:100%; padding:11px; border-radius:10px; border:1.5px solid rgba(255,255,255,0.15); background:transparent; color:rgba(255,255,255,0.6); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
-  .btn-fav-card:hover { background:rgba(255,255,255,0.07); color:#fff; }
+  .contact-card { background:var(--purple-deep); border-radius:16px; padding:22px; text-align:center; }
+  .contact-avatar { width:60px; height:60px; border-radius:50%; object-fit:cover; border:3px solid rgba(91,79,232,0.5); margin:0 auto 12px; display:block; }
+  .contact-card h3 { font-family:'Syne',sans-serif; font-size:16px; font-weight:700; color:#fff; margin-bottom:4px; }
+  .contact-card p { font-size:12px; color:rgba(255,255,255,0.45); margin-bottom:18px; line-height:1.5; }
+  .btn-contact-card { width:100%; padding:12px; border-radius:10px; border:none; background:var(--red); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; margin-bottom:8px; }
+  .btn-fav-card { width:100%; padding:10px; border-radius:10px; border:1.5px solid rgba(255,255,255,0.15); background:transparent; color:rgba(255,255,255,0.6); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
   .contact-note { font-size:11px; color:rgba(255,255,255,0.25); margin-top:12px; line-height:1.5; }
-
-  /* INFOS RAPIDES */
-  .info-list { display:flex; flex-direction:column; gap:12px; }
-  .info-row { display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; border-bottom:1px solid var(--border); }
-  .info-row:last-child { border-bottom:none; padding-bottom:0; }
-  .info-key { font-size:13px; color:var(--muted); display:flex; align-items:center; gap:6px; }
-  .info-val { font-size:13px; font-weight:600; color:var(--purple-deep); }
-
-  /* TALENTS SIMILAIRES */
-  .similar-list { display:flex; flex-direction:column; gap:10px; }
-  .similar-item { display:flex; gap:12px; align-items:center; cursor:pointer; padding:8px; border-radius:10px; transition:all .2s; }
+  .info-list { display:flex; flex-direction:column; gap:0; }
+  .info-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); }
+  .info-row:last-child { border-bottom:none; }
+  .info-key { font-size:13px; color:var(--muted); }
+  .info-val { font-size:13px; font-weight:600; }
+  .similar-item { display:flex; gap:12px; align-items:center; cursor:pointer; padding:8px; border-radius:10px; transition:background .2s; }
   .similar-item:hover { background:rgba(91,79,232,0.05); }
-  .similar-thumb { width:52px; height:52px; border-radius:10px; object-fit:cover; flex-shrink:0; }
-  .similar-info { flex:1; }
+  .similar-thumb { width:48px; height:48px; border-radius:10px; object-fit:cover; flex-shrink:0; }
   .similar-name { font-size:13px; font-weight:700; margin-bottom:2px; }
   .similar-cat { font-size:11px; color:var(--muted); }
-  .similar-views { font-size:11px; color:var(--muted); }
 
-  /* MODAL CONTACT */
-  .modal-overlay { position:fixed; inset:0; background:rgba(26,21,53,0.65); backdrop-filter:blur(5px); z-index:200; display:none; align-items:center; justify-content:center; }
+  /* MODAL */
+  .modal-overlay { position:fixed; inset:0; background:rgba(26,21,53,0.65); backdrop-filter:blur(5px); z-index:200; display:none; align-items:center; justify-content:center; padding:20px; }
   .modal-overlay.open { display:flex; }
-  .modal { background:#fff; border-radius:20px; padding:32px; width:100%; max-width:480px; margin:20px; animation:modalIn .3s ease; }
-  @keyframes modalIn { from{opacity:0;transform:scale(.95)} to{opacity:1;transform:scale(1)} }
-  .modal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
-  .modal-head h2 { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; }
-  .modal-close { width:32px; height:32px; border-radius:8px; border:1.5px solid var(--border); background:transparent; cursor:pointer; font-size:14px; transition:all .2s; }
-  .modal-close:hover { border-color:var(--red); color:var(--red); }
-  .modal-talent-info { display:flex; gap:12px; align-items:center; padding:12px; background:var(--cream); border-radius:10px; margin-bottom:20px; }
-  .modal-talent-info img { width:44px; height:44px; border-radius:50%; object-fit:cover; }
-  .modal-talent-name { font-size:14px; font-weight:700; }
-  .modal-talent-cat { font-size:12px; color:var(--muted); }
-  .mfg { margin-bottom:14px; }
-  .mlabel { display:block; font-size:12px; font-weight:700; margin-bottom:6px; }
-  .minput { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; color:var(--purple-deep); font-family:'DM Sans',sans-serif; outline:none; transition:border-color .2s; }
-  .minput:focus { border-color:var(--purple); }
-  .minput::placeholder { color:var(--muted); }
-  .mtextarea { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; color:var(--purple-deep); font-family:'DM Sans',sans-serif; outline:none; resize:vertical; min-height:100px; line-height:1.6; transition:border-color .2s; }
-  .mtextarea:focus { border-color:var(--purple); }
-  .mtextarea::placeholder { color:var(--muted); }
-  .modal-actions { display:flex; gap:10px; }
-  .btn-cancel { padding:12px 20px; border-radius:9px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
-  .btn-cancel:hover { border-color:var(--purple); color:var(--purple); }
-  .btn-send { flex:1; padding:12px; border-radius:9px; border:none; background:var(--purple); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
-  .btn-send:hover { background:var(--purple-dark); }
+  .modal { background:#fff; border-radius:20px; padding:28px; width:100%; max-width:480px; }
+  .modal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+  .modal-head h2 { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; }
+  .modal-close { width:30px; height:30px; border-radius:8px; border:1.5px solid var(--border); background:transparent; cursor:pointer; font-size:14px; }
+  .modal-info { display:flex; gap:10px; align-items:center; padding:10px; background:var(--cream); border-radius:10px; margin-bottom:16px; }
+  .modal-info img { width:40px; height:40px; border-radius:50%; object-fit:cover; }
+  .mfg { margin-bottom:12px; }
+  .mlabel { display:block; font-size:12px; font-weight:700; margin-bottom:5px; }
+  .minput, .mtextarea { width:100%; padding:10px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; color:var(--purple-deep); font-family:'DM Sans',sans-serif; outline:none; }
+  .mtextarea { resize:vertical; min-height:90px; line-height:1.6; }
+  .minput:focus, .mtextarea:focus { border-color:var(--purple); }
+  .modal-actions { display:flex; gap:10px; margin-top:4px; }
+  .btn-cancel { padding:11px 18px; border-radius:9px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .btn-send { flex:1; padding:11px; border-radius:9px; border:none; background:var(--purple); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; }
 
   /* TOAST */
-  .toast { position:fixed; bottom:24px; right:24px; background:#10b981; color:#fff; padding:14px 20px; border-radius:12px; font-weight:700; font-size:14px; z-index:999; font-family:'DM Sans',sans-serif; display:none; animation:toastIn .3s ease; }
-  @keyframes toastIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .toast { position:fixed; bottom:20px; right:20px; background:#10b981; color:#fff; padding:12px 18px; border-radius:12px; font-weight:700; font-size:14px; z-index:999; display:none; }
+
+  /* ── RESPONSIVE MOBILE ─────────────────────── */
+  @media (max-width: 768px) {
+    nav { padding:12px 16px; }
+    .btn-nav { padding:7px 14px; font-size:12px; }
+
+    .hero { height:auto; min-height:280px; margin-top:53px; }
+    .hero-content { flex-direction:column; align-items:flex-start; padding:16px; gap:12px; }
+    .hero-avatar { width:80px; height:80px; }
+    .hero-name { font-size:24px; }
+    .hero-sub { font-size:13px; gap:10px; }
+    .hero-actions { flex-direction:row; align-items:center; width:100%; }
+    .btn-contact-main { flex:1; padding:10px 16px; font-size:13px; }
+    .hero-icons { flex-shrink:0; }
+
+    .quick-stats { padding:10px 16px; }
+    .qs-num { font-size:18px; }
+    .qs-label { font-size:10px; }
+
+    .content { 
+      grid-template-columns:1fr !important; 
+      padding:16px 14px 80px;
+      gap:0;
+    }
+
+    /* Contact card en premier sur mobile */
+    .right-col { order:-1; margin-bottom:16px; }
+
+    .videos-grid { grid-template-columns:1fr 1fr; gap:10px; }
+    .video-play { width:36px; height:36px; font-size:14px; }
+
+    .section { padding:16px; margin-bottom:12px; }
+    .section-title { font-size:15px; margin-bottom:12px; }
+
+    .contact-card { padding:18px; }
+    .contact-avatar { width:52px; height:52px; }
+    .contact-card h3 { font-size:15px; }
+
+    .similar-item { padding:6px; }
+    .similar-thumb { width:42px; height:42px; }
+  }
+
+  @media (max-width: 380px) {
+    .hero-name { font-size:20px; }
+    .videos-grid { grid-template-columns:1fr; }
+  }
 </style>
 </head>
 <body>
@@ -193,20 +169,20 @@
       <h2 id="modalTitle">Contacter ce talent</h2>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-    <div class="modal-talent-info">
-      <img id="modalAvatar" src="" alt="" style="width:44px;height:44px;border-radius:50%;object-fit:cover;">
+    <div class="modal-info">
+      <img id="modalAvatar" src="" alt="">
       <div>
-        <div class="modal-talent-name" id="modalNom">—</div>
-        <div class="modal-talent-cat" id="modalCat">—</div>
+        <div style="font-size:14px;font-weight:700;" id="modalNom">—</div>
+        <div style="font-size:12px;color:var(--muted);" id="modalCat">—</div>
       </div>
     </div>
     <div class="mfg">
-      <label class="mlabel">Objet du message</label>
-      <input class="minput" id="msgObjet" type="text" placeholder="Ex : Audition comédie musicale — Juin 2025">
+      <label class="mlabel">Objet</label>
+      <input class="minput" id="msgObjet" type="text" placeholder="Ex : Proposition de casting">
     </div>
     <div class="mfg">
-      <label class="mlabel">Votre message</label>
-      <textarea class="mtextarea" id="msgContenu" placeholder="Bonjour, nous avons découvert votre profil ShowOne et votre talent nous intéresse pour…"></textarea>
+      <label class="mlabel">Message</label>
+      <textarea class="mtextarea" id="msgContenu" placeholder="Bonjour, nous avons découvert votre profil ShowOne…"></textarea>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Annuler</button>
@@ -215,26 +191,23 @@
   </div>
 </div>
 
-<div class="toast" id="toast">✓ Message envoyé !</div>
+<div class="toast" id="toast"></div>
 
 <!-- NAV -->
 <nav>
   <a href="/" class="nav-logo">Show<span>One</span></a>
   <div class="nav-right">
-    <a href="/connexion" class="btn-nav btn-nav-outline">Connexion</a>
-    <a href="/inscription-talent" class="btn-nav btn-nav-fill">Rejoindre</a>
+    <a href="/connexion" class="btn-nav btn-outline">Connexion</a>
+    <a href="/rejoindre" class="btn-nav btn-fill">Rejoindre</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
-  <img class="hero-bg" id="heroBg" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1400&h=500&fit=crop&crop=center" alt="">
+  <img class="hero-bg" id="heroBg" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1400&h=500&fit=crop" alt="">
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="hero-avatar-wrap">
-      <img class="hero-avatar" id="heroAvatar" src="" alt="">
-      <div class="hero-online"></div>
-    </div>
+    <img class="hero-avatar" id="heroAvatar" src="" alt="">
     <div class="hero-info">
       <div class="hero-badges">
         <span class="hero-badge badge-cat" id="heroCat">—</span>
@@ -248,20 +221,20 @@
     </div>
     <div class="hero-actions">
       <button class="btn-contact-main" onclick="openModal()">💬 Contacter</button>
-      <div class="hero-action-row">
-        <div class="btn-icon" id="favBtn" onclick="toggleFav()" title="Ajouter aux favoris">🤍</div>
-        <div class="btn-icon" onclick="shareProfile()" title="Partager le profil">🔗</div>
+      <div class="hero-icons">
+        <div class="btn-icon" id="favBtn" onclick="toggleFav()">🤍</div>
+        <div class="btn-icon" onclick="shareProfile()">🔗</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- STATS RAPIDES -->
+<!-- STATS -->
 <div class="quick-stats">
-  <div class="qs"><div class="qs-num" id="statVues">—</div><div class="qs-label">Vues totales</div></div>
-  <div class="qs"><div class="qs-num" id="statVideos">—</div><div class="qs-label">Vidéos publiées</div></div>
-  <div class="qs"><div class="qs-num" id="statFavoris">—</div><div class="qs-label">Mis en favoris</div></div>
-  <div class="qs"><div class="qs-num" id="statMessages">—</div><div class="qs-label">Messages reçus</div></div>
+  <div class="qs"><div class="qs-num" id="statVues">—</div><div class="qs-label">Vues</div></div>
+  <div class="qs"><div class="qs-num" id="statVideos">—</div><div class="qs-label">Vidéos</div></div>
+  <div class="qs"><div class="qs-num" id="statFavoris">—</div><div class="qs-label">Favoris</div></div>
+  <div class="qs"><div class="qs-num" id="statMessages">—</div><div class="qs-label">Messages</div></div>
 </div>
 
 <!-- CONTENU -->
@@ -269,96 +242,72 @@
 
   <!-- COLONNE GAUCHE -->
   <div>
-
-    <!-- VIDÉOS -->
     <div class="section">
       <div class="section-title">🎬 Vidéos</div>
       <div class="videos-grid" id="videosGrid">
-        <div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);">Chargement des vidéos…</div>
+        <div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);">Chargement…</div>
       </div>
     </div>
-
-    <!-- À PROPOS -->
     <div class="section">
       <div class="section-title">👤 À propos</div>
       <p class="about-text" id="aboutText">—</p>
       <div class="about-tags" id="aboutTags"></div>
     </div>
-
+    <div class="section" style="margin-bottom:0;">
+      <div class="section-title">✨ Talents similaires</div>
+      <div id="similarList"><div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;">Chargement…</div></div>
+    </div>
   </div>
 
   <!-- COLONNE DROITE -->
   <div class="right-col">
-
-    <!-- CARTE CONTACT -->
     <div class="contact-card">
-      <img class="contact-card-avatar" id="contactAvatar" src="" alt="">
+      <img class="contact-avatar" id="contactAvatar" src="" alt="">
       <h3 id="contactNom">—</h3>
-      <p>Recruteurs vérifiés uniquement. Réponse habituelle sous 48h.</p>
+      <p>Recruteurs vérifiés uniquement. Réponse sous 48h.</p>
       <button class="btn-contact-card" onclick="openModal()">💬 Envoyer un message</button>
       <button class="btn-fav-card" id="favCardBtn" onclick="toggleFav()">🤍 Ajouter aux favoris</button>
-      <p class="contact-note">Fonctionnalité réservée aux recruteurs abonnés à ShowOne.</p>
+      <p class="contact-note">Fonctionnalité réservée aux recruteurs abonnés ShowOne.</p>
     </div>
-
-    <!-- INFOS -->
     <div class="section" style="margin-bottom:0;">
       <div class="section-title">📋 Informations</div>
       <div class="info-list" id="infoList">
-        <div style="text-align:center;padding:20px;color:var(--muted);">Chargement…</div>
+        <div style="text-align:center;padding:16px;color:var(--muted);">Chargement…</div>
       </div>
     </div>
-
-    <!-- TALENTS SIMILAIRES -->
-    <div class="section" style="margin-bottom:0;">
-      <div class="section-title">✨ Talents similaires</div>
-      <div class="similar-list" id="similarList">
-        <div style="text-align:center;padding:20px;color:var(--muted);">Chargement…</div>
-      </div>
-    </div>
-
   </div>
+
 </div>
 
 <script>
   const SUPABASE_URL = 'https://emiuzigtlomlrsofxqyf.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_U8P52zBkzF6Nqno_mmbcVQ_bKQLNmTP';
-
   let talentData = null;
   let faved = false;
 
-  // Récupérer l'ID du talent depuis l'URL (?id=xxx)
   const params = new URLSearchParams(window.location.search);
   const talentId = params.get('id');
 
   async function chargerProfil() {
-    if (!talentId) {
-      document.getElementById('heroNom').textContent = 'Talent introuvable';
-      return;
-    }
-
+    if (!talentId) { document.getElementById('heroNom').textContent = 'Talent introuvable'; return; }
     try {
-      // Charger le profil talent + utilisateur
       const res = await fetch(`${SUPABASE_URL}/rest/v1/profils_talents?id=eq.${talentId}&select=*,utilisateurs(prenom,nom,ville,date_naissance,email)`, {
         headers: { 'apikey': SUPABASE_KEY }
       });
       const data = await res.json();
       if (!data || data.length === 0) { document.getElementById('heroNom').textContent = 'Profil introuvable'; return; }
-
       talentData = data[0];
       const u = talentData.utilisateurs;
-      const nom = talentData.nom_scene || ((u?.prenom || '') + ' ' + (u?.nom || '')).trim();
+      const nom = talentData.nom_scene || ((u?.prenom||'') + ' ' + (u?.nom||'')).trim();
       const ville = u?.ville || '';
       const cat = talentData.sous_categorie || talentData.categorie || 'Talent';
       const photo = talentData.photo_url || '';
 
-      // Calcul âge
       let age = '';
       if (u?.date_naissance) {
-        const diff = Date.now() - new Date(u.date_naissance).getTime();
-        age = Math.floor(diff / (365.25 * 24 * 3600 * 1000)) + ' ans';
+        age = Math.floor((Date.now() - new Date(u.date_naissance).getTime()) / (365.25 * 24 * 3600 * 1000)) + ' ans';
       }
 
-      // Remplir le hero
       document.title = nom + ' — ShowOne';
       document.getElementById('heroNom').textContent = nom;
       document.getElementById('heroCat').textContent = cat;
@@ -371,37 +320,23 @@
       if (ville) document.getElementById('heroVille').textContent = '📍 ' + ville;
       if (age) document.getElementById('heroAge').textContent = '🎂 ' + age;
 
-      // Modal
       document.getElementById('modalTitle').textContent = 'Contacter ' + nom;
       document.getElementById('modalNom').textContent = nom;
       document.getElementById('modalCat').textContent = cat + (ville ? ' · ' + ville : '');
       document.getElementById('contactNom').textContent = 'Contacter ' + nom;
 
-      // Infos
-      const infoRows = [
+      document.getElementById('infoList').innerHTML = [
         ville ? `<div class="info-row"><span class="info-key">📍 Ville</span><span class="info-val">${ville}</span></div>` : '',
         age ? `<div class="info-row"><span class="info-key">🎂 Âge</span><span class="info-val">${age}</span></div>` : '',
         cat ? `<div class="info-row"><span class="info-key">🎭 Catégorie</span><span class="info-val">${cat}</span></div>` : '',
-        `<div class="info-row"><span class="info-key">✅ Disponible</span><span class="info-val" style="color:#10b981;font-weight:700;">Oui</span></div>`
+        `<div class="info-row"><span class="info-key">✅ Disponible</span><span class="info-val" style="color:#10b981;">Oui</span></div>`
       ].filter(Boolean).join('');
-      document.getElementById('infoList').innerHTML = infoRows;
 
-      // Bio et tags
-      if (talentData.bio) {
-        document.getElementById('aboutText').textContent = talentData.bio;
-      } else {
-        document.getElementById('aboutText').textContent = 'Ce talent n\'a pas encore renseigné sa biographie.';
-      }
+      document.getElementById('aboutText').textContent = talentData.bio || "Ce talent n'a pas encore renseigné sa biographie.";
 
-      // Charger les vidéos
       await chargerVideos();
-
-      // Charger les stats
       await chargerStats();
-
-      // Charger les similaires
       await chargerSimilaires(cat);
-
     } catch(e) { console.error(e); }
   }
 
@@ -412,44 +347,36 @@
       });
       const videos = await res.json();
       const grid = document.getElementById('videosGrid');
-
       if (!videos || videos.length === 0) {
-        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);">Aucune vidéo publiée pour l\'instant.</div>';
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);">Aucune vidéo publiée.</div>';
         return;
       }
-
       grid.innerHTML = videos.map(v => {
-        const thumb = v.playback_id
-          ? `https://image.mux.com/${v.playback_id}/thumbnail.jpg?width=600&height=340&fit_mode=crop`
-          : '';
-        return `
-          <div class="video-card" onclick="lireVideo('${v.playback_id}')">
-            ${thumb ? `<img src="${thumb}" alt="${v.titre||''}">` : '<div style="width:100%;height:100%;background:#1a1535;"></div>'}
-            <div class="video-overlay"></div>
-            <div class="video-play-btn">▶</div>
-            <div class="video-views">👁 ${(v.vues||0).toLocaleString('fr-FR')}</div>
-            <div class="video-info">
-              <div class="video-title">${v.titre || 'Vidéo'}</div>
-            </div>
-          </div>`;
+        const thumb = v.playback_id ? `https://image.mux.com/${v.playback_id}/thumbnail.jpg?width=600&height=340&fit_mode=crop` : '';
+        return `<div class="video-card" onclick="lireVideo('${v.playback_id}')">
+          ${thumb ? `<img src="${thumb}" alt="${v.titre||''}">` : '<div style="width:100%;height:100%;background:#1a1535;"></div>'}
+          <div class="video-overlay"></div>
+          <div class="video-play">▶</div>
+          <div class="video-views">👁 ${(v.vues||0).toLocaleString('fr-FR')}</div>
+          <div class="video-info"><div class="video-title">${v.titre||'Vidéo'}</div></div>
+        </div>`;
       }).join('');
     } catch(e) { console.error(e); }
   }
 
   async function chargerStats() {
     try {
-      const [vRes, fRes, mRes] = await Promise.all([
+      const [vR, fR, mR] = await Promise.all([
         fetch(`${SUPABASE_URL}/rest/v1/videos?talent_id=eq.${talentId}&statut=eq.en_ligne&select=vues`, { headers: { 'apikey': SUPABASE_KEY } }),
         fetch(`${SUPABASE_URL}/rest/v1/favoris?talent_id=eq.${talentId}&select=id`, { headers: { 'apikey': SUPABASE_KEY } }),
         fetch(`${SUPABASE_URL}/rest/v1/messages?talent_id=eq.${talentId}&select=id`, { headers: { 'apikey': SUPABASE_KEY } })
       ]);
-      const videos = await vRes.json();
-      const favs = await fRes.json();
-      const msgs = await mRes.json();
-
-      const totalVues = Array.isArray(videos) ? videos.reduce((s, v) => s + (v.vues||0), 0) : 0;
+      const vids = await vR.json();
+      const favs = await fR.json();
+      const msgs = await mR.json();
+      const totalVues = Array.isArray(vids) ? vids.reduce((s,v) => s+(v.vues||0), 0) : 0;
       document.getElementById('statVues').textContent = totalVues.toLocaleString('fr-FR');
-      document.getElementById('statVideos').textContent = Array.isArray(videos) ? videos.length : 0;
+      document.getElementById('statVideos').textContent = Array.isArray(vids) ? vids.length : 0;
       document.getElementById('statFavoris').textContent = Array.isArray(favs) ? favs.length : 0;
       document.getElementById('statMessages').textContent = Array.isArray(msgs) ? msgs.length : 0;
     } catch(e) { console.error(e); }
@@ -460,26 +387,18 @@
       const res = await fetch(`${SUPABASE_URL}/rest/v1/profils_talents?categorie=eq.${encodeURIComponent(cat)}&id=neq.${talentId}&select=id,nom_scene,photo_url,categorie,sous_categorie,utilisateurs(prenom,nom,ville)&limit=3`, {
         headers: { 'apikey': SUPABASE_KEY }
       });
-      const similaires = await res.json();
+      const sim = await res.json();
       const list = document.getElementById('similarList');
-      if (!similaires || similaires.length === 0) {
-        list.innerHTML = '<div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;">Aucun talent similaire.</div>';
-        return;
-      }
-      list.innerHTML = similaires.map(s => {
+      if (!sim || sim.length === 0) { list.innerHTML = '<div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;">Aucun talent similaire.</div>'; return; }
+      list.innerHTML = sim.map(s => {
         const u = s.utilisateurs;
-        const nom = s.nom_scene || ((u?.prenom||'') + ' ' + (u?.nom||'')).trim();
+        const nom = s.nom_scene || ((u?.prenom||'')+ ' '+(u?.nom||'')).trim();
         const cat2 = s.sous_categorie || s.categorie || '';
-        const ville = u?.ville || '';
         const photo = s.photo_url || '';
-        return `
-          <div class="similar-item" onclick="window.location='/profil-talent?id=${s.id}'">
-            ${photo ? `<img class="similar-thumb" src="${photo}" alt="${nom}">` : `<div class="similar-thumb" style="background:var(--purple);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;">${nom[0]||'?'}</div>`}
-            <div class="similar-info">
-              <div class="similar-name">${nom}</div>
-              <div class="similar-cat">${cat2}${ville ? ' · ' + ville : ''}</div>
-            </div>
-          </div>`;
+        return `<div class="similar-item" onclick="window.location='/profil-talent?id=${s.id}'">
+          ${photo ? `<img class="similar-thumb" src="${photo}" alt="${nom}">` : `<div class="similar-thumb" style="background:var(--purple);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;">${nom[0]||'?'}</div>`}
+          <div><div class="similar-name">${nom}</div><div class="similar-cat">${cat2}${u?.ville?' · '+u.ville:''}</div></div>
+        </div>`;
       }).join('');
     } catch(e) { console.error(e); }
   }
@@ -488,10 +407,10 @@
     if (!playbackId) return;
     const src = 'https://stream.mux.com/' + playbackId + '.m3u8';
     const overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;display:flex;align-items:center;justify-content:center;';
-    overlay.innerHTML = `<div style="position:relative;width:90%;max-width:800px;">
-      <video id="popPlayer" controls autoplay playsinline style="width:100%;border-radius:12px;background:#000;"></video>
-      <button onclick="this.closest('div').parentElement.remove()" style="position:absolute;top:-40px;right:0;background:none;border:none;color:#fff;font-size:24px;cursor:pointer;">✕</button>
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;';
+    overlay.innerHTML = `<div style="position:relative;width:100%;max-width:800px;">
+      <video id="popPlayer" controls autoplay playsinline style="width:100%;border-radius:12px;background:#000;max-height:80vh;"></video>
+      <button onclick="this.closest('div').parentElement.remove()" style="position:absolute;top:-36px;right:0;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;">✕</button>
     </div>`;
     document.body.appendChild(overlay);
     const video = document.getElementById('popPlayer');
@@ -510,21 +429,18 @@
 
   async function envoyerMessage() {
     const token = localStorage.getItem('showone_token');
-    if (!token) { alert('Vous devez être connecté en tant que recruteur pour envoyer un message.'); window.location.href = '/connexion'; return; }
+    if (!token) { alert('Vous devez être connecté en tant que recruteur.'); window.location.href = '/connexion'; return; }
     const objet = document.getElementById('msgObjet').value || 'Proposition';
     const contenu = document.getElementById('msgContenu').value;
     if (!contenu.trim()) { alert('Veuillez écrire un message !'); return; }
     try {
       await fetch(`${SUPABASE_URL}/rest/v1/messages`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}`, 'Prefer': 'return=minimal' },
-        body: JSON.stringify({ talent_id: talentId, objet, contenu, lu: false })
+        method:'POST',
+        headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`,'Prefer':'return=minimal'},
+        body:JSON.stringify({talent_id:talentId, objet, contenu, lu:false})
       });
       closeModal();
-      const t = document.getElementById('toast');
-      t.textContent = '✓ Message envoyé !';
-      t.style.display = 'block';
-      setTimeout(() => { t.style.display = 'none'; }, 3000);
+      showToast('✓ Message envoyé !', '#10b981');
     } catch(e) { alert('Erreur lors de l\'envoi.'); }
   }
 
@@ -533,27 +449,22 @@
     document.getElementById('favBtn').textContent = faved ? '❤️' : '🤍';
     document.getElementById('favBtn').classList.toggle('faved', faved);
     document.getElementById('favCardBtn').textContent = faved ? '❤️ Retiré des favoris' : '🤍 Ajouter aux favoris';
-    const t = document.getElementById('toast');
-    t.style.background = faved ? '#5B4FE8' : '#10b981';
-    t.textContent = faved ? '❤️ Ajouté aux favoris !' : 'Retiré des favoris';
-    t.style.display = 'block';
-    setTimeout(() => { t.style.display = 'none'; }, 2500);
+    showToast(faved ? '❤️ Ajouté aux favoris !' : 'Retiré des favoris', faved ? '#5B4FE8' : '#10b981');
   }
 
   function shareProfile() {
-    navigator.clipboard.writeText(window.location.href).then(() => {
-      const t = document.getElementById('toast');
-      t.style.background = '#5B4FE8';
-      t.textContent = '🔗 Lien copié !';
-      t.style.display = 'block';
-      setTimeout(() => { t.style.display = 'none'; }, 2500);
-    });
+    navigator.clipboard.writeText(window.location.href).then(() => showToast('🔗 Lien copié !', '#5B4FE8'));
   }
 
-  document.getElementById('modalOverlay').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
+  function showToast(msg, color) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.background = color;
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 2500);
+  }
 
+  document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
   chargerProfil();
 </script>
 </body>
