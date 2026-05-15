@@ -197,92 +197,62 @@
 
   @media (max-width: 768px) {
     :root { --sidebar-w: 0px; }
-    /* Masquer la sidebar */
-    .sidebar { display: none !important; }
-    body { overflow-x: hidden; background: var(--cream); }
+
+    /* Sidebar */
+    .sidebar { transform:translateX(-100%); transition:transform .3s ease; z-index:200; width:260px; }
+    .sidebar.open { transform:translateX(0); }
+
     /* Main */
-    .main { margin-left: 0; padding: 0; overflow-x: hidden; width: 100%; background: var(--cream); padding-top: 60px; padding-bottom: 70px; }
-    /* Topbar fixe */
-    .topbar {
-      position: fixed !important; top: 0; left: 0; right: 0; z-index: 100;
-      background: var(--purple-deep) !important;
-      padding: 12px 16px !important;
-      display: flex !important; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      height: 60px; margin-bottom: 0 !important;
-    }
-    #topbarNom { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); }
-    .topbar p { display: none; }
-    #mobileLogoRec { display: block !important; }
-    .topbar-right a { display: none; }
-    .notif-btn { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
-    /* Stats en 2 colonnes */
-    .stats-grid {
-      grid-template-columns: repeat(2, 1fr) !important;
-      gap: 10px; padding: 16px 14px 14px;
-      width: 100%; box-sizing: border-box;
-    }
-    .stat-card { padding: 14px 12px; background: #fff; border-radius: 14px; border: 1px solid var(--border); }
-    .stat-num { font-size: 22px; }
-    /* Boutons action casting */
-    .main > div:not(.topbar):not(.stats-grid):not(.content-grid) {
-      padding: 0 14px 14px;
-    }
-    .main > div[style*="margin-bottom"] {
-      display: flex !important; flex-direction: column;
-      gap: 8px; padding: 0 14px 14px; margin-bottom: 0 !important;
-    }
-    .main > div[style*="margin-bottom"] a,
-    .main > div[style*="margin-bottom"] button {
-      width: 100% !important; margin: 0 !important;
-      padding: 12px 16px !important; font-size: 13px !important;
-      justify-content: center; box-sizing: border-box;
-    }
-    /* Grille principale en 1 colonne */
-    .content-grid {
-      grid-template-columns: 1fr !important;
-      padding: 0 14px; gap: 14px;
-      width: 100%; box-sizing: border-box;
-    }
-    .content-grid > * { min-width: 0; max-width: 100%; width: 100%; box-sizing: border-box; }
-    /* Cards sur fond blanc */
-    .section-card { background: #fff; border-radius: 16px; padding: 16px; box-shadow: 0 2px 12px rgba(91,79,232,0.06); }
-    /* Filtres scrollables */
-    .filters-row {
-      overflow-x: auto; flex-wrap: nowrap !important;
-      padding-bottom: 8px; -webkit-overflow-scrolling: touch;
-    }
-    .filter-chip { flex-shrink: 0; font-size: 12px; padding: 6px 12px; }
-    .search-bar { padding: 0; }
+    .main { margin-left:0; padding:0 0 70px; }
+
+    /* Topbar */
+    .topbar { padding:12px 14px; flex-wrap:wrap; gap:8px; }
+    .topbar h1 { font-size:18px; }
+    .topbar-actions { gap:6px; flex-wrap:wrap; }
+    .topbar-actions a, .topbar-actions button { font-size:11px !important; padding:8px 10px !important; }
+
+    /* Boutons du haut */
+    .top-btns { display:flex; flex-wrap:wrap; gap:8px; padding:0 14px 14px; }
+    .top-btns a, .top-btns button { font-size:12px !important; padding:10px 14px !important; flex:1; justify-content:center; }
+
+    /* Stats */
+    .stats-grid { grid-template-columns:repeat(2,1fr); gap:8px; padding:14px; }
+    .stat-card { padding:12px; }
+
+    /* Grille principale */
+    .main-grid { grid-template-columns:1fr !important; padding:0 14px; gap:14px; }
+
     /* Talents grid */
-    .talents-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
-    .talent-info { padding: 10px; }
-    .talent-name-card { font-size: 13px; }
-    .talent-loc, .talent-views { font-size: 11px; }
-    .btn-contact { font-size: 12px; padding: 6px 10px; }
-    /* Messages */
-    .msg-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-    /* Bottom nav fixe */
+    .talents-grid { grid-template-columns:repeat(2,1fr) !important; gap:10px; }
+    .talent-info { padding:10px 12px; }
+    .talent-name { font-size:13px; }
+
+    /* Conversations */
+    .conv-list-dash { max-height:300px; }
+
+    /* Bottom nav */
     .bottom-nav-r {
-      display: flex !important;
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: #fff; border-top: 1px solid var(--border);
-      z-index: 100; padding: 6px 0 12px;
-      box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+      display:flex !important;
+      position:fixed; bottom:0; left:0; right:0;
+      background:#fff; border-top:1px solid var(--border);
+      z-index:100; padding:6px 0 10px;
     }
     .bottom-nav-r a {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; gap: 3px; text-decoration: none;
-      color: var(--muted); font-size: 10px; font-weight: 600;
-      font-family: 'DM Sans', sans-serif; transition: color .2s;
+      flex:1; display:flex; flex-direction:column;
+      align-items:center; gap:2px; text-decoration:none;
+      color:var(--muted); font-size:10px; font-weight:600;
     }
-    .bottom-nav-r a.active { color: var(--purple); }
-    .bottom-nav-r a span:first-child { font-size: 22px; line-height: 1; }
+    .bottom-nav-r a.active { color:var(--purple); }
+    .bottom-nav-r a span:first-child { font-size:20px; }
+
+    /* Bouton hamburger */
+    .btn-menu-r { display:flex !important; }
   }
   @media (min-width: 769px) {
-    .bottom-nav-r { display: none !important; }
-    #mobileLogoRec { display: none !important; }
-  }style>
+    .btn-menu-r { display:none !important; }
+    .bottom-nav-r { display:none !important; }
+  }
+</style>
 </head>
 <body>
 
@@ -366,9 +336,12 @@
 
   <!-- TOPBAR -->
   <div class="topbar">
-    <div>
-      <h1 id="topbarNom">Bonjour 👋</h1>
-      <p>Explorez les talents disponibles sur ShowOne.</p>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="/" id="mobileLogoRec" style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:#fff;text-decoration:none;display:none;">Show<span style="color:var(--red);">One</span></a>
+      <div>
+        <h1 id="topbarNom">Bonjour 👋</h1>
+        <p>Explorez les talents disponibles sur ShowOne.</p>
+      </div>
     </div>
     <div class="topbar-right">
       <a href="/deposer-casting" style="padding:10px 18px;border-radius:10px;background:var(--purple);color:#fff;font-size:13px;font-weight:700;text-decoration:none;border:none;cursor:pointer;">🎬 Déposer un casting</a>
@@ -487,18 +460,26 @@
         <div class="section-head">
           <div class="section-title">🧾 Mon abonnement</div>
         </div>
-        <div class="sub-card">
-          <h3>Recruteur Pro</h3>
-          <p>Accès illimité à tous les talents</p>
-          <div class="sub-renew">
-            <span>Prochain renouvellement</span>
-            <span>4 juin 2025</span>
-          </div>
+        <div id="subCardPro" class="sub-card" style="display:none;">
+          <h3>✅ Recruteur Pro</h3>
+          <p>Accès illimité à tous les talents ShowOne</p>
           <div class="sub-renew" style="margin-bottom:12px;">
-            <span>Montant</span>
-            <span>49,99€ / mois</span>
+            <span>Montant</span><span>19,99€ / mois</span>
           </div>
-          <button class="btn-manage">Gérer mon abonnement</button>
+          <button class="btn-manage" onclick="alert('Gestion abonnement bientôt disponible.')">Gérer mon abonnement</button>
+        </div>
+        <div id="subCardGratuit" style="background:var(--purple-deep);border-radius:12px;padding:18px 20px;">
+          <h3 style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:6px;">🔓 Passez Recruteur Pro</h3>
+          <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:14px;">Contactez tous les talents et publiez des castings illimités.</p>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:rgba(255,255,255,0.75);margin-bottom:16px;">
+            <span>✓ Contacter tous les talents</span>
+            <span>✓ Messagerie illimitée</span>
+            <span>✓ Castings illimités</span>
+            <span>✓ Recherche avancée</span>
+          </div>
+          <button id="btnPaiementRecruteur" onclick="lancerPaiementRecruteur()" style="width:100%;padding:13px;border-radius:10px;border:none;background:var(--red);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">
+            🔍 Devenir Recruteur Pro — 19,99€/mois
+          </button>
         </div>
       </div>
 
@@ -551,6 +532,7 @@
 
           const recruteurId = profData[0].id;
           window.recruteurId = recruteurId;
+          verifierEtAfficherPlan(u.plan || 'gratuit');
 
           // Nombre de talents disponibles
           const talentsRes = await fetch(`${SUPABASE_URL}/rest/v1/profils_talents?select=id`, {
@@ -1025,6 +1007,37 @@
     window.location.href = `/messagerie?talent_id=${talentId}`;
   }
 
+  function verifierEtAfficherPlan(planSupabase) {
+    const userLocal = JSON.parse(localStorage.getItem('showone_user') || '{}');
+    const planLocal = userLocal.plan || 'gratuit';
+    const plan = (planSupabase === 'pro' || planLocal === 'pro') ? 'pro' : 'gratuit';
+    const cardPro = document.getElementById('subCardPro');
+    const cardGratuit = document.getElementById('subCardGratuit');
+    if (cardPro && cardGratuit) {
+      cardPro.style.display = plan === 'pro' ? 'block' : 'none';
+      cardGratuit.style.display = plan === 'pro' ? 'none' : 'block';
+    }
+  }
+  async function lancerPaiementRecruteur() {
+    const btn = document.getElementById('btnPaiementRecruteur');
+    btn.textContent = 'Redirection…'; btn.disabled = true;
+    try {
+      const userStr = localStorage.getItem('showone_user');
+      const user = userStr ? JSON.parse(userStr) : {};
+      const res = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          plan: 'recruteur_pro', userId: user.id, userEmail: user.email,
+          successUrl: 'https://www.showone.fr/paiement-succes?type=recruteur',
+          cancelUrl: 'https://www.showone.fr/dashboard-recruteur'
+        })
+      });
+      const data = await res.json();
+      if (data.url) { window.location.href = data.url; }
+      else { alert('Erreur.'); btn.textContent = 'Devenir Recruteur Pro — 19,99€/mois'; btn.disabled = false; }
+    } catch(e) { alert('Erreur.'); btn.textContent = 'Devenir Recruteur Pro — 19,99€/mois'; btn.disabled = false; }
+  }
   function seDeconnecter() {
     window.localStorage.removeItem('showone_token');
     window.localStorage.removeItem('showone_user');
@@ -1050,10 +1063,12 @@
 </div>
 
 <script>
-function toggleSidebarR() {
-  document.querySelector('.sidebar').classList.toggle('open');
-  const ov = document.getElementById('sidebarOverlayR');
-  ov.style.display = ov.style.display === 'block' ? 'none' : 'block';
+function toggleSidebarR() {}
+if (window.innerWidth <= 768) {
+  const logo = document.getElementById('mobileLogoRec');
+  if (logo) logo.style.display = 'block';
+  const nom = document.getElementById('topbarNom');
+  if (nom) nom.style.display = 'none';
 }
 </script>
 </body>
