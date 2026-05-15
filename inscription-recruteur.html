@@ -206,18 +206,7 @@
     .btn-back, .btn-next, .btn-submit { width: 100%; justify-content: center; }
     .plan-recruiter { padding: 18px; }
   }
-
-  .lang-selector { display:flex; align-items:center; gap:4px; margin-left:8px; }
-  .lang-btn { padding:4px 8px; border-radius:6px; border:1.5px solid rgba(255,255,255,0.2); background:transparent; color:rgba(255,255,255,0.6); font-size:11px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; letter-spacing:.3px; }
-  .lang-btn:hover { background:rgba(255,255,255,0.1); color:#fff; }
-  .lang-btn.active { background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.4); }
-  .lang-selector.light .lang-btn { border-color:var(--border); color:var(--muted); }
-  .lang-selector.light .lang-btn:hover { border-color:var(--purple); color:var(--purple); }
-  .lang-selector.light .lang-btn.active { background:var(--purple); color:#fff; border-color:var(--purple); }
-
 </style>
-
-<script src="/translations.js"></script>
 </head>
 <body>
 
@@ -254,13 +243,7 @@
 </div>
 
 <!-- FORMULAIRE DROITE -->
-<div class="side-form" style="position:relative;">
-  <div class="lang-selector light" id="langSelector" style="position:absolute;top:16px;right:16px;z-index:10;">
-    <button class="lang-btn" data-lang="fr" onclick="applyTranslations('fr')">FR</button>
-    <button class="lang-btn" data-lang="es" onclick="applyTranslations('es')">ES</button>
-    <button class="lang-btn" data-lang="pt" onclick="applyTranslations('pt')">PT</button>
-    <button class="lang-btn" data-lang="it" onclick="applyTranslations('it')">IT</button>
-  </div>
+<div class="side-form">
 
   <div class="steps" id="stepsBar">
     <div class="stp active" id="s1"><div class="stp-num">1</div><div class="stp-lbl">Identité</div></div>
@@ -417,7 +400,7 @@
 
     <div class="plan-recruiter">
       <div class="plan-recruiter-tag">Plan unique</div>
-      <div class="plan-recruiter-price">49,99€ <span>/ mois</span></div>
+      <div class="plan-recruiter-price">19,99€ <span>/ mois</span></div>
       <div class="plan-recruiter-sub">Sans engagement — résiliable à tout moment</div>
       <div class="plan-recruiter-feats">
         <div class="plan-recruiter-feat">Contacter n'importe quel talent sur la plateforme</div>
@@ -449,7 +432,7 @@
 
     <div class="actions">
       <button class="btn-back" onclick="go(3)">← Retour</button>
-      <button class="btn-submit" onclick="showSuccess()">Créer mon compte · 49,99€/mois</button>
+      <button class="btn-submit" onclick="showSuccess()">Créer mon compte · 19,99€/mois</button>
     </div>
   </div>
 
@@ -541,7 +524,7 @@
 
       if (authData.error) {
         alert('Erreur : ' + (authData.error.message || 'Email déjà utilisé ou invalide.'));
-        if (btnSubmit) { btnSubmit.textContent = 'Créer mon compte · 49,99€/mois'; btnSubmit.disabled = false; }
+        if (btnSubmit) { btnSubmit.textContent = 'Créer mon compte · 19,99€/mois'; btnSubmit.disabled = false; }
         return;
       }
 
@@ -560,17 +543,6 @@
         headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${authData.access_token}`, 'Prefer': 'return=minimal' },
         body: JSON.stringify({ utilisateur_id: userId, nom_societe: nomsociete, siret, type_recruteur: typeRecruteur, site_web: siteweb, description: descactivite, categories_recherchees: categories })
       });
-
-      // 3b. Sauvegarder dans localStorage avec type_compte recruteur
-      localStorage.setItem('showone_token', authData.access_token);
-      localStorage.setItem('showone_user', JSON.stringify({
-        id: userId,
-        email,
-        prenom,
-        nom,
-        type_compte: 'recruteur',
-        photo_url: ''
-      }));
 
       // 4. Envoyer l'email de confirmation
       try {
@@ -592,7 +564,7 @@
     } catch (err) {
       console.error(err);
       alert('Une erreur est survenue. Veuillez réessayer.');
-      if (btnSubmit) { btnSubmit.textContent = 'Créer mon compte · 49,99€/mois'; btnSubmit.disabled = false; }
+      if (btnSubmit) { btnSubmit.textContent = 'Créer mon compte · 19,99€/mois'; btnSubmit.disabled = false; }
     }
   }
 
