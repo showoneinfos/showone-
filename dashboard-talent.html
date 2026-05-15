@@ -606,6 +606,33 @@
     document.getElementById('modalePro').style.display = 'none';
   }
 
+  function calculerCompletion() {
+    const p = window._profilData;
+    if (!p) return;
+    let score = 0;
+    const criteres = [];
+    if (p.nom)       { score += 20; } else { criteres.push('Nom scène'); }
+    if (p.photo)     { score += 25; } else { criteres.push('Photo'); }
+    if (p.bio)       { score += 20; } else { criteres.push('Biographie'); }
+    if (p.categorie) { score += 15; } else { criteres.push('Catégorie'); }
+    if (p.ville)     { score += 10; } else { criteres.push('Ville'); }
+    if (window._hasVideo) { score += 10; } else { criteres.push('1ère vidéo'); }
+
+    const pct = Math.min(score, 100);
+    document.getElementById('completionPct').textContent = pct + '%';
+    document.getElementById('completionFill').style.width = pct + '%';
+    document.getElementById('completionFill').style.background = pct === 100 ? '#10b981' : 'var(--purple)';
+
+    const cat = (p.sousCat || p.categorie || '') + (p.ville ? ' · ' + p.ville : '');
+    const profCat = document.getElementById('profileCat');
+    if (!profCat) return;
+    if (pct === 100) {
+      profCat.innerHTML = cat + '<br><span style="font-size:11px;color:#10b981;font-weight:600;">✅ Profil complet !</span>';
+    } else {
+      profCat.innerHTML = cat + '<br><span style="font-size:11px;color:var(--red);">Manque : ' + criteres.join(', ') + '</span>';
+    }
+  }
+
   async function chargerDonnees() {
     const token = localStorage.getItem('showone_token');
     const userStr = localStorage.getItem('showone_user');
@@ -736,36 +763,8 @@
         document.getElementById('profileNom').textContent = nom || '—';
         document.getElementById('profileCat').textContent = (cat || '') + (ville ? ' · ' + ville : '');
 
-        // Complétion du profil (total 100%)
-        let score = 0;
-        const criteres = [];
-        if (nom) { score += 20; } else { criteres.push('Nom scène'); }
-        if (p.photo_url) { score += 25; } else { criteres.push('Photo de profil'); }
-        if (p.bio) { score += 20; } else { criteres.push('Biographie'); }
-        if (p.categorie) { score += 15; } else { criteres.push('Catégorie'); }
-        if (ville) { score += 10; } else { criteres.push('Ville'); }
-        // Vidéo vérifiée via les stats déjà chargées
-        if (window._hasVideo) { score += 10; } else { criteres.push('1ère vidéo'); }
-        
-        const pct = Math.min(score, 100);
-        document.getElementById('completionPct').textContent = pct + '%';
-        document.getElementById('completionFill').style.width = pct + '%';
-        document.getElementById('completionFill').style.background = pct === 100 ? '#10b981' : 'var(--purple)';
-        
-        // Afficher les critères manquants
-        if (pct < 100 && criteres.length > 0) {
-          const profCat = document.getElementById('profileCat');
-          if (profCat) {
-            profCat.innerHTML = (p.sous_categorie || p.categorie || '') + (ville ? ' · ' + ville : '') +
-              '<br><span style="font-size:11px;color:var(--red);">Manque : ' + criteres.join(', ') + '</span>';
-          }
-        } else if (pct === 100) {
-          const profCat = document.getElementById('profileCat');
-          if (profCat) {
-            profCat.innerHTML = (p.sous_categorie || p.categorie || '') + (ville ? ' · ' + ville : '') +
-              '<br><span style="font-size:11px;color:#10b981;">✅ Profil complet !</span>';
-          }
-        }
+        // Sauvegarder les données profil pour le calcul de complétion après chargement vidéos
+        window._profilData = { nom, photo: p.photo_url, bio: p.bio, categorie: p.categorie, ville, sousCat: p.sous_categorie };
       } else {
         // Pas encore de profil — afficher quand même le nom
         if (data && data.length > 0) {
@@ -776,6 +775,8 @@
 
       // Charger les vidéos réelles
       await chargerVideos(window.profilId, token);
+      // Calculer la complétion APRÈS les vidéos (besoin de window._hasVideo)
+      calculerCompletion();
 
       // Stats en parallèle (seulement si profilId connu)
       let videos = [], messages = [], favoris = [];
