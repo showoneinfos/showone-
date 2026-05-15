@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Talent — ShowOne</title>
+  <meta name="description" content="Découvrez le profil et les vidéos de ce talent sur ShowOne.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.showone.fr/profil-talent">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple:#5B4FE8; --purple-dark:#3D32C4; --purple-deep:#1a1535;
+    --red:#E8394F; --red-dark:#c0283c;
+    --cream:#f5f3ff; --muted:#a09dc0; --border:rgba(91,79,232,0.13); --white:#fff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--purple-deep); }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:14px 48px; background:rgba(26,21,53,0.95); backdrop-filter:blur(16px); border-bottom:1px solid rgba(255,255,255,0.06); }
+  .nav-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:22px; color:#fff; text-decoration:none; }
+  .nav-logo span { color:var(--red); }
+  .nav-right { display:flex; gap:10px; align-items:center; }
+  .btn-nav { padding:8px 18px; border-radius:999px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; text-decoration:none; border:none; }
+  .btn-outline { border:1.5px solid rgba(255,255,255,0.25); color:#fff; background:transparent; }
+  .btn-fill { background:var(--red); color:#fff; }
+  .hero { position:relative; height:380px; overflow:hidden; margin-top:57px; }
+  .hero-bg { width:100%; height:100%; object-fit:cover; object-position:center 30%; filter:brightness(.5); }
+  .hero-overlay { position:absolute; inset:0; background:linear-gradient(to bottom, rgba(26,21,53,0.2) 0%, rgba(26,21,53,0.95) 100%); }
+  .hero-content { position:absolute; bottom:0; left:0; right:0; padding:0 48px 32px; display:flex; align-items:flex-end; gap:24px; }
+  .hero-avatar { width:100px; height:100px; border-radius:50%; object-fit:cover; border:4px solid var(--purple); flex-shrink:0; }
+  .hero-info { flex:1; }
+  .hero-badges { display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
+  .hero-badge { padding:4px 12px; border-radius:999px; font-size:11px; font-weight:700; }
+  .badge-cat { background:rgba(232,57,79,0.85); color:#fff; }
+  .badge-verified { background:rgba(16,185,129,0.85); color:#fff; }
+  .hero-name { font-family:'Syne',sans-serif; font-size:32px; font-weight:800; color:#fff; letter-spacing:-1px; margin-bottom:4px; }
+  .hero-sub { color:rgba(255,255,255,0.6); font-size:14px; display:flex; gap:14px; flex-wrap:wrap; }
+  .hero-actions { display:flex; flex-direction:column; gap:8px; align-items:flex-end; flex-shrink:0; }
+  .btn-contact-main { padding:12px 24px; border-radius:10px; border:none; background:var(--red); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; white-space:nowrap; }
+  .hero-icons { display:flex; gap:8px; }
+  .btn-icon { width:36px; height:36px; border-radius:9px; border:1.5px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; font-size:15px; cursor:pointer; }
+  .btn-icon.faved { background:rgba(232,57,79,0.3); border-color:var(--red); }
+  .quick-stats { background:var(--purple-deep); padding:12px 48px; display:flex; border-bottom:1px solid rgba(255,255,255,0.06); }
+  .qs { flex:1; text-align:center; padding:6px 0; border-right:1px solid rgba(255,255,255,0.06); }
+  .qs:last-child { border-right:none; }
+  .qs-num { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; color:#fff; }
+  .qs-label { font-size:10px; color:rgba(255,255,255,0.4); margin-top:2px; }
+  .content { max-width:1100px; margin:0 auto; padding:32px 40px 80px; display:grid; grid-template-columns:1fr 300px; gap:20px; }
+  .section { background:var(--white); border:1.5px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:16px; }
+  .section-title { font-family:'Syne',sans-serif; font-size:16px; font-weight:700; margin-bottom:16px; }
+  .videos-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .video-card { border-radius:12px; overflow:hidden; position:relative; cursor:pointer; background:var(--purple-deep); aspect-ratio:16/9; }
+  .video-card img { width:100%; height:100%; object-fit:cover; opacity:.75; display:block; }
+  .video-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(26,21,53,0.9) 0%,transparent 50%); }
+  .video-play { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.9); display:flex; align-items:center; justify-content:center; font-size:16px; }
+  .video-info { position:absolute; bottom:0; left:0; right:0; padding:10px 12px; }
+  .video-title { font-size:12px; font-weight:600; color:#fff; }
+  .video-views { position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.5); color:#fff; font-size:10px; padding:2px 7px; border-radius:999px; }
+  .about-text { font-size:14px; line-height:1.75; color:#3d3760; }
+  .right-col { display:flex; flex-direction:column; gap:16px; }
+  .contact-card { background:var(--purple-deep); border-radius:16px; padding:22px; text-align:center; }
+  .contact-avatar { width:60px; height:60px; border-radius:50%; object-fit:cover; border:3px solid rgba(91,79,232,0.5); margin:0 auto 12px; display:block; }
+  .contact-card h3 { font-family:'Syne',sans-serif; font-size:16px; font-weight:700; color:#fff; margin-bottom:4px; }
+  .contact-card p { font-size:12px; color:rgba(255,255,255,0.45); margin-bottom:18px; line-height:1.5; }
+  .btn-contact-card { width:100%; padding:12px; border-radius:10px; border:none; background:var(--red); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; margin-bottom:8px; }
+  .btn-fav-card { width:100%; padding:10px; border-radius:10px; border:1.5px solid rgba(255,255,255,0.15); background:transparent; color:rgba(255,255,255,0.6); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .contact-note { font-size:11px; color:rgba(255,255,255,0.25); margin-top:12px; line-height:1.5; }
+  .info-list { display:flex; flex-direction:column; }
+  .info-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); }
+  .info-row:last-child { border-bottom:none; }
+  .info-key { font-size:13px; color:var(--muted); }
+  .info-val { font-size:13px; font-weight:600; }
+  .similar-item { display:flex; gap:12px; align-items:center; cursor:pointer; padding:8px; border-radius:10px; transition:background .2s; }
+  .similar-item:hover { background:rgba(91,79,232,0.05); }
+  .similar-thumb { width:48px; height:48px; border-radius:10px; object-fit:cover; flex-shrink:0; }
+  .similar-name { font-size:13px; font-weight:700; margin-bottom:2px; }
+  .similar-cat { font-size:11px; color:var(--muted); }
+  .modal-overlay { position:fixed; inset:0; background:rgba(26,21,53,0.65); backdrop-filter:blur(5px); z-index:200; display:none; align-items:center; justify-content:center; padding:20px; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:#fff; border-radius:20px; padding:28px; width:100%; max-width:480px; }
+  .modal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+  .modal-head h2 { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; }
+  .modal-close { width:30px; height:30px; border-radius:8px; border:1.5px solid var(--border); background:transparent; cursor:pointer; font-size:14px; }
+  .modal-info { display:flex; gap:10px; align-items:center; padding:10px; background:var(--cream); border-radius:10px; margin-bottom:16px; }
+  .modal-info img { width:40px; height:40px; border-radius:50%; object-fit:cover; }
+  .mfg { margin-bottom:12px; }
+  .mlabel { display:block; font-size:12px; font-weight:700; margin-bottom:5px; }
+  .minput, .mtextarea { width:100%; padding:10px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; color:var(--purple-deep); font-family:'DM Sans',sans-serif; outline:none; }
+  .mtextarea { resize:vertical; min-height:90px; line-height:1.6; }
+  .minput:focus, .mtextarea:focus { border-color:var(--purple); }
+  .modal-actions { display:flex; gap:10px; margin-top:4px; }
+  .btn-cancel { padding:11px 18px; border-radius:9px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .btn-send { flex:1; padding:11px; border-radius:9px; border:none; background:var(--purple); color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .toast { position:fixed; bottom:20px; right:20px; background:#10b981; color:#fff; padding:12px 18px; border-radius:12px; font-weight:700; font-size:14px; z-index:999; display:none; }
+  @media (max-width: 768px) {
+    nav { padding:12px 16px; }
+    .btn-nav { padding:7px 14px; font-size:12px; }
+    .hero { height:auto; min-height:280px; margin-top:53px; }
+    .hero-content { flex-direction:column; align-items:flex-start; padding:16px; gap:12px; }
+    .hero-avatar { width:80px; height:80px; }
+    .hero-name { font-size:24px; }
+    .hero-actions { flex-direction:row; align-items:center; width:100%; }
+    .btn-contact-main { flex:1; padding:10px 16px; font-size:13px; }
+    .quick-stats { padding:10px 16px; }
+    .content { grid-template-columns:1fr !important; padding:16px 14px 80px; gap:0; }
+    .right-col { order:-1; margin-bottom:16px; }
+    .videos-grid { grid-template-columns:1fr 1fr; gap:10px; }
+    .section { padding:16px; margin-bottom:12px; }
+    .contact-card { padding:18px; }
+  }
+  @media (max-width: 380px) {
+    .hero-name { font-size:20px; }
+    .videos-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="modalTitle">Contacter ce talent</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-info">
+      <img id="modalAvatar" src="" alt="">
+      <div>
+        <div style="font-size:14px;font-weight:700;" id="modalNom">—</div>
+        <div style="font-size:12px;color:var(--muted);" id="modalCat">—</div>
+      </div>
+    </div>
+    <div class="mfg">
+      <label class="mlabel">Objet</label>
+      <input class="minput" id="msgObjet" type="text" placeholder="Ex : Proposition de casting">
+    </div>
+    <div class="mfg">
+      <label class="mlabel">Message</label>
+      <textarea class="mtextarea" id="msgContenu" placeholder="Bonjour, nous avons découvert votre profil ShowOne…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-send" onclick="envoyerMessage()">Envoyer ✓</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<nav>
+  <a href="/" class="nav-logo">Show<span>One</span></a>
+  <div class="nav-right">
+    <a href="/connexion" class="btn-nav btn-outline">Connexion</a>
+    <a href="/rejoindre" class="btn-nav btn-fill">Rejoindre</a>
+  </div>
+</nav>
+<div class="hero">
+  <img class="hero-bg" id="heroBg" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1400&h=500&fit=crop" alt="">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <img class="hero-avatar" id="heroAvatar" src="" alt="">
+    <div class="hero-info">
+      <div class="hero-badges">
+        <span class="hero-badge badge-cat" id="heroCat">—</span>
+        <span class="hero-badge badge-verified">✓ Vérifié</span>
+      </div>
+      <div class="hero-name" id="heroNom">Chargement…</div>
+      <div class="hero-sub">
+        <span id="heroVille"></span>
+        <span id="heroAge"></span>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <button class="btn-contact-main" id="btnContactHero" onclick="openModal()">💬 Contacter</button>
+      <div class="hero-icons">
+        <div class="btn-icon" id="favBtn" onclick="toggleFav()">🤍</div>
+        <div class="btn-icon" onclick="shareProfile()">🔗</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="quick-stats">
+  <div class="qs"><div class="qs-num" id="statVues">—</div><div class="qs-label">Vues</div></div>
+  <div class="qs"><div class="qs-num" id="statVideos">—</div><div class="qs-label">Vidéos</div></div>
+  <div class="qs"><div class="qs-num" id="statFavoris">—</div><div class="qs-label">Favoris</div></div>
+  <div class="qs"><div class="qs-num" id="statMessages">—</div><div class="qs-label">Messages</div></div>
+</div>
+<div class="content">
+  <div>
+    <div class="section">
+      <div class="section-title">🎬 Vidéos</div>
+      <div class="videos-grid" id="videosGrid">
+        <div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);">Chargement…</div>
+      </div>
+    </div>
+    <div class="section">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="section-title" style="margin-bottom:0;">👤 À propos</div>
+        <button id="btnEditBio" style="display:none;padding:6px 12px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--purple);font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="toggleEditBio()">✏️ Modifier</button>
+      </div>
+      <p class="about-text" id="aboutText">—</p>
+      <div id="editBioZone" style="display:none;">
+        <textarea id="bioInput" style="width:100%;padding:12px;border:1.5px solid var(--purple);border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;resize:vertical;min-height:100px;line-height:1.6;color:var(--purple-deep);" placeholder="Décrivez-vous en quelques mots — votre style, vos expériences, vos ambitions…"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button onclick="toggleEditBio()" style="padding:8px 16px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Annuler</button>
+          <button id="btnSauvBio" onclick="sauvegarderBio()" style="flex:1;padding:8px;border-radius:8px;border:none;background:var(--purple);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">✓ Sauvegarder</button>
+        </div>
+      </div>
+      <div class="about-tags" id="aboutTags"></div>
+    </div>
+    <div class="section" style="margin-bottom:0;">
+      <div class="section-title">✨ Talents similaires</div>
+      <div id="similarList"><div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;">Chargement…</div></div>
+    </div>
+  </div>
+  <div class="right-col">
+    <div class="contact-card">
+      <img class="contact-avatar" id="contactAvatar" src="" alt="">
+      <h3 id="contactNom">—</h3>
+      <p id="contactDesc">Recruteurs vérifiés uniquement. Réponse sous 48h.</p>
+      <div id="cardActionsRecruteur">
+        <button class="btn-contact-card" onclick="openModal()">💬 Envoyer un message</button>
+        <button class="btn-fav-card" id="favCardBtn" onclick="toggleFav()">🤍 Ajouter aux favoris</button>
+        <p class="contact-note">Fonctionnalité réservée aux recruteurs abonnés ShowOne.</p>
+      </div>
+      <div id="cardActionsTalent" style="display:none;">
+        <button class="btn-contact-card" onclick="partagerProfil()" style="background:var(--purple);">📤 Partager mon profil</button>
+        <button class="btn-fav-card" onclick="copierLien()">🔗 Copier le lien</button>
+        <p class="contact-note">Partagez votre profil à vos amis et recruteurs !</p>
+      </div>
+    </div>
+    <div class="section" style="margin-bottom:0;">
+      <div class="section-title">📋 Informations</div>
+      <div class="info-list" id="infoList">
+        <div style="text-align:center;padding:16px;color:var(--muted);">Chargement…</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const SUPABASE_URL = 'https://emiuzigtlomlrsofxqyf.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_U8P52zBkzF6Nqno_mmbcVQ_bKQLNmTP';
+  let talentData = null;
+  let faved = false;
+  let currentUserId = null;
+
+  const params = new URLSearchParams(window.location.search);
+  const talentId = params.get('id');
+
+  async function chargerProfil() {
+    if (!talentId) { document.getElementById('heroNom').textContent = 'Talent introuvable'; return; }
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/profils_talents?id=eq.${talentId}&select=*,utilisateurs(id,prenom,nom,ville,date_naissance,email)`, {
+        headers: { 'apikey': SUPABASE_KEY }
+      });
+      const data = await res.json();
+      if (!data || data.length === 0) { document.getElementById('heroNom').textContent = 'Profil introuvable'; return; }
+      talentData = data[0];
+      const u = talentData.utilisateurs;
+      const nom = talentData.nom_scene || ((u?.prenom||'') + ' ' + (u?.nom||'')).trim();
+      const ville = u?.ville || '';
+      const cat = talentData.sous_categorie || talentData.categorie || 'Talent';
+      const photo = talentData.photo_url || '';
+      let age = '';
+      if (u?.date_naissance) {
+        age = Math.floor((Date.now() - new Date(u.date_naissance).getTime()) / (365.25 * 24 * 3600 * 1000)) + ' ans';
+      }
+      document.title = nom + ' — ShowOne';
+      document.getElementById('heroNom').textContent = nom;
+      document.getElementById('heroCat').textContent = cat;
+      if (photo) {
+        document.getElementById('heroAvatar').src = photo;
+        document.getElementById('heroBg').src = photo;
+        document.getElementById('contactAvatar').src = photo;
+        document.getElementById('modalAvatar').src = photo;
+      }
+      if (ville) document.getElementById('heroVille').textContent = '📍 ' + ville;
+      if (age) document.getElementById('heroAge').textContent = '🎂 ' + age;
+      document.getElementById('modalTitle').textContent = 'Contacter ' + nom;
+      document.getElementById('modalNom').textContent = nom;
+      document.getElementById('modalCat').textContent = cat + (ville ? ' · ' + ville : '');
+      document.getElementById('contactNom').textContent = 'Contacter ' + nom;
+      document.getElementById('infoList').innerHTML = [
+        ville ? `<div class="info-row"><span class="info-key">📍 Ville</span><span class="info-val">${ville}</span></div>` : '',
+        age ? `<div class="info-row"><span class="info-key">🎂 Âge</span><span class="info-val">${age}</span></div>` : '',
+        cat ? `<div class="info-row"><span class="info-key">🎭 Catégorie</span><span class="info-val">${cat}</span></div>` : '',
+        `<div class="info-row"><span class="info-key">✅ Disponible</span><span class="info-val" style="color:#10b981;">Oui</span></div>`
+      ].filter(Boolean).join('');
+      // Bio
+      const bioTxt = talentData.bio || '';
+      document.getElementById('aboutText').textContent = bioTxt || "Ce talent n'a pas encore renseigné sa biographie.";
+      await chargerVideos();
+      await chargerStats();
+      await chargerSimilaires(cat);
+      verifierProprietaire(u?.id);
+    } catch(e) { console.error(e); }
+  }
+
+  async function chargerVideos() {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/videos?talent_id=eq.${talentId}&statut=eq.en_ligne&order=vues.desc`, {
+        headers: { 'apikey': SUPABASE_KEY }
+      });
+      const videos = await res.json();
+      const grid = document.getElementById('videosGrid');
+      if (!videos || videos.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);">Aucune vidéo publiée.</div>';
+        return;
+      }
+      grid.innerHTML = videos.map(v => {
+        const thumb = v.playback_id ? `https://image.mux.com/${v.playback_id}/thumbnail.jpg?width=600&height=340&fit_mode=crop` : '';
+        return `<div class="video-card" onclick="lireVideo('${v.playback_id}')">
+          ${thumb ? `<img src="${thumb}" alt="${v.titre||''}">` : '<div style="width:100%;height:100%;background:#1a1535;"></div>'}
+          <div class="video-overlay"></div>
+          <div class="video-play">▶</div>
+          <div class="video-views">👁 ${(v.vues||0).toLocaleString('fr-FR')}</div>
+          <div class="video-info"><div class="video-title">${v.titre||'Vidéo'}</div></div>
+        </div>`;
+      }).join('');
+    } catch(e) { console.error(e); }
+  }
+
+  async function chargerStats() {
+    try {
+      const [vR, fR, mR] = await Promise.all([
+        fetch(`${SUPABASE_URL}/rest/v1/videos?talent_id=eq.${talentId}&statut=eq.en_ligne&select=vues`, { headers: { 'apikey': SUPABASE_KEY } }),
+        fetch(`${SUPABASE_URL}/rest/v1/favoris?talent_id=eq.${talentId}&select=id`, { headers: { 'apikey': SUPABASE_KEY } }),
+        fetch(`${SUPABASE_URL}/rest/v1/messages?talent_id=eq.${talentId}&select=id`, { headers: { 'apikey': SUPABASE_KEY } })
+      ]);
+      const vids = await vR.json(); const favs = await fR.json(); const msgs = await mR.json();
+      const totalVues = Array.isArray(vids) ? vids.reduce((s,v) => s+(v.vues||0), 0) : 0;
+      document.getElementById('statVues').textContent = totalVues.toLocaleString('fr-FR');
+      document.getElementById('statVideos').textContent = Array.isArray(vids) ? vids.length : 0;
+      document.getElementById('statFavoris').textContent = Array.isArray(favs) ? favs.length : 0;
+      document.getElementById('statMessages').textContent = Array.isArray(msgs) ? msgs.length : 0;
+    } catch(e) { console.error(e); }
+  }
+
+  async function chargerSimilaires(cat) {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/profils_talents?categorie=eq.${encodeURIComponent(cat)}&id=neq.${talentId}&select=id,nom_scene,photo_url,categorie,sous_categorie,utilisateurs(prenom,nom,ville)&limit=3`, {
+        headers: { 'apikey': SUPABASE_KEY }
+      });
+      const sim = await res.json();
+      const list = document.getElementById('similarList');
+      if (!sim || sim.length === 0) { list.innerHTML = '<div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;">Aucun talent similaire.</div>'; return; }
+      list.innerHTML = sim.map(s => {
+        const u = s.utilisateurs;
+        const nom = s.nom_scene || ((u?.prenom||'')+ ' '+(u?.nom||'')).trim();
+        const cat2 = s.sous_categorie || s.categorie || '';
+        const photo = s.photo_url || '';
+        return `<div class="similar-item" onclick="window.location='/profil-talent?id=${s.id}'">
+          ${photo ? `<img class="similar-thumb" src="${photo}" alt="${nom}">` : `<div class="similar-thumb" style="background:var(--purple);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;">${nom[0]||'?'}</div>`}
+          <div><div class="similar-name">${nom}</div><div class="similar-cat">${cat2}${u?.ville?' · '+u.ville:''}</div></div>
+        </div>`;
+      }).join('');
+    } catch(e) { console.error(e); }
+  }
+
+  function verifierProprietaire(utilisateurId) {
+    try {
+      const userStr = localStorage.getItem('showone_user');
+      if (!userStr) return;
+      const user = JSON.parse(userStr);
+      if (user.type_compte === 'recruteur') return;
+      if (utilisateurId && utilisateurId === user.id) {
+        currentUserId = user.id;
+        document.getElementById('cardActionsRecruteur').style.display = 'none';
+        document.getElementById('cardActionsTalent').style.display = 'block';
+        document.getElementById('contactDesc').textContent = 'Partagez votre profil et faites-vous découvrir !';
+        document.getElementById('btnEditBio').style.display = 'block';
+        const btnHero = document.getElementById('btnContactHero');
+        btnHero.textContent = '📤 Partager';
+        btnHero.onclick = partagerProfil;
+      }
+    } catch(e) { console.error(e); }
+  }
+
+  function toggleEditBio() {
+    const zone = document.getElementById('editBioZone');
+    const txt = document.getElementById('aboutText');
+    const isOpen = zone.style.display === 'block';
+    zone.style.display = isOpen ? 'none' : 'block';
+    txt.style.display = isOpen ? 'block' : 'none';
+    if (!isOpen) {
+      const current = txt.textContent;
+      document.getElementById('bioInput').value = current === "Ce talent n'a pas encore renseigné sa biographie." ? '' : current;
+    }
+  }
+
+  async function sauvegarderBio() {
+    const bio = document.getElementById('bioInput').value.trim();
+    const token = localStorage.getItem('showone_token');
+    const userStr = localStorage.getItem('showone_user');
+    if (!bio) { alert('La biographie ne peut pas être vide.'); return; }
+    if (!token || !userStr) { alert('Vous devez être connecté.'); return; }
+    const user = JSON.parse(userStr);
+    const btn = document.getElementById('btnSauvBio');
+    btn.textContent = '⏳ Sauvegarde…';
+    btn.disabled = true;
+    try {
+      // PATCH par utilisateur_id (plus fiable avec RLS)
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/profils_talents?utilisateur_id=eq.${user.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${token}`,
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify({ bio })
+      });
+      const result = await res.json();
+      console.log('Bio PATCH:', res.status, result);
+      if (res.ok) {
+        document.getElementById('aboutText').textContent = bio;
+        toggleEditBio();
+        showToast('✓ Biographie sauvegardée !', '#10b981');
+      } else {
+        console.error('Erreur:', result);
+        alert('Erreur lors de la sauvegarde. Vérifiez votre connexion.');
+      }
+    } catch(e) {
+      console.error(e);
+      alert('Erreur : ' + e.message);
+    } finally {
+      btn.textContent = '✓ Sauvegarder';
+      btn.disabled = false;
+    }
+  }
+
+  function lireVideo(playbackId) {
+    if (!playbackId) return;
+    const src = 'https://stream.mux.com/' + playbackId + '.m3u8';
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;';
+    overlay.innerHTML = `<div style="position:relative;width:100%;max-width:800px;">
+      <video id="popPlayer" controls autoplay playsinline style="width:100%;border-radius:12px;background:#000;max-height:80vh;"></video>
+      <button onclick="this.closest('div').parentElement.remove()" style="position:absolute;top:-36px;right:0;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;">✕</button>
+    </div>`;
+    document.body.appendChild(overlay);
+    const video = document.getElementById('popPlayer');
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = src; video.play();
+    } else {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/hls.js@latest';
+      s.onload = () => { if (window.Hls?.isSupported()) { const hls = new Hls(); hls.loadSource(src); hls.attachMedia(video); hls.on(Hls.Events.MANIFEST_PARSED, () => video.play()); } };
+      document.head.appendChild(s);
+    }
+  }
+
+  function openModal() {
+    const token = localStorage.getItem('showone_token');
+    const userStr = localStorage.getItem('showone_user');
+    
+    if (!token || !userStr) {
+      if (confirm('Vous devez être connecté en tant que recruteur pour contacter un talent.\n\nVoulez-vous vous connecter ?')) {
+        window.location.href = '/connexion';
+      }
+      return;
+    }
+    
+    const user = JSON.parse(userStr);
+    if (user.type_compte !== 'recruteur') {
+      alert('Seuls les recruteurs peuvent envoyer des messages aux talents.\n\nInscrivez-vous en tant que recruteur sur ShowOne !');
+      return;
+    }
+    
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+  async function envoyerMessage() {
+    const token = localStorage.getItem('showone_token');
+    const userStr = localStorage.getItem('showone_user');
+    if (!token || !userStr) { alert('Vous devez être connecté en tant que recruteur.'); window.location.href = '/connexion'; return; }
+    const user = JSON.parse(userStr);
+    if (user.type_compte !== 'recruteur') { alert('Seuls les recruteurs peuvent envoyer des messages.'); return; }
+    const objet = document.getElementById('msgObjet').value || 'Proposition';
+    const contenu = document.getElementById('msgContenu').value;
+    if (!contenu.trim()) { alert('Veuillez écrire un message !'); return; }
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/messages`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`,'Prefer':'return=minimal'},
+        body:JSON.stringify({talent_id:talentId, objet, contenu, lu:false})
+      });
+      closeModal();
+      showToast('✓ Message envoyé !', '#10b981');
+    } catch(e) { alert('Erreur.'); }
+  }
+
+  function toggleFav() {
+    faved = !faved;
+    document.getElementById('favBtn').textContent = faved ? '❤️' : '🤍';
+    document.getElementById('favBtn').classList.toggle('faved', faved);
+    if (document.getElementById('favCardBtn')) document.getElementById('favCardBtn').textContent = faved ? '❤️ Retiré des favoris' : '🤍 Ajouter aux favoris';
+    showToast(faved ? '❤️ Ajouté aux favoris !' : 'Retiré des favoris', faved ? '#5B4FE8' : '#10b981');
+  }
+
+  function shareProfile() { navigator.clipboard.writeText(window.location.href).then(() => showToast('🔗 Lien copié !', '#5B4FE8')); }
+
+  function partagerProfil() {
+    const url = window.location.href;
+    const texte = "Viens découvrir mon profil sur ShowOne ! " + url;
+    if (navigator.share) {
+      navigator.share({ title: 'Mon profil ShowOne', text: texte, url });
+    } else {
+      navigator.clipboard.writeText(texte).then(() => showToast('📤 Lien copié !', '#5B4FE8'));
+    }
+  }
+
+  function copierLien() { navigator.clipboard.writeText(window.location.href).then(() => showToast('🔗 Lien copié !', '#5B4FE8')); }
+
+  function showToast(msg, color) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.style.background = color; t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 2500);
+  }
+
+  document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+  chargerProfil();
+</script>
+</body>
+</html>
