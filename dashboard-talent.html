@@ -303,15 +303,15 @@
     }
     .bottom-nav a {
       flex: 1; display: flex; flex-direction: column;
-      align-items: center; gap: 2px;
+      align-items: center; gap: 3px;
       text-decoration: none; color: var(--muted);
-      font-size: 9px; font-weight: 600;
+      font-size: 10px; font-weight: 600;
       font-family: 'DM Sans', sans-serif;
       transition: color .2s;
     }
     .bottom-nav a.active,
     .bottom-nav a:active { color: var(--purple); }
-    .bottom-nav a .nav-ico { font-size: 19px; line-height: 1; }
+    .bottom-nav a .nav-ico { font-size: 22px; line-height: 1; }
   }
 
   @media (min-width: 769px) {
@@ -494,7 +494,11 @@
             <div class="completion-bar"><div class="completion-fill" id="completionFill" style="width:0%"></div></div>
           </div>
         </div>
-        <button class="btn-view-profile" onclick="window.location.href='/profil-talent?id='+window.profilId">Voir mon profil public →</button>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;">
+          <button class="btn-view-profile" onclick="window.location.href='/profil-talent?id='+window.profilId">Voir mon profil public →</button>
+          <button onclick="partagerProfil()" style="width:100%;padding:11px;border-radius:9px;border:none;background:var(--purple);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">📤 Partager mon profil</button>
+          <button onclick="copierLien()" style="width:100%;padding:10px;border-radius:9px;border:1.5px solid var(--border);background:transparent;color:var(--purple);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">🔗 Copier le lien</button>
+        </div>
       </div>
 
       <!-- MESSAGES -->
@@ -1100,6 +1104,23 @@
     }
   }
 
+  function partagerProfil() {
+    const url = 'https://www.showone.fr/profil-talent?id=' + (window.profilId || '');
+    const texte = 'Viens découvrir mon profil sur ShowOne ! ' + url;
+    if (navigator.share) { navigator.share({ title: 'Mon profil ShowOne', text: texte, url }); }
+    else { navigator.clipboard.writeText(texte).then(() => showNotif('📤 Lien copié !')); }
+  }
+  function copierLien() {
+    const url = 'https://www.showone.fr/profil-talent?id=' + (window.profilId || '');
+    navigator.clipboard.writeText(url).then(() => showNotif('🔗 Lien copié !'));
+  }
+  function showNotif(msg) {
+    const n = document.createElement('div');
+    n.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#5B4FE8;color:#fff;padding:12px 20px;border-radius:12px;font-weight:700;font-size:14px;z-index:999;font-family:DM Sans,sans-serif;white-space:nowrap;';
+    n.textContent = msg;
+    document.body.appendChild(n);
+    setTimeout(() => n.remove(), 2500);
+  }
   chargerDonnees();
 </script>
 <!-- PLAYER MODAL -->
@@ -1131,6 +1152,9 @@
   </a>
   <a href="/mon-profil">
     <span class="nav-ico">👤</span><span>Profil</span>
+  </a>
+  <a href="#" onclick="seDeconnecter()">
+    <span class="nav-ico">🚪</span><span>Déco</span>
   </a>
 </div>
 
