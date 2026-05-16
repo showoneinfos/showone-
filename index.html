@@ -497,6 +497,7 @@
   /* ===================== RESPONSIVE MOBILE ===================== */
   @media (max-width: 768px) {
     .d-none-mobile { display: none !important; }
+    #barreMonEspace { display: block !important; }
 
     /* NAV */
     nav { padding: 14px 20px; }
@@ -592,8 +593,8 @@
   </div>
 </nav>
 <!-- BARRE MON ESPACE MOBILE -->
-<div id="barreMonEspace" style="display:none;background:var(--purple-deep);padding:8px 16px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.08);">
-  <button onclick="allerMonEspace()" style="background:var(--red-accent);border:none;color:#fff;font-weight:700;font-size:14px;padding:10px 24px;border-radius:999px;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;max-width:300px;">Mon espace →</button>
+<div id="barreMonEspace" style="background:var(--purple-deep);padding:8px 16px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.08);">
+  <button onclick="allerMonEspace()" id="btnBarreMobile" style="background:var(--red-accent);border:none;color:#fff;font-weight:700;font-size:14px;padding:10px 24px;border-radius:999px;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;max-width:300px;">Mon espace →</button>
 </div>
 
 <!-- HERO -->
