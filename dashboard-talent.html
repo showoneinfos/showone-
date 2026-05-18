@@ -532,11 +532,8 @@
   window.profilId = null;
 
   function ouvrirModalUpload() {
-    const uploadZone = document.querySelector('.upload-zone');
-    if (uploadZone) {
-      uploadZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setTimeout(() => uploadZone.querySelector('input').click(), 400);
-    }
+    // Passe par la vérification du plan avant d'ouvrir le sélecteur
+    verifierAvantUpload();
   }
 
   async function chargerDonnees() {
