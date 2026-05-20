@@ -1125,8 +1125,8 @@ chargerTalents();
     </div>
 
     <!-- Nom -->
-    <div id="revelationNom" style="font-family:'Syne',sans-serif;font-size:clamp(36px,10vw,64px);font-weight:800;color:#fff;letter-spacing:-2px;line-height:1;margin-bottom:4px;text-shadow:0 0 40px rgba(232,57,79,0.6);">ANGELINA</div>
-    <div id="revelationCat" style="font-size:15px;color:rgba(255,255,255,0.5);margin-bottom:20px;font-weight:500;">🎵 Musique · Valence</div>
+    <div style="font-family:'Syne',sans-serif;font-size:clamp(36px,10vw,64px);font-weight:800;color:#fff;letter-spacing:-2px;line-height:1;margin-bottom:4px;text-shadow:0 0 40px rgba(232,57,79,0.6);">ANGELINA</div>
+    <div style="font-size:15px;color:rgba(255,255,255,0.5);margin-bottom:20px;font-weight:500;">🎵 Musique · Valence</div>
 
     <!-- Vidéo -->
     <div style="border-radius:20px;overflow:hidden;background:#000;position:relative;margin-bottom:20px;box-shadow:0 0 60px rgba(232,57,79,0.3);">
@@ -1175,7 +1175,13 @@ chargerTalents();
 </style>
 
 <script>
-const ANGELINA_PLAYBACK_ID = 'O7ndr2I1KibfSra4quU38vPDHDOx5ofoasfiFp2eSmo';
+// ═══ TALENT EN AVANT ═══
+const TALENT_ACTUEL = {
+  playback_id: 'vBf01HytDPxBWKNoc7DXokXr000063yPTEXFL3KG501y2wk',
+  nom: 'CÉLIA ALLORY',
+  categorie: '💃 Danse · ShowOne'
+};
+const ANGELINA_PLAYBACK_ID = TALENT_ACTUEL.playback_id;
 let videoMuted = false;
 let dejaLike = false;
 
@@ -1193,17 +1199,10 @@ function activerSon() {
 function ouvrirRevelation() {
   const popup = document.getElementById('popupRevelation');
   popup.style.display = 'flex';
-  // Mettre à jour nom et catégorie
-  const nomEl = document.getElementById('revelationNom');
-  const catEl = document.getElementById('revelationCat');
-  if (nomEl) nomEl.textContent = TALENT_ACTUEL.nom;
-  if (catEl) catEl.textContent = TALENT_ACTUEL.categorie;
-  // Mettre à jour le poster
-  const video = document.getElementById('angelinaVideo');
-  video.poster = 'https://image.mux.com/' + TALENT_ACTUEL.playback_id + '/thumbnail.jpg?width=480&height=340&fit_mode=crop&time=3';
 
   // Charger la vidéo HLS
-  const src = 'https://stream.mux.com/' + TALENT_ACTUEL.playback_id + '.m3u8';
+  const video = document.getElementById('angelinaVideo');
+  const src = 'https://stream.mux.com/' + ANGELINA_PLAYBACK_ID + '.m3u8';
   if (video.canPlayType('application/vnd.apple.mpegurl')) {
     video.src = src;
     video.play();
@@ -1232,7 +1231,7 @@ function fermerRevelation() {
   popup.style.display = 'none';
   const video = document.getElementById('angelinaVideo');
   if (video) video.pause();
-  storageSet('showone_revelation_seen', '1');
+  sessionStorage.setItem('showone_revelation_fermee', '1');
 }
 
 async function chargerLikes() {
@@ -1320,8 +1319,7 @@ function lancerParticules() {
 
 // Afficher la popup après 2 secondes si pas déjà vue aujourd'hui
 document.addEventListener('DOMContentLoaded', () => {
-  const vuAuj = storageGet('showone_revelation_seen');
-  if (!vuAuj) {
+  if (!sessionStorage.getItem('showone_revelation_fermee')) {
     setTimeout(ouvrirRevelation, 2000);
   }
 });
