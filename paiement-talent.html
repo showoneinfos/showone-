@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShowOne — Passer Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:#f5f3ff; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .card { background:#fff; border-radius:24px; padding:48px 40px; max-width:480px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(91,79,232,0.12); }
+  .logo { font-family:'Syne',sans-serif; font-weight:800; font-size:22px; color:#1a1535; margin-bottom:32px; }
+  .logo span { color:#E8394F; }
+  .ico { font-size:56px; margin-bottom:16px; }
+  h1 { font-family:'Syne',sans-serif; font-size:26px; font-weight:800; color:#1a1535; margin-bottom:10px; }
+  .prix { font-family:'Syne',sans-serif; font-size:48px; font-weight:800; color:#5B4FE8; margin:20px 0 4px; }
+  .prix span { font-size:18px; font-weight:400; color:#a09dc0; }
+  .sous-titre { color:#a09dc0; font-size:14px; margin-bottom:28px; }
+  .features { text-align:left; background:#f5f3ff; border-radius:14px; padding:20px; margin-bottom:28px; }
+  .feature { display:flex; align-items:center; gap:10px; font-size:14px; color:#1a1535; padding:7px 0; border-bottom:1px solid rgba(91,79,232,0.08); }
+  .feature:last-child { border-bottom:none; }
+  .feature span:first-child { color:#5B4FE8; font-weight:700; font-size:16px; }
+  .btn-payer {
+    display:block; width:100%; padding:16px;
+    border-radius:12px; border:none;
+    background:linear-gradient(135deg,#E8394F,#c0283c);
+    color:#fff; font-size:16px; font-weight:700;
+    cursor:pointer; font-family:'DM Sans',sans-serif;
+    transition:all .2s; margin-bottom:12px;
+    text-decoration:none;
+  }
+  .btn-payer:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(232,57,79,0.35); }
+  .btn-payer:disabled { opacity:0.7; cursor:not-allowed; transform:none; }
+  .btn-retour {
+    display:block; width:100%; padding:13px;
+    border-radius:12px; border:1.5px solid rgba(91,79,232,0.2);
+    background:transparent; color:#5B4FE8;
+    font-size:14px; font-weight:600;
+    cursor:pointer; font-family:'DM Sans',sans-serif;
+    text-decoration:none; transition:all .2s;
+  }
+  .btn-retour:hover { background:rgba(91,79,232,0.05); }
+  .securite { display:flex; align-items:center; justify-content:center; gap:6px; color:#a09dc0; font-size:12px; margin-top:16px; }
+  .erreur { display:none; background:rgba(232,57,79,0.08); border:1px solid rgba(232,57,79,0.3); border-radius:10px; padding:12px; color:#c0283c; font-size:13px; margin-bottom:14px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">Show<span>One</span></div>
+  <div class="ico">⭐</div>
+  <h1>Passer au plan Pro</h1>
+  <div class="prix">4,99€ <span>/ mois</span></div>
+  <p class="sous-titre">Sans engagement · Annulable à tout moment</p>
+
+  <div class="features">
+    <div class="feature"><span>✓</span> 10 vidéos sur ton profil</div>
+    <div class="feature"><span>✓</span> Changement de vidéos illimité</div>
+    <div class="feature"><span>✓</span> Profil prioritaire en recherche</div>
+    <div class="feature"><span>✓</span> Postulations casting illimitées</div>
+    <div class="feature"><span>✓</span> Badge Pro exclusif</div>
+    <div class="feature"><span>✓</span> Statistiques avancées</div>
+    <div class="feature"><span>✓</span> Messagerie illimitée</div>
+  </div>
+
+  <div class="erreur" id="erreur"></div>
+
+  <button class="btn-payer" id="btnPayer" onclick="lancerPaiement()">
+    🔒 Souscrire — 4,99€/mois
+  </button>
+  <a href="/dashboard-talent" class="btn-retour">← Retour au dashboard</a>
+
+  <div class="securite">
+    🔒 Paiement sécurisé par Stripe
+  </div>
+</div>
+
+<script>
+async function lancerPaiement() {
+  const btn = document.getElementById('btnPayer');
+  const errDiv = document.getElementById('erreur');
+  errDiv.style.display = 'none';
+
+  btn.textContent = 'Redirection vers Stripe…';
+  btn.disabled = true;
+
+  try {
+    // Récupérer infos utilisateur
+    let userId = '', userEmail = '';
+    try {
+      const user = JSON.parse(localStorage.getItem('showone_user') || '{}');
+      userId = user.id || '';
+      userEmail = user.email || '';
+    } catch(e) {}
+
+    const res = await fetch('/api/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        plan: 'talent_pro',
+        userId,
+        userEmail,
+        successUrl: 'https://www.showone.fr/paiement-succes?type=talent',
+        cancelUrl: 'https://www.showone.fr/paiement-talent'
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error(data.error || 'Erreur lors de la création du paiement');
+    }
+
+  } catch(err) {
+    errDiv.textContent = '⚠️ ' + (err.message || 'Une erreur est survenue. Réessayez.');
+    errDiv.style.display = 'block';
+    btn.textContent = '🔒 Souscrire — 4,99€/mois';
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
