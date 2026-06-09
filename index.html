@@ -833,15 +833,27 @@ async function likerRevelation() {
     console.log('Réponse PATCH likes:', patchRes.status, patchData);
 
     if (patchRes.ok) {
-      // Succès — mettre à jour l'affichage
-      const el = document.getElementById('likeCount');
-      if (el) el.textContent = newLikes;
       btn.style.background = 'linear-gradient(135deg,#ff6b7a,#E8394F)';
-      btn.innerHTML = '❤️ Merci ! <span style="opacity:.8;font-size:13px;">' + newLikes + '</span>';
+      // Relire la vraie valeur en base pour l'afficher correctement
+      try {
+        const verif = await fetch(`${SUPABASE_URL}/rest/v1/videos?id=eq.${videoId}&select=likes`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const verifData = await verif.json();
+        const vraiLikes = verifData?.[0]?.likes || newLikes;
+        btn.innerHTML = '❤️ Merci ! <span style="opacity:.8;font-size:13px;">' + vraiLikes + '</span>';
+        const el = document.getElementById('likeCount');
+        if (el) el.textContent = vraiLikes;
+      } catch(e) {
+        // Fallback sur la valeur calculée localement
+        btn.innerHTML = '❤️ Merci ! <span style="opacity:.8;font-size:13px;">' + newLikes + '</span>';
+        const el = document.getElementById('likeCount');
+        if (el) el.textContent = newLikes;
+      }
     } else {
-      console.warn("PATCH likes echoue status " + patchRes.status + " — verifie la colonne likes dans Supabase");
-      btn.innerHTML = "❤️ Merci !";
-      btn.style.background = "linear-gradient(135deg,#ff6b7a,#E8394F)";
+      console.warn('PATCH likes échoué status ' + patchRes.status);
+      btn.innerHTML = '❤️ Merci !';
+      btn.style.background = 'linear-gradient(135deg,#ff6b7a,#E8394F)';
     }
 
   } catch(e) {
