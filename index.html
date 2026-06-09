@@ -302,51 +302,47 @@
 </div>
 
 <!-- COUPS DE COEUR -->
+<!-- SECTION RECRUTEURS -->
 <section class="editorial">
   <div class="section-header">
     <div>
-      <div class="section-label">Sélection ShowOne</div>
-      <div class="section-title">Coups de cœur de la rédaction</div>
+      <div class="section-label" style="color:var(--red-accent);">Recruteurs</div>
+      <div class="section-title" style="color:#fff;">Ils recherchent des talents</div>
     </div>
-    <a href="#" class="section-link">Voir toute la sélection →</a>
+    <a href="/inscription-recruteur" class="section-link" style="color:var(--red-accent);font-weight:700;font-size:14px;">🎬 Déposer mon annonce gratuitement →</a>
   </div>
-  <div class="editorial-grid">
-    <div class="editorial-card">
-      <div class="editorial-thumb" style="aspect-ratio:16/10;position:relative;overflow:hidden;">
-        <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&h=500&fit=crop&crop=center" alt="Thomas Vega" style="width:100%;height:100%;object-fit:cover;display:block;">
+
+  <!-- Annonces vidéo recruteurs chargées dynamiquement -->
+  <div id="recruteursGrid" style="display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:20px;">
+    <!-- Chargement initial — affiché tant qu'aucune vraie annonce -->
+    <div id="recruteursPlaceholder" style="grid-column:1/-1;">
+      <!-- CTA inscription recruteur -->
+      <div style="background:rgba(255,255,255,0.05);border:1.5px dashed rgba(255,255,255,0.15);border-radius:20px;padding:48px;text-align:center;">
+        <div style="font-size:52px;margin-bottom:16px;">🎬</div>
+        <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:10px;">Vous recrutez des talents ?</div>
+        <p style="color:rgba(255,255,255,0.5);font-size:15px;margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.65;">Filmez-vous en 60 secondes — présentez votre agence et ce que vous cherchez. Votre annonce sera visible par tous les talents ShowOne.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <a href="/inscription-recruteur" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--red-accent);color:#fff;border-radius:12px;font-size:15px;font-weight:700;text-decoration:none;">🎬 Déposer mon annonce — Gratuit</a>
+          <a href="/castings" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);border-radius:12px;font-size:14px;font-weight:600;text-decoration:none;">Voir tous les castings →</a>
+        </div>
+        <p style="color:rgba(255,255,255,0.25);font-size:12px;margin-top:16px;">Gratuit · Sans carte bancaire · Inscription en 2 minutes</p>
       </div>
-      <div class="editorial-overlay"></div>
-      <div class="editorial-info">
-        <div class="talent-badge badge-chant" style="position:static;display:inline-block;margin-bottom:8px;">Radio</div>
-        <div class="editorial-name">Thomas Vega</div>
-        <div class="editorial-cat">Animateur radio · Toulouse · 34 200 vues</div>
-      </div>
-      <div class="editorial-heart">❤️</div>
-    </div>
-    <div class="editorial-card">
-      <div class="editorial-thumb" style="position:relative;overflow:hidden;">
-        <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=400&h=300&fit=crop&crop=center" alt="Amina Cissé" style="width:100%;height:100%;object-fit:cover;display:block;">
-      </div>
-      <div class="editorial-overlay"></div>
-      <div class="editorial-info">
-        <div class="editorial-name">Amina Cissé</div>
-        <div class="editorial-cat">Photo animaux · Nantes</div>
-      </div>
-      <div class="editorial-heart">❤️</div>
-    </div>
-    <div class="editorial-card">
-      <div class="editorial-thumb" style="position:relative;overflow:hidden;">
-        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop&crop=center" alt="Yann Leclerc" style="width:100%;height:100%;object-fit:cover;display:block;">
-      </div>
-      <div class="editorial-overlay"></div>
-      <div class="editorial-info">
-        <div class="editorial-name">Yann Leclerc</div>
-        <div class="editorial-cat">Sport · Lille</div>
-      </div>
-      <div class="editorial-heart">❤️</div>
     </div>
   </div>
 </section>
+
+<!-- PLAYER VIDÉO RECRUTEUR -->
+<div id="playerRecruteur" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;align-items:center;justify-content:center;flex-direction:column;padding:20px;">
+  <div style="width:100%;max-width:420px;position:relative;">
+    <button onclick="fermerPlayerRec()" style="position:absolute;top:-40px;right:0;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;">✕</button>
+    <video id="playerRecVideo" controls playsinline style="width:100%;border-radius:14px;background:#000;max-height:70vh;"></video>
+  </div>
+  <div style="color:#fff;text-align:center;margin-top:14px;">
+    <strong id="playerRecNom" style="display:block;font-size:16px;margin-bottom:4px;"></strong>
+    <span id="playerRecCat" style="font-size:13px;color:rgba(255,255,255,0.5);"></span>
+  </div>
+  <a href="/castings" style="margin-top:14px;padding:12px 32px;border-radius:10px;border:none;background:var(--red-accent);color:#fff;font-size:14px;font-weight:700;text-decoration:none;">Voir tous les castings →</a>
+</div>
 
 <section class="pricing" id="pricing">
   <div class="pricing-header">
@@ -656,7 +652,91 @@ document.addEventListener('DOMContentLoaded', () => {
   const m = document.getElementById('modaleWelcome');
   if (m) m.addEventListener('click', e => { if (e.target === m) fermerWelcome(); });
 });
-chargerTalents();
+// ── ANNONCES VIDÉO RECRUTEURS ────────────────────────────────
+let _hlsRec = null;
+
+async function chargerAnnoncesRecruteurs() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/castings?statut=eq.actif&video_playback_id=not.is.null&select=id,titre,categorie,ville,video_playback_id,recruteur_id&order=created_at.desc&limit=3`, {
+      headers: { 'apikey': SUPABASE_KEY }
+    });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) return; // Garder le placeholder
+
+    // Enrichir avec noms recruteurs
+    for (const c of data) {
+      try {
+        const r = await fetch(`${SUPABASE_URL}/rest/v1/profils_recruteurs?id=eq.${c.recruteur_id}&select=nom_societe&limit=1`, { headers: { 'apikey': SUPABASE_KEY } });
+        const rd = await r.json();
+        c.recruteur_nom = rd[0]?.nom_societe || 'Recruteur ShowOne';
+      } catch(e) { c.recruteur_nom = 'Recruteur ShowOne'; }
+    }
+
+    // Cacher le placeholder et afficher les vraies annonces
+    document.getElementById('recruteursPlaceholder').style.display = 'none';
+    const grid = document.getElementById('recruteursGrid');
+
+    // Remettre la grille en mode editorial (1.6fr 1fr 1fr)
+    const cards = data.map((c, i) => {
+      const thumb = `https://image.mux.com/${c.video_playback_id}/thumbnail.jpg?width=${i===0?800:400}&height=${i===0?500:300}&fit_mode=crop`;
+      const isFirst = i === 0;
+      return `<div class="editorial-card" onclick="lireAnnonce('${c.video_playback_id}','${(c.recruteur_nom||'').replace(/'/g,"\\'")}','${c.categorie||''}')">
+        <div class="editorial-thumb" style="${isFirst?'aspect-ratio:16/10;':''}position:relative;overflow:hidden;">
+          <img src="${thumb}" alt="${c.recruteur_nom}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a1535,#3a1a2e)'">
+        </div>
+        <div class="editorial-overlay"></div>
+        <div class="editorial-info">
+          <div class="talent-badge badge-chant" style="position:static;display:inline-block;margin-bottom:8px;">${c.categorie||'Casting'}</div>
+          <div class="editorial-name${isFirst?' editorial-card:first-child':''}">${c.recruteur_nom}</div>
+          <div class="editorial-cat">${c.titre} ${c.ville?'· '+c.ville:''}</div>
+        </div>
+        <div style="position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:16px;">▶</div>
+      </div>`;
+    }).join('');
+
+    // Insérer après le placeholder
+    grid.insertAdjacentHTML('beforeend', cards);
+
+  } catch(e) { console.error('Erreur annonces recruteurs:', e); }
+}
+
+function lireAnnonce(playbackId, nom, categorie) {
+  const popup = document.getElementById('playerRecruteur');
+  const video = document.getElementById('playerRecVideo');
+  const src = `https://stream.mux.com/${playbackId}.m3u8`;
+  if (_hlsRec) { _hlsRec.destroy(); _hlsRec = null; }
+  if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = src; video.play();
+  } else {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/hls.js@latest';
+    s.onload = () => {
+      if (window.Hls && Hls.isSupported()) {
+        _hlsRec = new Hls(); _hlsRec.loadSource(src); _hlsRec.attachMedia(video);
+        _hlsRec.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+      }
+    };
+    document.head.appendChild(s);
+  }
+  document.getElementById('playerRecNom').textContent = nom;
+  document.getElementById('playerRecCat').textContent = categorie;
+  popup.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function fermerPlayerRec() {
+  document.getElementById('playerRecruteur').style.display = 'none';
+  const v = document.getElementById('playerRecVideo');
+  v.pause(); v.src = '';
+  if (_hlsRec) { _hlsRec.destroy(); _hlsRec = null; }
+  document.body.style.overflow = '';
+}
+
+document.getElementById('playerRecruteur').addEventListener('click', function(e) {
+  if (e.target === this) fermerPlayerRec();
+});
+
+chargerAnnoncesRecruteurs();
 </script>
 
 <!-- MODALE BIENVENUE -->
@@ -906,3 +986,4 @@ document.addEventListener('DOMContentLoaded', () => {
 <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }</script>
 </body>
 </html>
+chargerTalents();
