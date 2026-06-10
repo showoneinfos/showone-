@@ -288,7 +288,7 @@
     </div>
     <div class="actions">
       <button class="btn-back" onclick="go(2)">← Retour</button>
-      <button class="btn-next" onclick="go(4)">Continuer →</button>
+      <button class="btn-next" onclick="validerEtape3()">Continuer →</button>
     </div>
   </div>
 
@@ -363,6 +363,18 @@ let planChoisi = 'gratuit';
 let _videoFile = null;
 let _videoPlaybackId = null;
 let _videoUploadId = null;
+
+function validerEtape3() {
+  const titre = document.getElementById('titreAnnonce').value.trim();
+  const desc = document.getElementById('descAnnonce').value.trim();
+  const cat = document.getElementById('catAnnonce').value;
+  const ville = document.getElementById('villeAnnonce').value.trim();
+  if (!titre) { alert('Veuillez donner un titre à votre annonce.'); return; }
+  if (!desc) { alert('Veuillez décrire ce que vous recherchez.'); return; }
+  if (!cat) { alert('Veuillez choisir une catégorie.'); return; }
+  if (!ville) { alert('Veuillez indiquer la ville.'); return; }
+  go(4);
+}
 
 function go(n) {
   document.getElementById('p'+cur).classList.remove('active');
