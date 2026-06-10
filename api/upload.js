@@ -20,7 +20,47 @@ export default async function handler(req, res) {
   const credentials = Buffer.from(MUX_ID + ':' + MUX_SECRET).toString('base64');
   const muxAuth = 'Basic ' + credentials;
 
-  // OBTENIR URL D'UPLOAD — avec vérification plan
+  // ── HELPER : créer une URL upload Mux ──────────────────────
+  async function creerUploadMux() {
+    const muxRes = await fetch('https://api.mux.com/video/v1/uploads', {
+      method: 'POST',
+      headers: { 'Authorization': muxAuth, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        cors_origin: '*',
+        new_asset_settings: { playback_policy: ['public'], max_resolution_tier: '1080p' },
+        timeout: 3600
+      })
+    });
+    const muxData = await muxRes.json();
+    if (!muxRes.ok) throw new Error('Erreur Mux: ' + JSON.stringify(muxData));
+    return { upload_url: muxData.data.url, upload_id: muxData.data.id };
+  }
+
+  // ── URL UPLOAD POUR RECRUTEUR (sans vérification quota) ────
+  // Utilisé pour les vidéos d'annonce casting
+  if (req.method === 'GET' && req.query.action === 'upload-url-recruteur') {
+    try {
+      const authToken = req.headers['authorization']?.replace('Bearer ', '');
+      if (!authToken) return res.status(401).json({ error: 'Non authentifié' });
+
+      // Vérifier que c'est bien un recruteur
+      const userRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${authToken}` }
+      });
+      const userData = await userRes.json();
+      const userId = userData?.id;
+      if (!userId) return res.status(401).json({ error: 'Session expirée' });
+
+      // Pas de vérification quota pour les recruteurs
+      const result = await creerUploadMux();
+      return res.status(200).json(result);
+
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  }
+
+  // ── URL UPLOAD POUR TALENT (avec vérification quota) ───────
   if (req.method === 'GET' && req.query.action === 'upload-url') {
     try {
       // 1. Token Supabase
@@ -36,18 +76,34 @@ export default async function handler(req, res) {
       if (!userId) return res.status(401).json({ error: 'Session expirée' });
 
       // 3. Plan de l'utilisateur
-      const planRes = await fetch(`${SUPABASE_URL}/rest/v1/utilisateurs?id=eq.${userId}&select=plan`, {
+      const planRes = await fetch(`${SUPABASE_URL}/rest/v1/utilisateurs?id=eq.${userId}&select=plan,type_compte`, {
         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${authToken}` }
       });
       const planData = await planRes.json();
       const plan = planData?.[0]?.plan || 'gratuit';
+      const typeCompte = planData?.[0]?.type_compte || 'talent';
 
-      // 4. Nombre de vidéos existantes
-      const vidRes = await fetch(`${SUPABASE_URL}/rest/v1/videos?utilisateur_id=eq.${userId}&select=id`, {
+      // Si c'est un recruteur — pas de quota
+      if (typeCompte === 'recruteur') {
+        const result = await creerUploadMux();
+        return res.status(200).json(result);
+      }
+
+      // 4. Nombre de vidéos du talent (via profil_talent)
+      const profRes = await fetch(`${SUPABASE_URL}/rest/v1/profils_talents?utilisateur_id=eq.${userId}&select=id`, {
         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${authToken}` }
       });
-      const vidData = await vidRes.json();
-      const nbVideos = Array.isArray(vidData) ? vidData.length : 0;
+      const profData = await profRes.json();
+      const talentId = profData?.[0]?.id;
+
+      let nbVideos = 0;
+      if (talentId) {
+        const vidRes = await fetch(`${SUPABASE_URL}/rest/v1/videos?talent_id=eq.${talentId}&select=id`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${authToken}` }
+        });
+        const vidData = await vidRes.json();
+        nbVideos = Array.isArray(vidData) ? vidData.length : 0;
+      }
 
       // 5. Vérifier la limite
       const MAX = plan === 'pro' ? 10 : 1;
@@ -62,26 +118,15 @@ export default async function handler(req, res) {
       }
 
       // 6. Créer URL upload Mux
-      const muxRes = await fetch('https://api.mux.com/video/v1/uploads', {
-        method: 'POST',
-        headers: { 'Authorization': muxAuth, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cors_origin: '*',
-          new_asset_settings: { playback_policy: ['public'], max_resolution_tier: '1080p' },
-          timeout: 3600
-        })
-      });
-      const muxData = await muxRes.json();
-      if (!muxRes.ok) return res.status(500).json({ error: 'Erreur Mux', details: muxData });
-
-      return res.status(200).json({ upload_url: muxData.data.url, upload_id: muxData.data.id });
+      const result = await creerUploadMux();
+      return res.status(200).json(result);
 
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }
   }
 
-  // VÉRIFIER STATUT UPLOAD
+  // ── VÉRIFIER STATUT UPLOAD ──────────────────────────────────
   if (req.method === 'GET' && req.query.action === 'get-playback') {
     try {
       const { upload_id } = req.query;
@@ -97,7 +142,7 @@ export default async function handler(req, res) {
     }
   }
 
-  // SUPPRIMER UNE VIDÉO
+  // ── SUPPRIMER UNE VIDÉO ─────────────────────────────────────
   if (req.method === 'DELETE' && req.query.action === 'delete-video') {
     try {
       const { asset_id, video_id } = req.query;
